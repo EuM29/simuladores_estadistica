@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Relación entre variables</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+    --azulNoche:#0f172a;
+    --azulPetroleo:#164e63;
+    --turquesa:#22d3ee;
+    --dorado:#f4c542;
+    --grisTexto:#64748b;
+    --fondo:#f8fafc;
+    --blanco:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:
+        radial-gradient(circle at 45% 20%, rgba(34,211,238,.15), transparent 30%),
+        linear-gradient(135deg,#f8fafc,#e2e8f0);
+    color:var(--azulNoche);
+}
+
+/* SUBHEADER */
+
+.subheader{
+    position:relative;
+    overflow:hidden;
+    padding:28px 60px 30px;
+    background:
+        radial-gradient(circle at 45% 20%, rgba(34,211,238,.18), transparent 28%),
+        linear-gradient(90deg, #f8fafc 0%, #eaf3f7 55%, #eef2f7 100%);
+    border-bottom:4px solid var(--dorado);
+}
+
+.subheader::after{
+    content:"X  Y  r";
+    position:absolute;
+    right:70px;
+    top:22px;
+    font-size:3rem;
+    font-weight:800;
+    color:rgba(22,78,99,.07);
+    letter-spacing:8px;
+}
+
+.subheader-content{
+    position:relative;
+    z-index:1;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+.subheader-badge{
+    display:inline-block;
+    margin-bottom:6px;
+    color:var(--azulPetroleo);
+    font-size:.82rem;
+    font-weight:700;
+}
+
+.subheader h1{
+    margin:0;
+    color:var(--azulNoche);
+    font-size:2.15rem;
+    font-weight:850;
+}
+
+.subheader h1::after{
+    content:"";
+    display:block;
+    width:62px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--dorado), var(--turquesa));
+}
+
+.subheader p{
+    margin-top:10px;
+    color:#475569;
+    font-size:1rem;
+    font-weight:500;
+}
+
+/* CONTENIDO */
+
+.contenedor{
+    max-width:1150px;
+    margin:35px auto;
+    padding:0 24px;
+}
+
+.intro{
+    background:white;
+    padding:20px 24px;
+    border-radius:20px;
+    box-shadow:0 12px 28px rgba(15,23,42,.08);
+    margin-bottom:24px;
+}
+
+.intro h2{
+    font-size:1.25rem;
+    margin-bottom:8px;
+}
+
+.intro p{
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:24px;
+    align-items:start;
+}
+
+.panel{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:0 12px 28px rgba(15,23,42,.08);
+}
+
+.panel h3{
+    font-size:1rem;
+    margin-bottom:16px;
+}
+
+.opcion{
+    width:100%;
+    text-align:left;
+    border:1px solid #dbe3ec;
+    background:#ffffff;
+    padding:13px 14px;
+    border-radius:15px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:.25s ease;
+    color:var(--azulNoche);
+    font-weight:700;
+}
+
+.opcion small{
+    display:block;
+    margin-top:4px;
+    color:var(--grisTexto);
+    font-weight:500;
+}
+
+.opcion:hover,
+.opcion.activa{
+    border-color:var(--turquesa);
+    background:#ecfeff;
+    transform:translateY(-2px);
+}
+
+.grafico-card{
+    background:white;
+    border-radius:24px;
+    padding:24px;
+    box-shadow:0 14px 32px rgba(15,23,42,.10);
+}
+
+.grafico-header{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:flex-start;
+    margin-bottom:15px;
+}
+
+.grafico-header h2{
+    font-size:1.35rem;
+}
+
+.etiqueta{
+    background:#fef3c7;
+    color:#92400e;
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:.8rem;
+    font-weight:800;
+}
+
+.descripcion{
+    color:var(--grisTexto);
+    margin-bottom:18px;
+    line-height:1.5;
+}
+
+.canvas-box{
+    height:390px;
+}
+
+.pregunta{
+    margin-top:20px;
+    background:#f8fafc;
+    border-left:5px solid var(--dorado);
+    padding:16px 18px;
+    border-radius:14px;
+}
+
+.pregunta strong{
+    color:var(--azulPetroleo);
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:20px;
+    text-decoration:none;
+    background:var(--azulPetroleo);
+    color:white;
+    padding:10px 16px;
+    border-radius:12px;
+    font-weight:700;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+}
+
+@media(max-width:850px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .subheader{
+        padding:24px 26px 26px;
+    }
+
+    .subheader::after{
+        display:none;
+    }
+
+    .canvas-box{
+        height:320px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="subheader">
+    <div class="subheader-content">
+        <span class="subheader-badge">
+            Diplomado en Estadística Aplicada
+        </span>
+
+        <h1>Relación entre variables</h1>
+
+        <p>
+            Exploración visual mediante gráficos de dispersión
+        </p>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <a href="semana1.html" class="btn-volver">← Regresar a Semana I</a>
+
+    <section class="intro">
+        <h2>Objetivo de la actividad</h2>
+        <p>
+            En esta sección se presentan diferentes conjuntos de datos para observar
+            cómo puede variar la relación entre dos variables. Por ahora, el propósito
+            es identificar visualmente si los datos sugieren una relación lineal o no lineal.
+        </p>
+    </section>
+
+    <section class="grid">
+
+        <aside class="panel">
+            <h3>Conjuntos de datos</h3>
+
+            <button class="opcion activa" onclick="cambiarDataset('linealPositiva', this)">
+                Lineal positiva
+                <small>Cuando X aumenta, Y también aumenta.</small>
+            </button>
+
+            <button class="opcion" onclick="cambiarDataset('linealNegativa', this)">
+                Lineal negativa
+                <small>Cuando X aumenta, Y disminuye.</small>
+            </button>
+
+            <button class="opcion" onclick="cambiarDataset('cuadratica', this)">
+                Cuadrática
+                <small>Forma curva, no lineal.</small>
+            </button>
+
+            <button class="opcion" onclick="cambiarDataset('exponencial', this)">
+                Exponencial
+                <small>Crecimiento cada vez más rápido.</small>
+            </button>
+
+            <button class="opcion" onclick="cambiarDataset('sinRelacion', this)">
+                Sin relación clara
+                <small>Puntos dispersos sin patrón evidente.</small>
+            </button>
+        </aside>
+
+        <section class="grafico-card">
+            <div class="grafico-header">
+                <div>
+                    <h2 id="tituloGrafico">Lineal positiva</h2>
+                </div>
+                <span class="etiqueta" id="tipoRelacion">Relación lineal</span>
+            </div>
+
+            <p class="descripcion" id="descripcionGrafico">
+                Los puntos siguen una tendencia ascendente aproximadamente recta.
+            </p>
+
+            <div class="canvas-box">
+                <canvas id="graficoDispersion"></canvas>
+            </div>
+
+            <div class="pregunta">
+                <strong>Pregunta para el estudiante:</strong>
+                ¿El patrón de los puntos sugiere una relación lineal entre X y Y?
+            </div>
+        </section>
+
+    </section>
+
+</main>
+
+<script>
+const datasets = {
+    linealPositiva: {
+        titulo: "Lineal positiva",
+        tipo: "Relación lineal",
+        descripcion: "Los puntos siguen una tendencia ascendente aproximadamente recta.",
+        datos: [
+            {x:1,y:2.1},{x:2,y:3.8},{x:3,y:5.2},{x:4,y:7.1},
+            {x:5,y:8.9},{x:6,y:10.4},{x:7,y:12.2},{x:8,y:13.9},
+            {x:9,y:15.8},{x:10,y:17.1}
+        ]
+    },
+
+    linealNegativa: {
+        titulo: "Lineal negativa",
+        tipo: "Relación lineal",
+        descripcion: "Los puntos muestran una tendencia descendente aproximadamente recta.",
+        datos: [
+            {x:1,y:18.2},{x:2,y:16.5},{x:3,y:14.8},{x:4,y:13.1},
+            {x:5,y:11.3},{x:6,y:9.5},{x:7,y:7.9},{x:8,y:6.1},
+            {x:9,y:4.6},{x:10,y:2.9}
+        ]
+    },
+
+    cuadratica: {
+        titulo: "Relación cuadrática",
+        tipo: "Relación no lineal",
+        descripcion: "Los puntos forman una curva. Aunque existe relación, no es lineal.",
+        datos: [
+            {x:-5,y:25.4},{x:-4,y:16.1},{x:-3,y:9.3},{x:-2,y:4.2},
+            {x:-1,y:1.4},{x:0,y:0.2},{x:1,y:1.2},{x:2,y:4.3},
+            {x:3,y:9.1},{x:4,y:16.5},{x:5,y:25.2}
+        ]
+    },
+
+    exponencial: {
+        titulo: "Relación exponencial",
+        tipo: "Relación no lineal",
+        descripcion: "La variable Y crece lentamente al inicio y luego aumenta con mayor rapidez.",
+        datos: [
+            {x:1,y:1.4},{x:2,y:1.9},{x:3,y:2.7},{x:4,y:3.9},
+            {x:5,y:5.4},{x:6,y:7.5},{x:7,y:10.1},{x:8,y:13.8},
+            {x:9,y:18.2},{x:10,y:24.7}
+        ]
+    },
+
+    sinRelacion: {
+        titulo: "Sin relación clara",
+        tipo: "Sin patrón definido",
+        descripcion: "Los puntos aparecen dispersos y no muestran una tendencia evidente.",
+        datos: [
+            {x:1,y:9.2},{x:2,y:3.1},{x:3,y:14.5},{x:4,y:6.8},
+            {x:5,y:11.3},{x:6,y:4.9},{x:7,y:16.1},{x:8,y:7.2},
+            {x:9,y:12.6},{x:10,y:5.5}
+        ]
+    }
+};
+
+const ctx = document.getElementById("graficoDispersion");
+
+let grafico = new Chart(ctx, {
+    type: "scatter",
+    data: {
+        datasets: [{
+            label: "Observaciones",
+            data: datasets.linealPositiva.datos,
+            pointRadius: 6,
+            pointHoverRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: "Variable X"
+                },
+                grid: {
+                    color: "rgba(100,116,139,.15)"
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: "Variable Y"
+                },
+                grid: {
+                    color: "rgba(100,116,139,.15)"
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `X = ${context.raw.x}, Y = ${context.raw.y}`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+function cambiarDataset(nombre, boton){
+    const seleccionado = datasets[nombre];
+
+    document.getElementById("tituloGrafico").textContent = seleccionado.titulo;
+    document.getElementById("tipoRelacion").textContent = seleccionado.tipo;
+    document.getElementById("descripcionGrafico").textContent = seleccionado.descripcion;
+
+    grafico.data.datasets[0].data = seleccionado.datos;
+    grafico.update();
+
+    document.querySelectorAll(".opcion").forEach(btn => {
+        btn.classList.remove("activa");
+    });
+
+    boton.classList.add("activa");
+}
+</script>
+
+</body>
+</html>
