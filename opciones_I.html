@@ -303,6 +303,60 @@ body{
     .nodo{
         width:170px;
     }
+    
+}
+
+    .subheader{
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #eef2f7
+        );
+
+    border-bottom:4px solid var(--dorado);
+
+    padding:40px 60px;
+
+    margin-bottom:20px;
+}
+
+.subheader-content{
+    max-width:1200px;
+    margin:auto;
+}
+
+.subheader-badge{
+    display:inline-block;
+
+    background:white;
+
+    color:var(--azulPetroleo);
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    font-size:.85rem;
+    font-weight:600;
+
+    border:1px solid #dbe3ec;
+
+    margin-bottom:15px;
+}
+
+.subheader h1{
+    font-size:2.4rem;
+    font-weight:800;
+
+    color:var(--azulNoche);
+
+    margin-bottom:8px;
+}
+
+.subheader p{
+    color:#64748b;
+    font-size:1.05rem;
 }
 
 </style>
@@ -310,37 +364,21 @@ body{
 
 <body>
 
-<header class="mini-header">
+<header class="subheader">
+    <div class="subheader-content">
 
-    <div class="logo-area">
+        <span class="subheader-badge">
+            Diplomado en Estadística Aplicada
+        </span>
 
-        <div class="logo-circle">
-            📊
-        </div>
+        <h1>Semana I</h1>
 
-        <div class="header-text">
-
-            <span class="universidad">
-                Universidad Nacional Autónoma de Honduras
-            </span>
-
-            <h1>
-                Diplomado en Estadística Aplicada
-            </h1>
-
-            <small>
-                Maestría en Matemática con Orientación en Estadística
-            </small>
-
-        </div>
+        <p>
+            Regresión Lineal Simple · Correlación · Inferencia · Predicción
+        </p>
 
     </div>
-
-</header>
-
-<p class="semana-label">
-    Unidad I · Regresión Lineal Simple
-</p>
+</header> 
 
 <section class="submenu-semana">
 
