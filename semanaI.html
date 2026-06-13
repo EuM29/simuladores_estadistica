@@ -296,6 +296,114 @@ Línea dorada: recta poblacional. Línea azul: recta estimada. Punto rojo: predi
 </div>
 
 </div>
+
+    <div class="panel" style="margin-top:20px;">
+
+<h2>📚 ¿Cómo se generan los datos?</h2>
+
+<p>
+En esta simulación los datos se generan a partir del modelo:
+</p>
+
+<p style="text-align:center;font-size:20px;">
+\[
+Y_i = \beta_0 + \beta_1X_i + \varepsilon_i
+\]
+</p>
+
+<ul>
+<li>
+<strong>\(\beta_0\)</strong> representa el intercepto o valor esperado de \(Y\) cuando \(X=0\).
+</li>
+
+<li>
+<strong>\(\beta_1\)</strong> representa la pendiente poblacional. Indica cuánto cambia \(Y\) en promedio por cada unidad adicional de \(X\).
+</li>
+
+<li>
+<strong>\(\varepsilon_i\)</strong> representa el error aleatorio o ruido.
+</li>
+</ul>
+
+<h3>Distribución del error</h3>
+
+<p>
+Los errores se generan mediante una distribución normal:
+</p>
+
+<p style="text-align:center;font-size:18px;">
+\[
+\varepsilon_i \sim N(0,\sigma^2)
+\]
+</p>
+
+<p>
+Esto significa que los errores tienen media cero y desviación estándar \(\sigma\).
+</p>
+
+<ul>
+<li>
+Valores pequeños de \(\sigma\) producen puntos cercanos a la recta.
+</li>
+
+<li>
+Valores grandes de \(\sigma\) generan mayor dispersión alrededor de la recta.
+</li>
+
+<li>
+Al aumentar \(\sigma\), generalmente disminuyen \(r\) y \(R^2\).
+</li>
+</ul>
+
+<h3>¿Por qué los datos parecen lineales?</h3>
+
+<p>
+Porque cada observación se genera utilizando la misma pendiente poblacional \(\beta_1\).
+La única fuente de variación es el error aleatorio.
+</p>
+
+<p>
+Si \(\sigma\) fuera igual a cero, todos los puntos caerían exactamente sobre la recta:
+</p>
+
+<p style="text-align:center;font-size:18px;">
+\[
+Y_i = \beta_0 + \beta_1X_i
+\]
+</p>
+
+<h3>¿Qué representa la predicción?</h3>
+
+<p>
+Cuando selecciona un valor \(x_0\), el modelo calcula:
+</p>
+
+<p style="text-align:center;font-size:18px;">
+\[
+\hat Y_0 = \hat\beta_0 + \hat\beta_1 x_0
+\]
+</p>
+
+<p>
+Este valor corresponde a la respuesta esperada para un individuo con valor \(x_0\).
+</p>
+
+<ul>
+<li>
+El <strong>intervalo de confianza</strong> estima la media de la población para dicho valor.
+</li>
+
+<li>
+El <strong>intervalo de predicción</strong> estima una observación individual futura.
+</li>
+</ul>
+
+<p>
+Por esta razón el intervalo de predicción siempre es más amplio que el intervalo de confianza.
+</p>
+
+</div>
+    
 </div>
 
 <script>
