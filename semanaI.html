@@ -151,6 +151,130 @@ canvas{
     font-size:20px;
     color:#2C447D;
 }
+
+    /* ====================================================== */
+/* FUNDAMENTOS */
+/* ====================================================== */
+
+.theory-section{
+    margin-top:30px;
+}
+
+.theory-section h2{
+    color:#2C447D;
+    margin-bottom:20px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.info-card{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+}
+
+.info-card h3{
+    color:#2C447D;
+    margin-top:0;
+    margin-bottom:12px;
+    border-bottom:2px solid #C7A05A;
+    padding-bottom:8px;
+}
+
+.formula-box{
+    background:#ECECEC55;
+    border-left:4px solid #C7A05A;
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.metric-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.metric-card{
+    background:#2D9AB811;
+    border-radius:8px;
+    padding:10px;
+}
+
+.metric-card strong{
+    color:#2C447D;
+}
+
+.metric-card p{
+    margin-top:6px;
+    margin-bottom:0;
+    font-size:14px;
+}
+
+.note-box{
+    margin-top:12px;
+    background:#FFF8EB;
+    border-left:4px solid #C7A05A;
+    padding:10px;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.mini-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.mini-table td{
+    padding:8px;
+    border-bottom:1px solid #E2E8F0;
+}
+
+.mini-table td:first-child{
+    font-weight:bold;
+    color:#2C447D;
+    width:90px;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+.question-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.question-box{
+    background:#2C447D10;
+    border-left:4px solid #2C447D;
+    border-radius:8px;
+    padding:12px;
+}
+
+@media(max-width:1000px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+    .question-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+
+    
 </style>
 
     <script>
@@ -296,170 +420,228 @@ Línea dorada: recta poblacional. Línea azul: recta estimada. Punto rojo: predi
 </div>
 
 </div>
-<div class="panel" style="margin-top:20px;">
 
-<h2>📚 Fundamentos estadísticos de la simulación</h2>
+    
+<!-- ====================================================== -->
+<!-- FUNDAMENTOS ESTADÍSTICOS DE LA SIMULACIÓN -->
+<!-- ====================================================== -->
 
-<p>
-Las observaciones son generadas a partir del modelo de regresión lineal simple:
-</p>
+<div class="theory-section">
 
-<p style="text-align:center;font-size:20px;">
-\[
-Y_i=\beta_0+\beta_1X_i+\varepsilon_i
-\]
-</p>
+    <h2>📚 Fundamentos estadísticos de la simulación</h2>
 
-<p>
-donde:
-</p>
+    <div class="info-grid">
 
-<ul>
-<li>
-\(\beta_0\): intercepto poblacional.
-</li>
+        <!-- MODELO -->
+        <div class="info-card">
 
-<li>
-\(\beta_1\): coeficiente de regresión o pendiente poblacional.
-</li>
+            <h3>📈 Modelo poblacional</h3>
 
-<li>
-\(X_i\): variable explicativa.
-</li>
+            <div class="formula-box">
+                \[
+                Y_i=\beta_0+\beta_1X_i+\varepsilon_i
+                \]
+            </div>
 
-<li>
-\(Y_i\): variable respuesta.
-</li>
+            <table class="mini-table">
+                <tr>
+                    <td>\(\beta_0\)</td>
+                    <td>Intercepto poblacional</td>
+                </tr>
 
-<li>
-\(\varepsilon_i\): componente aleatoria del modelo.
-</li>
-</ul>
+                <tr>
+                    <td>\(\beta_1\)</td>
+                    <td>Pendiente poblacional</td>
+                </tr>
 
-<h3>Generación de la componente aleatoria</h3>
+                <tr>
+                    <td>\(X_i\)</td>
+                    <td>Variable explicativa</td>
+                </tr>
 
-<p>
-Los errores aleatorios se generan bajo el supuesto:
-</p>
+                <tr>
+                    <td>\(Y_i\)</td>
+                    <td>Variable respuesta</td>
+                </tr>
 
-<p style="text-align:center;font-size:18px;">
-\[
-\varepsilon_i \sim N(0,\sigma^2)
-\]
-</p>
+                <tr>
+                    <td>\(\varepsilon_i\)</td>
+                    <td>Error aleatorio</td>
+                </tr>
+            </table>
 
-<p>
-donde \(\sigma\) representa la desviación estándar poblacional de los errores.
-Este parámetro controla la variabilidad de las observaciones alrededor de la función de regresión.
-</p>
+        </div>
 
-<p>
-A medida que aumenta \(\sigma\):
-</p>
+        <!-- ERROR -->
+        <div class="info-card">
 
-<ul>
-<li>Incrementa la dispersión de los residuos.</li>
-<li>Disminuye la precisión de las estimaciones de \(\beta_0\) y \(\beta_1\).</li>
-<li>Tienden a ampliarse los intervalos de confianza.</li>
-<li>Disminuye la proporción de variabilidad explicada por el modelo (\(R^2\)).</li>
-</ul>
+            <h3>🎲 Componente aleatoria</h3>
 
-<h3>Estimación del modelo</h3>
+            <div class="formula-box">
+                \[
+                \varepsilon_i\sim N(0,\sigma^2)
+                \]
+            </div>
 
-<p>
-A partir de la muestra generada se estiman los parámetros mediante el método de mínimos cuadrados ordinarios (MCO), obteniéndose:
-</p>
+            <div class="metric-grid">
 
-<p style="text-align:center;font-size:18px;">
-\[
-\hat Y_i=\hat\beta_0+\hat\beta_1X_i
-\]
-</p>
+                <div class="metric-card">
+                    <strong>\(\sigma\) pequeño</strong>
+                    <p>
+                    Menor dispersión alrededor de la función de regresión.
+                    </p>
+                </div>
 
-<p>
-Las estimaciones \(\hat\beta_0\) y \(\hat\beta_1\) dependen de la muestra observada y, por lo tanto, presentan variabilidad muestral.
-</p>
+                <div class="metric-card">
+                    <strong>\(\sigma\) grande</strong>
+                    <p>
+                    Mayor variabilidad y menor precisión inferencial.
+                    </p>
+                </div>
 
-<h3>Correlación y coeficiente de determinación</h3>
+            </div>
 
-<p>
-El coeficiente de correlación de Pearson:
-</p>
+            <div class="note-box">
+                El parámetro \(\sigma\) controla la variabilidad de las observaciones alrededor de la recta poblacional.
+            </div>
 
-<p style="text-align:center;font-size:18px;">
-\[
-r=\frac{\sum_{i=1}^{n}(X_i-\bar X)(Y_i-\bar Y)}
-{\sqrt{\sum_{i=1}^{n}(X_i-\bar X)^2
-\sum_{i=1}^{n}(Y_i-\bar Y)^2}}
-\]
-</p>
+        </div>
 
-<p>
-cuantifica la intensidad y dirección de la asociación lineal entre las variables.
-</p>
+        <!-- CORRELACION -->
+        <div class="info-card">
 
-<p>
-Por su parte,
-</p>
+            <h3>📊 Asociación lineal</h3>
 
-<p style="text-align:center;font-size:18px;">
-\[
-R^2
-\]
-</p>
+            <div class="formula-box">
+                \[
+                r=
+                \frac{\sum (X_i-\bar X)(Y_i-\bar Y)}
+                {\sqrt{\sum (X_i-\bar X)^2
+                \sum (Y_i-\bar Y)^2}}
+                \]
+            </div>
 
-<p>
-representa la proporción de la variabilidad total de la variable respuesta explicada por el modelo lineal ajustado.
-</p>
+            <div class="metric-grid">
 
-<h3>Inferencia para el coeficiente de regresión</h3>
+                <div class="metric-card">
+                    <strong>\(r\)</strong>
+                    <p>
+                    Intensidad y dirección de la asociación lineal.
+                    </p>
+                </div>
 
-<p>
-La significancia estadística de la pendiente se evalúa mediante la prueba:
-</p>
+                <div class="metric-card">
+                    <strong>\(R^2\)</strong>
+                    <p>
+                    Proporción de variabilidad explicada por el modelo.
+                    </p>
+                </div>
 
-<p style="text-align:center;font-size:18px;">
-\[
-H_0:\beta_1=0
-\]
-\[
-H_1:\beta_1\neq0
-\]
-</p>
+            </div>
 
-<p>
-El p-valor asociado permite determinar si existe evidencia estadística suficiente para concluir la presencia de una relación lineal entre \(X\) y \(Y\).
-</p>
+        </div>
 
-<h3>Predicción</h3>
+        <!-- INFERENCIA -->
+        <div class="info-card">
 
-<p>
-Para un valor específico \(x_0\), el modelo produce la predicción:
-</p>
+            <h3>🧪 Inferencia estadística</h3>
 
-<p style="text-align:center;font-size:18px;">
-\[
-\hat Y_0=\hat\beta_0+\hat\beta_1x_0
-\]
-</p>
+            <div class="formula-box">
+                \[
+                H_0:\beta_1=0
+                \]
 
-<p>
-Adicionalmente se calculan:
-</p>
+                \[
+                H_1:\beta_1\neq0
+                \]
+            </div>
 
-<ul>
-<li>
-El intervalo de confianza para \(E(Y|X=x_0)\), asociado a la respuesta media.
-</li>
+            <div class="metric-grid">
 
-<li>
-El intervalo de predicción para una futura observación individual \(Y|X=x_0\).
-</li>
-</ul>
+                <div class="metric-card">
+                    <strong>\(p<0.05\)</strong>
+                    <p>
+                    Evidencia estadística de relación lineal.
+                    </p>
+                </div>
 
-<p>
-Debido a que incorpora la variabilidad inherente de una observación futura, el intervalo de predicción presenta una amplitud mayor que el intervalo de confianza para la media.
-</p>
+                <div class="metric-card">
+                    <strong>\(p\ge0.05\)</strong>
+                    <p>
+                    No existe evidencia suficiente para rechazar \(H_0\).
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PREDICCION -->
+        <div class="info-card">
+
+            <h3>🎯 Predicción</h3>
+
+            <div class="formula-box">
+                \[
+                \hat Y_0=
+                \hat\beta_0+
+                \hat\beta_1x_0
+                \]
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric-card">
+                    <strong>IC 95%</strong>
+                    <p>
+                    Intervalo para la respuesta media
+                    \(E(Y|X=x_0)\).
+                    </p>
+                </div>
+
+                <div class="metric-card">
+                    <strong>IP 95%</strong>
+                    <p>
+                    Intervalo para una observación futura individual.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="note-box">
+                El intervalo de predicción siempre es más amplio que el intervalo de confianza para la media.
+            </div>
+
+        </div>
+
+        <!-- ACTIVIDAD -->
+        <div class="info-card full-width">
+
+            <h3>💡 Preguntas para reflexionar</h3>
+
+            <div class="question-grid">
+
+                <div class="question-box">
+                    ¿Qué ocurre con \(R^2\) al incrementar \(\sigma\)?
+                </div>
+
+                <div class="question-box">
+                    ¿Cómo cambia el ancho de los intervalos cuando aumenta \(n\)?
+                </div>
+
+                <div class="question-box">
+                    ¿Qué sucede con el p-valor cuando \(\beta_1\) se aproxima a cero?
+                </div>
+
+                <div class="question-box">
+                    ¿Por qué el intervalo de predicción es más amplio que el intervalo de confianza?
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
     
