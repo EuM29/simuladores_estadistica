@@ -1,167 +1,371 @@
-<section class="submenu-semana">
-  <div class="orbita">
-    <div class="centro">
-      <span>Semana I</span>
-      <small>Regresión lineal</small>
-    </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <a href="#relacion-variables" class="nodo nodo-1">
-      <span class="icono">📈</span>
-      <strong>Relación entre variables</strong>
-      <small>Correlación y R²</small>
-    </a>
+<title>Diplomado en Estadística Aplicada - Semana I</title>
 
-    <a href="#simulador-parametros" class="nodo nodo-2">
-      <span class="icono">🎛️</span>
-      <strong>Simulador con parámetros</strong>
-      <small>β₀, β₁ y ruido</small>
-    </a>
-  </div>
-</section>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --azulNoche: #0f172a;
-    --azulPetroleo: #164e63;
-    --turquesa: #22d3ee;
-    --dorado: #f4c542;
-    --grisTexto: #64748b;
-    --fondo: #f8fafc;
-    --blanco: #ffffff;
-  }
 
-  .submenu-semana {
-    min-height: 420px;
-    display: grid;
-    place-items: center;
+:root{
+    --azulNoche:#0f172a;
+    --azulPetroleo:#164e63;
+    --turquesa:#22d3ee;
+    --dorado:#f4c542;
+    --grisTexto:#64748b;
+    --fondo:#f8fafc;
+    --blanco:#ffffff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:'Inter',sans-serif;
+
     background:
-      radial-gradient(circle at center, rgba(34, 211, 238, .18), transparent 45%),
-      linear-gradient(135deg, #f8fafc, #e2e8f0);
-    padding: 40px 20px;
-    font-family: "Segoe UI", sans-serif;
-  }
+    radial-gradient(circle at top, rgba(34,211,238,.10), transparent 35%),
+    linear-gradient(135deg,#f8fafc,#e2e8f0);
+}
 
-  .orbita {
-    width: 340px;
-    height: 340px;
-    position: relative;
-    border: 2px dashed rgba(22, 78, 99, .25);
-    border-radius: 50%;
-    animation: flotar 5s ease-in-out infinite;
-  }
+/* ==========================
+   ENCABEZADO
+========================== */
 
-  .centro {
-    position: absolute;
-    inset: 50%;
-    transform: translate(-50%, -50%);
-    width: 145px;
-    height: 145px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--azulNoche), var(--azulPetroleo));
-    color: white;
-    display: grid;
-    place-content: center;
-    text-align: center;
-    box-shadow: 0 18px 35px rgba(15, 23, 42, .25);
-  }
+.mini-header{
+    max-width:1000px;
+    margin:30px auto 10px auto;
+    padding:16px 22px;
 
-  .centro span {
-    font-size: 1.25rem;
-    font-weight: 800;
-  }
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(10px);
 
-  .centro small {
-    color: #cffafe;
-    margin-top: 4px;
-  }
+    border-radius:20px;
 
-  .nodo {
-    position: absolute;
-    width: 185px;
-    min-height: 92px;
-    padding: 14px;
-    border-radius: 22px;
-    background: var(--blanco);
-    color: var(--azulNoche);
-    text-decoration: none;
-    box-shadow: 0 14px 28px rgba(15, 23, 42, .14);
-    border: 1px solid rgba(100, 116, 139, .18);
-    transition: .3s ease;
-  }
+    box-shadow:
+    0 10px 25px rgba(15,23,42,.08);
 
-  .nodo:hover {
-    transform: scale(1.06) translateY(-4px);
-    box-shadow: 0 20px 40px rgba(15, 23, 42, .22);
-    border-color: var(--turquesa);
-  }
+    border-left:6px solid var(--dorado);
+}
 
-  .nodo-1 {
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+.logo-area{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
 
-  .nodo-1:hover {
-    transform: translateX(-50%) scale(1.06) translateY(-4px);
-  }
+.logo-circle{
+    width:60px;
+    height:60px;
+    border-radius:50%;
 
-  .nodo-2 {
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-  .nodo-2:hover {
-    transform: translateX(-50%) scale(1.06) translateY(-4px);
-  }
+    font-size:1.5rem;
+    color:white;
 
-  .icono {
-    display: inline-grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
-    background: rgba(34, 211, 238, .16);
-    margin-bottom: 8px;
-    font-size: 1.15rem;
-  }
+    background:
+    linear-gradient(
+        135deg,
+        var(--azulNoche),
+        var(--azulPetroleo)
+    );
 
-  .nodo strong {
-    display: block;
-    font-size: .95rem;
-    line-height: 1.2;
-  }
+    box-shadow:
+    0 8px 18px rgba(15,23,42,.18);
+}
 
-  .nodo small {
-    display: block;
-    color: var(--grisTexto);
-    margin-top: 4px;
-    font-size: .78rem;
-  }
+.universidad{
+    display:block;
+    font-size:.75rem;
+    color:var(--grisTexto);
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
 
-  @keyframes flotar {
-    0%, 100% {
-      transform: translateY(0);
+.header-text h1{
+    font-size:1.25rem;
+    color:var(--azulNoche);
+    margin:4px 0;
+}
+
+.header-text small{
+    color:var(--azulPetroleo);
+    font-weight:600;
+}
+
+.semana-label{
+    text-align:center;
+    margin-top:20px;
+
+    color:var(--azulPetroleo);
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+/* ==========================
+   MENU ORBITAL
+========================== */
+
+.submenu-semana{
+    min-height:500px;
+
+    display:grid;
+    place-items:center;
+
+    padding:20px;
+}
+
+.orbita{
+    width:340px;
+    height:340px;
+
+    position:relative;
+
+    border-radius:50%;
+    border:2px dashed rgba(22,78,99,.25);
+
+    animation:flotar 5s ease-in-out infinite;
+}
+
+.centro{
+    position:absolute;
+
+    inset:50%;
+    transform:translate(-50%,-50%);
+
+    width:150px;
+    height:150px;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--azulNoche),
+        var(--azulPetroleo)
+    );
+
+    color:white;
+
+    display:grid;
+    place-content:center;
+
+    text-align:center;
+
+    box-shadow:
+    0 18px 35px rgba(15,23,42,.25);
+}
+
+.centro span{
+    font-size:1.25rem;
+    font-weight:800;
+}
+
+.centro small{
+    color:#cffafe;
+    margin-top:4px;
+}
+
+.nodo{
+    position:absolute;
+
+    width:200px;
+    min-height:95px;
+
+    padding:14px;
+
+    border-radius:22px;
+
+    background:white;
+
+    color:var(--azulNoche);
+
+    text-decoration:none;
+
+    border:1px solid rgba(100,116,139,.18);
+
+    box-shadow:
+    0 14px 28px rgba(15,23,42,.14);
+
+    transition:.35s ease;
+}
+
+.nodo:hover{
+    border-color:var(--turquesa);
+
+    box-shadow:
+    0 20px 40px rgba(15,23,42,.22);
+}
+
+.nodo-1{
+    top:-15px;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.nodo-1:hover{
+    transform:
+    translateX(-50%)
+    scale(1.05)
+    translateY(-4px);
+}
+
+.nodo-2{
+    bottom:-15px;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.nodo-2:hover{
+    transform:
+    translateX(-50%)
+    scale(1.05)
+    translateY(-4px);
+}
+
+.icono{
+    width:38px;
+    height:38px;
+
+    border-radius:12px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+    rgba(34,211,238,.15);
+
+    margin-bottom:8px;
+
+    font-size:1.1rem;
+}
+
+.nodo strong{
+    display:block;
+    font-size:.95rem;
+}
+
+.nodo small{
+    display:block;
+    margin-top:4px;
+
+    color:var(--grisTexto);
+}
+
+@keyframes flotar{
+    0%,100%{
+        transform:translateY(0);
     }
 
-    50% {
-      transform: translateY(-8px);
+    50%{
+        transform:translateY(-8px);
     }
-  }
+}
 
-  @media (max-width: 520px) {
-    .orbita {
-      width: 285px;
-      height: 285px;
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:600px){
+
+    .logo-area{
+        flex-direction:column;
+        text-align:center;
     }
 
-    .centro {
-      width: 120px;
-      height: 120px;
+    .header-text h1{
+        font-size:1.05rem;
     }
 
-    .nodo {
-      width: 165px;
+    .orbita{
+        width:290px;
+        height:290px;
     }
-  }
+
+    .centro{
+        width:120px;
+        height:120px;
+    }
+
+    .nodo{
+        width:170px;
+    }
+}
+
 </style>
+</head>
+
+<body>
+
+<header class="mini-header">
+
+    <div class="logo-area">
+
+        <div class="logo-circle">
+            📊
+        </div>
+
+        <div class="header-text">
+
+            <span class="universidad">
+                Universidad Nacional Autónoma de Honduras
+            </span>
+
+            <h1>
+                Diplomado en Estadística Aplicada
+            </h1>
+
+            <small>
+                Maestría en Matemática con Orientación en Estadística
+            </small>
+
+        </div>
+
+    </div>
+
+</header>
+
+<p class="semana-label">
+    Unidad I · Regresión Lineal Simple
+</p>
+
+<section class="submenu-semana">
+
+    <div class="orbita">
+
+        <div class="centro">
+            <span>Semana I</span>
+            <small>Regresión lineal</small>
+        </div>
+
+        <a href="#relacion-variables" class="nodo nodo-1">
+            <span class="icono">📈</span>
+            <strong>Relación entre variables</strong>
+            <small>Correlación y coeficiente de determinación</small>
+        </a>
+
+        <a href="#simulador-parametros" class="nodo nodo-2">
+            <span class="icono">🎛️</span>
+            <strong>Simulador con parámetros</strong>
+            <small>β₀, β₁, ruido y predicción</small>
+        </a>
+
+    </div>
+
+</section>
+
+</body>
+</html>
