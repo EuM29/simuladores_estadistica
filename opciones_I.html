@@ -1,0 +1,167 @@
+<section class="submenu-semana">
+  <div class="orbita">
+    <div class="centro">
+      <span>Semana I</span>
+      <small>Regresión lineal</small>
+    </div>
+
+    <a href="#relacion-variables" class="nodo nodo-1">
+      <span class="icono">📈</span>
+      <strong>Relación entre variables</strong>
+      <small>Correlación y R²</small>
+    </a>
+
+    <a href="#simulador-parametros" class="nodo nodo-2">
+      <span class="icono">🎛️</span>
+      <strong>Simulador con parámetros</strong>
+      <small>β₀, β₁ y ruido</small>
+    </a>
+  </div>
+</section>
+
+<style>
+  :root {
+    --azulNoche: #0f172a;
+    --azulPetroleo: #164e63;
+    --turquesa: #22d3ee;
+    --dorado: #f4c542;
+    --grisTexto: #64748b;
+    --fondo: #f8fafc;
+    --blanco: #ffffff;
+  }
+
+  .submenu-semana {
+    min-height: 420px;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, .18), transparent 45%),
+      linear-gradient(135deg, #f8fafc, #e2e8f0);
+    padding: 40px 20px;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  .orbita {
+    width: 340px;
+    height: 340px;
+    position: relative;
+    border: 2px dashed rgba(22, 78, 99, .25);
+    border-radius: 50%;
+    animation: flotar 5s ease-in-out infinite;
+  }
+
+  .centro {
+    position: absolute;
+    inset: 50%;
+    transform: translate(-50%, -50%);
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--azulNoche), var(--azulPetroleo));
+    color: white;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, .25);
+  }
+
+  .centro span {
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+
+  .centro small {
+    color: #cffafe;
+    margin-top: 4px;
+  }
+
+  .nodo {
+    position: absolute;
+    width: 185px;
+    min-height: 92px;
+    padding: 14px;
+    border-radius: 22px;
+    background: var(--blanco);
+    color: var(--azulNoche);
+    text-decoration: none;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, .14);
+    border: 1px solid rgba(100, 116, 139, .18);
+    transition: .3s ease;
+  }
+
+  .nodo:hover {
+    transform: scale(1.06) translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, .22);
+    border-color: var(--turquesa);
+  }
+
+  .nodo-1 {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nodo-1:hover {
+    transform: translateX(-50%) scale(1.06) translateY(-4px);
+  }
+
+  .nodo-2 {
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nodo-2:hover {
+    transform: translateX(-50%) scale(1.06) translateY(-4px);
+  }
+
+  .icono {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: rgba(34, 211, 238, .16);
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+  }
+
+  .nodo strong {
+    display: block;
+    font-size: .95rem;
+    line-height: 1.2;
+  }
+
+  .nodo small {
+    display: block;
+    color: var(--grisTexto);
+    margin-top: 4px;
+    font-size: .78rem;
+  }
+
+  @keyframes flotar {
+    0%, 100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .orbita {
+      width: 285px;
+      height: 285px;
+    }
+
+    .centro {
+      width: 120px;
+      height: 120px;
+    }
+
+    .nodo {
+      width: 165px;
+    }
+  }
+</style>
