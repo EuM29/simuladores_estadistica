@@ -306,23 +306,119 @@ body{
     
 }
 
+/* ==========================
+   SUBHEADER SEMANA I
+========================== */
+
 .subheader{
-    padding: 20px 60px;
+    position:relative;
+    overflow:hidden;
+
+    padding:28px 60px 30px;
+
+    background:
+        radial-gradient(circle at 45% 20%, rgba(34,211,238,.18), transparent 28%),
+        linear-gradient(90deg, #f8fafc 0%, #eaf3f7 55%, #eef2f7 100%);
+
+    border-bottom:4px solid var(--dorado);
 }
 
-.subheader h1{
-    font-size: 2rem;
-    margin-bottom: 4px;
+.subheader::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 45%, transparent 70%);
+
+    pointer-events:none;
 }
 
-.subheader p{
-    font-size: .95rem;
+.subheader::after{
+    content:"β₀  β₁  R²";
+    position:absolute;
+    right:70px;
+    top:22px;
+
+    font-size:3rem;
+    font-weight:800;
+    color:rgba(22,78,99,.07);
+
+    letter-spacing:8px;
+}
+
+.subheader-content{
+    position:relative;
+    z-index:1;
+
+    max-width:1200px;
+    margin:0 auto;
 }
 
 .subheader-badge{
-    padding: 6px 14px;
-    font-size: .8rem;
-    margin-bottom: 10px;
+    display:inline-block;
+
+    margin-bottom:6px;
+
+    color:var(--azulPetroleo);
+
+    font-size:.82rem;
+    font-weight:700;
+
+    letter-spacing:.2px;
+}
+
+.subheader h1{
+    margin:0;
+
+    color:var(--azulNoche);
+
+    font-size:2.15rem;
+    font-weight:850;
+    line-height:1.05;
+}
+
+.subheader h1::after{
+    content:"";
+    display:block;
+
+    width:62px;
+    height:4px;
+
+    margin-top:8px;
+
+    border-radius:999px;
+
+    background:linear-gradient(90deg, var(--dorado), var(--turquesa));
+}
+
+.subheader p{
+    margin-top:10px;
+
+    color:#475569;
+
+    font-size:1rem;
+    font-weight:500;
+}
+
+/* Responsive */
+
+@media(max-width:700px){
+    .subheader{
+        padding:24px 26px 26px;
+    }
+
+    .subheader::after{
+        display:none;
+    }
+
+    .subheader h1{
+        font-size:1.85rem;
+    }
+
+    .subheader p{
+        font-size:.92rem;
+    }
 }
 
 </style>
