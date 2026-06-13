@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Simuladores de Estadística Aplicada</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI, Arial, sans-serif;
+    background:#f7f8fa;
+    color:#1D2D50;
+}
+
+.hero{
+    background:linear-gradient(120deg,#2C447D,#3E6FA5);
+    color:white;
+    padding:55px 8%;
+    border-bottom:6px solid #C7A05A;
+}
+
+.hero h1{
+    font-size:42px;
+    margin:0;
+}
+
+.hero p{
+    font-size:18px;
+    opacity:.95;
+}
+
+.container{
+    max-width:1100px;
+    margin:35px auto;
+    padding:0 22px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:22px;
+}
+
+.card{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 8px 22px rgba(0,0,0,.06);
+    transition:.25s;
+    text-decoration:none;
+    color:#1D2D50;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(0,0,0,.10);
+}
+
+.badge{
+    color:#C7A05A;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.card h2{
+    color:#2C447D;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#3E6FA5;
+    line-height:1.45;
+}
+
+.footer{
+    text-align:center;
+    color:#64748B;
+    margin:40px;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <h1>Simuladores de Estadística Aplicada</h1>
+    <p>Diplomado en Estadística Aplicada · Módulo III</p>
+</section>
+
+<main class="container">
+
+<div class="grid">
+
+<a class="card" href="semana1/regresion.html">
+    <span class="badge">SEMANA I</span>
+    <h2>Regresión lineal simple</h2>
+    <p>
+        Simulación inferencial con β₀, β₁, ruido, R²,
+        p-valor e intervalo de confianza.
+    </p>
+</a>
+
+<a class="card" href="semana2/regresion_multiple.html">
+    <span class="badge">SEMANA II</span>
+    <h2>Regresión lineal múltiple</h2>
+    <p>
+        Comparación de predictores, interpretación de coeficientes
+        y ajuste del modelo.
+    </p>
+</a>
+
+<a class="card" href="semana3/anova.html">
+    <span class="badge">SEMANA III</span>
+    <h2>ANOVA de un factor</h2>
+    <p>
+        Comparación de medias entre grupos, variabilidad
+        entre tratamientos y dentro de grupos.
+    </p>
+</a>
+
+<a class="card" href="semana4/factorial.html">
+    <span class="badge">SEMANA IV</span>
+    <h2>Diseño de factores</h2>
+    <p>
+        Simulación de diseños experimentales, efectos principales
+        e interacción entre factores.
+    </p>
+</a>
+
+</div>
+
+</main>
+
+<div class="footer">
+    Universidad Nacional Autónoma de Honduras · Estadística Aplicada
+</div>
+
+</body>
+</html>
