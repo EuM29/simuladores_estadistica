@@ -2,353 +2,896 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Semana I - Regresión Lineal Simple</title>
 
 <style>
-
-:root{
-    --azulNoche:#1D2D50;
-    --azulMedio:#2C447D;
-    --turquesa:#2D9AB8;
-    --dorado:#C7A05A;
-    --gris:#64748B;
-    --grisClaro:#F8FAFC;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-    font-family:'Segoe UI',sans-serif;
-
-    background:
-    radial-gradient(circle at top,
-    rgba(45,154,184,.08),
-    transparent 35%),
-    #f7f8fa;
-
-    color:var(--azulNoche);
+    font-family:Segoe UI,Arial,sans-serif;
+    background:#f7f8fa;
+    color:#1D2D50;
+    margin:0;
+    padding:22px;
 }
-
-/* ================================= */
-/* HEADER */
-/* ================================= */
-
-.subheader{
-    background:
-    linear-gradient(
-        135deg,
-        #f8fafc,
-        #eef2f7
-    );
-
-    border-bottom:4px solid var(--dorado);
-
-    padding:25px 50px;
-}
-
-.subheader-content{
-    max-width:1200px;
-    margin:auto;
-}
-
-.badge{
-    display:inline-block;
-
-    background:white;
-
-    padding:7px 14px;
-
-    border-radius:30px;
-
-    font-size:.82rem;
-    font-weight:700;
-
-    color:var(--azulMedio);
-
-    border:1px solid #E2E8F0;
-
-    margin-bottom:10px;
-}
-
-.subheader h1{
-    color:var(--azulNoche);
-    font-size:2rem;
-    margin-bottom:5px;
-}
-
-.subheader p{
-    color:var(--gris);
-}
-
-/* ================================= */
-/* CONTENEDOR */
-/* ================================= */
-
 .container{
-    max-width:1200px;
-    margin:40px auto;
-    padding:0 20px;
-}
-
-/* ================================= */
-/* BOTON VOLVER */
-/* ================================= */
-
-.back{
-    display:inline-block;
-
-    margin-bottom:25px;
-
-    background:var(--azulMedio);
-    color:white;
-
-    text-decoration:none;
-
-    padding:10px 18px;
-
-    border-radius:10px;
-
-    font-weight:700;
-}
-
-.back:hover{
-    background:var(--azulNoche);
-}
-
-/* ================================= */
-/* INTRO */
-/* ================================= */
-
-.intro{
+    max-width:1400px;
+    margin:auto;
     background:white;
-
-    border-radius:18px;
-
+    border:1px solid #E2E8F0;
+    border-radius:16px;
     padding:24px;
-
-    margin-bottom:30px;
-
-    border:1px solid #E2E8F0;
-
-    box-shadow:0 8px 24px rgba(0,0,0,.05);
+    box-shadow:0 8px 24px rgba(0,0,0,.07);
 }
-
-.intro h2{
-    color:var(--azulMedio);
-    margin-bottom:10px;
-}
-
-.intro p{
-    color:var(--gris);
-    line-height:1.6;
-}
-
-/* ================================= */
-/* MENU */
-/* ================================= */
-
-.menu-bloques{
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(300px,1fr));
-
-    gap:22px;
-}
-
-.bloque{
-    background:white;
-
-    border:1px solid #E2E8F0;
-
-    border-radius:20px;
-
-    padding:26px;
-
-    text-decoration:none;
-
-    color:inherit;
-
-    transition:.25s;
-
-    box-shadow:
-    0 8px 24px rgba(0,0,0,.05);
-}
-
-.bloque:hover{
-
-    transform:translateY(-5px);
-
-    border-color:var(--turquesa);
-
-    box-shadow:
-    0 15px 35px rgba(0,0,0,.10);
-}
-
-.numero{
-
-    display:inline-flex;
-
+.topbar{
+    display:flex;
+    justify-content:space-between;
     align-items:center;
-    justify-content:center;
-
-    width:42px;
-    height:42px;
-
-    border-radius:12px;
-
-    background:var(--azulMedio);
-
+    gap:15px;
+}
+.back{
+    background:#2C447D;
     color:white;
-
-    font-weight:800;
-
-    margin-bottom:16px;
-}
-
-.bloque h3{
-    color:var(--azulNoche);
-    margin-bottom:10px;
-}
-
-.bloque p{
-    color:var(--gris);
-    line-height:1.55;
-}
-
-.tag{
-    display:inline-block;
-
-    margin-top:15px;
-
-    padding:5px 10px;
-
-    border-radius:999px;
-
-    background:#2D9AB811;
-
-    color:var(--turquesa);
-
-    font-size:.8rem;
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:9px;
     font-weight:700;
 }
+h1{color:#2C447D;margin-bottom:4px;}
+.subtitle{color:#3E6FA5;margin-top:0;}
+.formula{
+    text-align:center;
+    color:#2C447D;
+    font-size:20px;
+    font-weight:700;
+    margin:12px 0 20px;
+}
+.layout{
+    display:grid;
+    grid-template-columns:290px 1fr 330px;
+    gap:20px;
+}
+.panel{
+    background:#ECECEC55;
+    border:1px solid #E2E8F0;
+    border-radius:14px;
+    padding:16px;
+}
+.panel h2{
+    color:#2C447D;
+    font-size:18px;
+    margin-top:0;
+}
+.control{margin-bottom:18px;}
+label{font-weight:600;}
+input{width:100%;}
+button{
+    background:#2C447D;
+    color:white;
+    border:0;
+    border-radius:8px;
+    padding:10px 16px;
+    cursor:pointer;
+    width:100%;
+    font-weight:700;
+}
+canvas{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:12px;
+    width:100%;
+    height:540px;
+}
+.metric{
+    background:#2D9AB811;
+    border-left:4px solid #C7A05A;
+    border-radius:10px;
+    padding:10px;
+    margin-bottom:10px;
+}
+.metric span{
+    display:block;
+    font-size:13px;
+    color:#3E6FA5;
+}
+.metric b{
+    font-size:18px;
+    color:#2C447D;
+}
+.note{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:10px;
+    padding:12px;
+    font-size:14px;
+    line-height:1.45;
+}
+.tabs{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin:18px 0;
+}
+.tab{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:12px;
+    padding:12px;
+    text-align:center;
+}
+.tab b{color:#2C447D;}
+.tab span{display:block;color:#C7A05A;font-weight:700;}
+@media(max-width:1050px){
+    .layout{grid-template-columns:1fr;}
+    .tabs{grid-template-columns:1fr;}
+    .topbar{display:block;}
+    .back{display:inline-block;margin-bottom:12px;}
+}
+    .double-metric{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+}
 
-/* ================================= */
-/* RESPONSIVE */
-/* ================================= */
+.metric-mini{
+    background:#2D9AB811;
+    border-left:4px solid #C7A05A;
+    border-radius:10px;
+    padding:10px;
+}
 
-@media(max-width:700px){
+.metric-mini span{
+    display:block;
+    font-size:13px;
+    color:#3E6FA5;
+}
 
-    .subheader{
-        padding:20px;
+.metric-mini b{
+    display:block;
+    margin-top:4px;
+    font-size:20px;
+    color:#2C447D;
+}
+
+    /* ====================================================== */
+/* FUNDAMENTOS */
+/* ====================================================== */
+
+.theory-section{
+    margin-top:30px;
+}
+
+.theory-section h2{
+    color:#2C447D;
+    margin-bottom:20px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.info-card{
+    background:white;
+    border:1px solid #E2E8F0;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+}
+
+.info-card h3{
+    color:#2C447D;
+    margin-top:0;
+    margin-bottom:12px;
+    border-bottom:2px solid #C7A05A;
+    padding-bottom:8px;
+}
+
+.formula-box{
+    background:#ECECEC55;
+    border-left:4px solid #C7A05A;
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.metric-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.metric-card{
+    background:#2D9AB811;
+    border-radius:8px;
+    padding:10px;
+}
+
+.metric-card strong{
+    color:#2C447D;
+}
+
+.metric-card p{
+    margin-top:6px;
+    margin-bottom:0;
+    font-size:14px;
+}
+
+.note-box{
+    margin-top:12px;
+    background:#FFF8EB;
+    border-left:4px solid #C7A05A;
+    padding:10px;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.mini-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.mini-table td{
+    padding:8px;
+    border-bottom:1px solid #E2E8F0;
+}
+
+.mini-table td:first-child{
+    font-weight:bold;
+    color:#2C447D;
+    width:90px;
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+.question-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.question-box{
+    background:#2C447D10;
+    border-left:4px solid #2C447D;
+    border-radius:8px;
+    padding:12px;
+}
+
+@media(max-width:1000px){
+
+    .info-grid{
+        grid-template-columns:1fr;
     }
 
-    .subheader h1{
-        font-size:1.7rem;
+    .question-grid{
+        grid-template-columns:1fr;
     }
 
 }
 
+
+
+    
 </style>
+
+    <script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <body>
 
-<header class="subheader">
-
-    <div class="subheader-content">
-
-        <span class="badge">
-            Diplomado en Estadística Aplicada
-        </span>
-
-        <h1>Semana I · Regresión Lineal Simple</h1>
-
-        <p>
-            Maestría en Matemática con Orientación en Estadística · Universidad Nacional Autónoma de Honduras
-        </p>
-
-    </div>
-
-</header>
-
 <div class="container">
 
-    <a href="index.html" class="back">
-        ← Menú Principal
-    </a>
-
-    <div class="intro">
-
-        <h2>Exploración de conceptos fundamentales</h2>
-
-        <p>
-            En esta unidad estudiaremos la relación lineal entre variables,
-            el ajuste de la recta mediante mínimos cuadrados y el modelo
-            de regresión lineal simple. Seleccione cualquiera de los recursos
-            interactivos para comenzar.
+<div class="topbar">
+    <div>
+        <h1>Semana I · Regresión Lineal Simple</h1>
+        <p class="subtitle">
+            Simulador para explorar modelo lineal, correlación, \(R^2\), inferencia y predicción.
         </p>
+    </div>
+    <a class="back" href="../simuladores_estadistica/index.html">← Menú </a>
+</div>
 
+<div class="formula">
+\(Y_i = \beta_0 + \beta_1X_i + \varepsilon_i,\quad \varepsilon_i \sim N(0,\sigma^2)\)
+</div>
+
+<div class="tabs">
+    <div class="tab"><span>1</span><b>Modelo</b><br>Recta estimada</div>
+    <div class="tab"><span>2</span><b>Correlación</b><br>\(r\) y \(R^2\)</div>
+    <div class="tab"><span>3</span><b>IC coeficientes</b><br>β₀ y β₁</div>
+    <div class="tab"><span>4</span><b>Hipótesis</b><br>\(H_0:β_1=0\)</div>
+    <div class="tab"><span>5</span><b>Predicción</b><br>IC e IP</div>
+</div>
+
+<div class="layout">
+
+<!-- IZQUIERDA -->
+<div class="panel">
+<h2>⚙ Parámetros</h2>
+
+<div class="control">
+<label>Tamaño de muestra n: <span id="nv">50</span></label>
+<input id="n" type="range" min="10" max="250" value="50">
+</div>
+
+<div class="control">
+<label>Intercepto β₀: <span id="b0v">20</span></label>
+<input id="b0" type="range" min="0" max="80" value="20">
+</div>
+
+<div class="control">
+<label>Pendiente β₁: <span id="b1v">5</span></label>
+<input id="b1" type="range" min="-10" max="15" value="5">
+</div>
+
+<div class="control">
+<label>Ruido σ: <span id="sigmav">10</span></label>
+<input id="sigma" type="range" min="1" max="45" value="10">
+</div>
+
+<div class="control">
+<label>Valor para predicción x₀: <span id="x0v">6</span></label>
+<input id="x0" type="range" min="1" max="10" value="6" step="0.1">
+</div>
+
+<button onclick="generate()">Generar nueva muestra</button>
+
+<br><br>
+
+<div class="note">
+<strong>Actividad:</strong>
+Aumente \(σ\) y observe qué ocurre con \(R^2\), el p-valor, los intervalos de confianza y el intervalo de predicción.
+</div>
+</div>
+
+<!-- CENTRO -->
+<div class="panel">
+<h2>Gráfico de dispersión, Recta regresora</h2>
+<canvas id="plot" width="900" height="540"></canvas>
+<p style="font-size:13px;color:#3E6FA5;">
+Línea dorada: recta poblacional. Línea azul: recta estimada. Punto rojo: predicción en \(x_0\).
+</p>
+</div>
+
+<!-- DERECHA -->
+<div class="panel">
+<h2>Resultados</h2>
+
+<div class="metric">
+<span>Modelo estimado</span>
+<b id="eqv">\( \hat{Y}=a+bX \)</b>
+</div>
+
+<div class="double-metric">
+
+    <div class="metric-mini">
+        <span>Correlación \(r\)</span>
+        <b id="rv">0.000</b>
     </div>
 
-    <div class="menu-bloques">
+    <div class="metric-mini">
+        <span>\(R^2\)</span>
+        <b id="r2v">0.000</b>
+    </div>
 
-        <a href="relacion_variables.html" class="bloque">
+</div>
 
-            <div class="numero">01</div>
+<div class="metric">
+<span>IC 95% para β₀</span>
+<b id="ci0v">[0.000, 0.000]</b>
+</div>
 
-            <h3>Relación entre variables</h3>
+<div class="metric">
+<span>IC 95% para β₁</span>
+<b id="ci1v">[0.000, 0.000]</b>
+</div>
 
-            <p>
-                Explore diferentes conjuntos de datos mediante diagramas
-                de dispersión e identifique cuándo existe una relación
-                lineal entre las variables.
-            </p>
+<div class="metric">
+<span>Prueba \(H_0:β_1=0\)</span>
+<b id="pv">p = 0.000</b>
+</div>
 
-            <span class="tag">Visualización</span>
+<div class="metric">
+<span>Predicción en \(x_0\)</span>
+<b id="predv">ŷ₀ = 0.000</b>
+</div>
 
-        </a>
+<div class="metric">
+<span>IC media 95%</span>
+<b id="icmediav">[0.000, 0.000]</b>
+</div>
 
-        <a href="minimos_cuadrados.html" class="bloque">
+<div class="metric">
+<span>IP individual 95%</span>
+<b id="ipv">[0.000, 0.000]</b>
+</div>
 
-            <div class="numero">02</div>
 
-            <h3>Mínimos cuadrados</h3>
 
-            <p>
-                Observe cómo la recta de regresión se ajusta a los datos
-                minimizando la suma de cuadrados de los residuos.
-            </p>
+</div>
 
-            <span class="tag">Animación</span>
+</div>
 
-        </a>
+    
+<!-- ====================================================== -->
+<!-- FUNDAMENTOS ESTADÍSTICOS DE LA SIMULACIÓN -->
+<!-- ====================================================== -->
 
-        <a href="simulador_regresion.html" class="bloque">
+<div class="theory-section">
 
-            <div class="numero">03</div>
+    <h2>Componentes utilizados en la simulación</h2>
 
-            <h3>Simulador completo</h3>
+    <div class="info-grid">
 
-            <p>
-                Experimente con β₀, β₁, tamaño de muestra, ruido,
-                correlación, intervalos de confianza, pruebas de hipótesis
-                y predicción.
-            </p>
+        <!-- MODELO -->
+        <div class="info-card">
 
-            <span class="tag">Interactivo</span>
+            <h3>Modelo poblacional</h3>
 
-        </a>
+            <div class="formula-box">
+                \[
+                Y_i=\beta_0+\beta_1X_i+\varepsilon_i
+                \]
+            </div>
+
+            <table class="mini-table">
+                <tr>
+                    <td>\(\beta_0\)</td>
+                    <td>Intercepto poblacional</td>
+                </tr>
+
+                <tr>
+                    <td>\(\beta_1\)</td>
+                    <td>Pendiente poblacional</td>
+                </tr>
+
+                <tr>
+                    <td>\(X_i\)</td>
+                    <td>Variable explicativa</td>
+                </tr>
+
+                <tr>
+                    <td>\(Y_i\)</td>
+                    <td>Variable respuesta</td>
+                </tr>
+
+                <tr>
+                    <td>\(\varepsilon_i\)</td>
+                    <td>Error aleatorio</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <!-- ERROR -->
+        <div class="info-card">
+
+            <h3>Componente aleatoria</h3>
+
+            <div class="formula-box">
+                \[
+                \varepsilon_i\sim N(0,\sigma^2)
+                \]
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric-card">
+                    <strong>\(\sigma\) pequeño</strong>
+                    <p>
+                    Menor dispersión alrededor de la función de regresión.
+                    </p>
+                </div>
+
+                <div class="metric-card">
+                    <strong>\(\sigma\) grande</strong>
+                    <p>
+                    Mayor variabilidad y menor precisión inferencial.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="note-box">
+                El parámetro \(\sigma\) controla la variabilidad de las observaciones alrededor de la recta poblacional.
+            </div>
+
+        </div>
+
+        <!-- CORRELACION -->
+        <div class="info-card">
+
+            <h3>Asociación lineal</h3>
+
+            <div class="formula-box">
+                \[
+                r=
+                \frac{\sum (X_i-\bar X)(Y_i-\bar Y)}
+                {\sqrt{\sum (X_i-\bar X)^2
+                \sum (Y_i-\bar Y)^2}}
+                \]
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric-card">
+                    <strong>\(r\)</strong>
+                    <p>
+                    Intensidad y dirección de la asociación lineal.
+                    </p>
+                </div>
+
+                <div class="metric-card">
+                    <strong>\(R^2\)</strong>
+                    <p>
+                    Proporción de variabilidad explicada por el modelo.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- INFERENCIA -->
+        <div class="info-card">
+
+            <h3>Inferencia estadística</h3>
+
+            <div class="formula-box">
+                \[
+                H_0:\beta_1=0
+                \]
+
+                \[
+                H_1:\beta_1\neq0
+                \]
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric-card">
+                    <strong>\(p<0.05\)</strong>
+                    <p>
+                    Evidencia estadística de relación lineal.
+                    </p>
+                </div>
+
+                <div class="metric-card">
+                    <strong>\(p\ge0.05\)</strong>
+                    <p>
+                    No existe evidencia suficiente para rechazar \(H_0\).
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PREDICCION -->
+        <div class="info-card">
+
+            <h3>Predicción</h3>
+
+            <div class="formula-box">
+                \[
+                \hat Y_0=
+                \hat\beta_0+
+                \hat\beta_1x_0
+                \]
+            </div>
+
+            <div class="metric-grid">
+
+                <div class="metric-card">
+                    <strong>IC 95%</strong>
+                    <p>
+                    Intervalo para la respuesta media
+                    \(E(Y|X=x_0)\).
+                    </p>
+                </div>
+
+                <div class="metric-card">
+                    <strong>IP 95%</strong>
+                    <p>
+                    Intervalo para una observación futura individual.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="note-box">
+                El intervalo de predicción siempre es más amplio que el intervalo de confianza para la media.
+            </div>
+
+        </div>
+
+        <!-- ACTIVIDAD -->
+        <div class="info-card full-width">
+
+            <h3>💡 Preguntas</h3>
+
+            <div class="question-grid">
+
+                <div class="question-box">
+                    ¿Qué ocurre con \(R^2\) al incrementar \(\sigma\)?
+                </div>
+
+                <div class="question-box">
+                    ¿Cómo cambia el ancho de los intervalos cuando aumenta \(n\)?
+                </div>
+
+                <div class="question-box">
+                    ¿Qué sucede con el p-valor cuando \(\beta_1\) se aproxima a cero?
+                </div>
+
+                <div class="question-box">
+                    ¿Por qué el intervalo de predicción es más amplio que el intervalo de confianza?
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
+    
+</div>
+
+<script>
+const canvas = document.getElementById("plot");
+const ctx = canvas.getContext("2d");
+let data = [];
+
+function randn(){
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+function erf(x){
+    const sign = x >= 0 ? 1 : -1;
+    x = Math.abs(x);
+    const a1=0.254829592, a2=-0.284496736, a3=1.421413741;
+    const a4=-1.453152027, a5=1.061405429, p=0.3275911;
+    const t = 1/(1+p*x);
+    const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+    return sign*y;
+}
+
+function normalCDF(x){
+    return 0.5 * (1 + erf(x / Math.sqrt(2)));
+}
+
+function generate(){
+    const n = +document.getElementById("n").value;
+    const b0 = +document.getElementById("b0").value;
+    const b1 = +document.getElementById("b1").value;
+    const sigma = +document.getElementById("sigma").value;
+    const x0 = +document.getElementById("x0").value;
+
+    document.getElementById("nv").textContent = n;
+    document.getElementById("b0v").textContent = b0;
+    document.getElementById("b1v").textContent = b1;
+    document.getElementById("sigmav").textContent = sigma;
+    document.getElementById("x0v").textContent = x0.toFixed(1);
+
+    data = [];
+    for(let i=0; i<n; i++){
+        let x = 1 + Math.random()*9;
+        let y = b0 + b1*x + randn()*sigma;
+        data.push({x,y});
+    }
+    draw(b0,b1,x0);
+}
+
+function regression(){
+    const n = data.length;
+    const mx = data.reduce((s,d)=>s+d.x,0)/n;
+    const my = data.reduce((s,d)=>s+d.y,0)/n;
+
+    let sxx=0, syy=0, sxy=0;
+
+    data.forEach(d=>{
+        sxx += (d.x-mx)**2;
+        syy += (d.y-my)**2;
+        sxy += (d.x-mx)*(d.y-my);
+    });
+
+    const b1hat = sxy/sxx;
+    const b0hat = my - b1hat*mx;
+
+    let sse=0;
+    data.forEach(d=>{
+        const yhat = b0hat + b1hat*d.x;
+        sse += (d.y-yhat)**2;
+    });
+
+    const mse = sse/(n-2);
+    const se = Math.sqrt(mse);
+    const se_b1 = Math.sqrt(mse/sxx);
+    const se_b0 = Math.sqrt(mse*(1/n + mx*mx/sxx));
+
+    const t_b1 = b1hat/se_b1;
+    const p = 2*(1-normalCDF(Math.abs(t_b1)));
+
+    const z = 1.96;
+
+    const ci_b1 = [b1hat - z*se_b1, b1hat + z*se_b1];
+    const ci_b0 = [b0hat - z*se_b0, b0hat + z*se_b0];
+
+    const r = sxy/Math.sqrt(sxx*syy);
+    const r2 = r*r;
+
+    return {n,mx,my,sxx,syy,b0hat,b1hat,se,se_b0,se_b1,ci_b0,ci_b1,r,r2,p};
+}
+
+function prediction(st,x0){
+    const yhat = st.b0hat + st.b1hat*x0;
+    const z = 1.96;
+
+    const se_mean = st.se * Math.sqrt(1/st.n + ((x0-st.mx)**2)/st.sxx);
+    const se_pred = st.se * Math.sqrt(1 + 1/st.n + ((x0-st.mx)**2)/st.sxx);
+
+    return {
+        yhat,
+        icMean:[yhat-z*se_mean, yhat+z*se_mean],
+        ip:[yhat-z*se_pred, yhat+z*se_pred]
+    };
+}
+
+function draw(trueB0,trueB1,x0){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const st = regression();
+    const pr = prediction(st,x0);
+
+    const pad = 55;
+    const ys = data.map(d=>d.y);
+    ys.push(trueB0 + trueB1*0, trueB0 + trueB1*10, pr.ip[0], pr.ip[1]);
+
+    const xmin = 0, xmax = 10;
+    const ymin = Math.min(...ys) - 8;
+    const ymax = Math.max(...ys) + 8;
+
+    function X(x){return pad + (x-xmin)/(xmax-xmin)*(canvas.width-2*pad);}
+    function Y(y){return canvas.height-pad - (y-ymin)/(ymax-ymin)*(canvas.height-2*pad);}
+
+    // grid
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+    for(let i=0;i<=10;i++){
+        let x = X(i);
+        ctx.beginPath(); ctx.moveTo(x,pad); ctx.lineTo(x,canvas.height-pad); ctx.stroke();
+    }
+    for(let i=0;i<=8;i++){
+        let y = pad + i*(canvas.height-2*pad)/8;
+        ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(canvas.width-pad,y); ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad,canvas.height-pad); ctx.lineTo(canvas.width-pad,canvas.height-pad); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad,pad); ctx.lineTo(pad,canvas.height-pad); ctx.stroke();
+
+    // population line
+    ctx.strokeStyle = "#C7A05A";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(X(0),Y(trueB0));
+    ctx.lineTo(X(10),Y(trueB0 + trueB1*10));
+    ctx.stroke();
+
+    // estimated line
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([8,5]);
+    ctx.beginPath();
+    ctx.moveTo(X(0),Y(st.b0hat));
+    ctx.lineTo(X(10),Y(st.b0hat + st.b1hat*10));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // points
+    data.forEach(d=>{
+        ctx.beginPath();
+        ctx.fillStyle = "#2D9AB8";
+        ctx.arc(X(d.x),Y(d.y),4.3,0,Math.PI*2);
+        ctx.fill();
+    });
+
+    // prediction x0
+    ctx.strokeStyle = "#B91C1C";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(X(x0),Y(ymin)); ctx.lineTo(X(x0),Y(ymax)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+    ctx.fillStyle = "#B91C1C";
+    ctx.arc(X(x0),Y(pr.yhat),6,0,Math.PI*2);
+    ctx.fill();
+
+    // prediction interval vertical
+    ctx.strokeStyle = "#B91C1C";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(X(x0)+10,Y(pr.ip[0]));
+    ctx.lineTo(X(x0)+10,Y(pr.ip[1]));
+    ctx.stroke();
+
+    // mean confidence interval
+    ctx.strokeStyle = "#C7A05A";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(X(x0)-10,Y(pr.icMean[0]));
+    ctx.lineTo(X(x0)-10,Y(pr.icMean[1]));
+    ctx.stroke();
+
+    // outputs
+    document.getElementById("eqv").innerHTML =
+        `\\(
+        \\hat{Y}
+        =
+        ${st.b0hat.toFixed(2)}
+        +
+        ${st.b1hat.toFixed(2)}X
+        \\)`;
+        
+        MathJax.typesetPromise();
+
+    document.getElementById("rv").textContent = st.r.toFixed(3);
+    document.getElementById("r2v").textContent = st.r2.toFixed(3);
+
+    document.getElementById("ci0v").textContent =
+        `[${st.ci_b0[0].toFixed(2)}, ${st.ci_b0[1].toFixed(2)}]`;
+
+    document.getElementById("ci1v").textContent =
+        `[${st.ci_b1[0].toFixed(2)}, ${st.ci_b1[1].toFixed(2)}]`;
+
+    document.getElementById("pv").textContent =
+        st.p < 0.001 ? "p < 0.001" : `p = ${st.p.toFixed(3)}`;
+
+    document.getElementById("predv").textContent =
+        `ŷ₀ = ${pr.yhat.toFixed(2)}`;
+
+    document.getElementById("icmediav").textContent =
+        `[${pr.icMean[0].toFixed(2)}, ${pr.icMean[1].toFixed(2)}]`;
+
+    document.getElementById("ipv").textContent =
+        `[${pr.ip[0].toFixed(2)}, ${pr.ip[1].toFixed(2)}]`;
+
+    let text = "";
+    if(st.p < 0.05){
+        text = `Existe evidencia estadística para rechazar H₀: β₁ = 0. 
+        La pendiente estimada es ${st.b1hat.toFixed(2)}. 
+        El modelo explica aproximadamente ${(st.r2*100).toFixed(1)}% de la variabilidad de Y. 
+        El intervalo de predicción es más amplio que el intervalo para la media porque predice una observación individual.`;
+    } else {
+        text = `No se rechaza H₀: β₁ = 0. 
+        La muestra no aporta evidencia suficiente de una relación lineal estadísticamente significativa. 
+        Observe cómo el tamaño de muestra y el ruido afectan esta conclusión.`;
+    }
+    document.getElementById("interp").textContent = text;
+}
+
+["n","b0","b1","sigma","x0"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", generate);
+});
+
+generate();
+</script>
 
 </body>
 </html>
