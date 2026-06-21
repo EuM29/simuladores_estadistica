@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-
 :root{
     --azulNoche:#0f172a;
     --azulPetroleo:#164e63;
@@ -31,279 +30,10 @@
 body{
     min-height:100vh;
     font-family:'Inter',sans-serif;
-
     background:
-    radial-gradient(circle at top, rgba(34,211,238,.10), transparent 35%),
-    linear-gradient(135deg,#f8fafc,#e2e8f0);
-}
-
-/* ==========================
-   ENCABEZADO
-========================== */
-
-.mini-header{
-    max-width:1000px;
-    margin:30px auto 10px auto;
-    padding:16px 22px;
-
-    background:rgba(255,255,255,.85);
-    backdrop-filter:blur(10px);
-
-    border-radius:20px;
-
-    box-shadow:
-    0 10px 25px rgba(15,23,42,.08);
-
-    border-left:6px solid var(--dorado);
-}
-
-.logo-area{
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-.logo-circle{
-    width:60px;
-    height:60px;
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:1.5rem;
-    color:white;
-
-    background:
-    linear-gradient(
-        135deg,
-        var(--azulNoche),
-        var(--azulPetroleo)
-    );
-
-    box-shadow:
-    0 8px 18px rgba(15,23,42,.18);
-}
-
-.universidad{
-    display:block;
-    font-size:.75rem;
-    color:var(--grisTexto);
-    text-transform:uppercase;
-    letter-spacing:1px;
-}
-
-.header-text h1{
-    font-size:1.25rem;
+        radial-gradient(circle at top, rgba(34,211,238,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#e2e8f0);
     color:var(--azulNoche);
-    margin:4px 0;
-}
-
-.header-text small{
-    color:var(--azulPetroleo);
-    font-weight:600;
-}
-
-.semana-label{
-    text-align:center;
-    margin-top:20px;
-
-    color:var(--azulPetroleo);
-    font-weight:700;
-    letter-spacing:.5px;
-}
-
-/* ==========================
-   MENU ORBITAL
-========================== */
-
-.submenu-semana{
-    min-height:500px;
-
-    display:grid;
-    place-items:center;
-
-    padding:20px;
-}
-
-.orbita{
-    width:340px;
-    height:340px;
-
-    position:relative;
-
-    border-radius:50%;
-    border:2px dashed rgba(22,78,99,.25);
-
-    animation:flotar 5s ease-in-out infinite;
-}
-
-.centro{
-    position:absolute;
-
-    inset:50%;
-    transform:translate(-50%,-50%);
-
-    width:150px;
-    height:150px;
-
-    border-radius:50%;
-
-    background:
-    linear-gradient(
-        135deg,
-        var(--azulNoche),
-        var(--azulPetroleo)
-    );
-
-    color:white;
-
-    display:grid;
-    place-content:center;
-
-    text-align:center;
-
-    box-shadow:
-    0 18px 35px rgba(15,23,42,.25);
-}
-
-.centro span{
-    font-size:1.25rem;
-    font-weight:800;
-}
-
-.centro small{
-    color:#cffafe;
-    margin-top:4px;
-}
-
-.nodo{
-    position:absolute;
-
-    width:200px;
-    min-height:95px;
-
-    padding:14px;
-
-    border-radius:22px;
-
-    background:white;
-
-    color:var(--azulNoche);
-
-    text-decoration:none;
-
-    border:1px solid rgba(100,116,139,.18);
-
-    box-shadow:
-    0 14px 28px rgba(15,23,42,.14);
-
-    transition:.35s ease;
-}
-
-.nodo:hover{
-    border-color:var(--turquesa);
-
-    box-shadow:
-    0 20px 40px rgba(15,23,42,.22);
-}
-
-.nodo-1{
-    top:-15px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.nodo-1:hover{
-    transform:
-    translateX(-50%)
-    scale(1.05)
-    translateY(-4px);
-}
-
-.nodo-2{
-    bottom:-15px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.nodo-2:hover{
-    transform:
-    translateX(-50%)
-    scale(1.05)
-    translateY(-4px);
-}
-
-.icono{
-    width:38px;
-    height:38px;
-
-    border-radius:12px;
-
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-    rgba(34,211,238,.15);
-
-    margin-bottom:8px;
-
-    font-size:1.1rem;
-}
-
-.nodo strong{
-    display:block;
-    font-size:.95rem;
-}
-
-.nodo small{
-    display:block;
-    margin-top:4px;
-
-    color:var(--grisTexto);
-}
-
-@keyframes flotar{
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-}
-
-/* ==========================
-   RESPONSIVE
-========================== */
-
-@media(max-width:600px){
-
-    .logo-area{
-        flex-direction:column;
-        text-align:center;
-    }
-
-    .header-text h1{
-        font-size:1.05rem;
-    }
-
-    .orbita{
-        width:290px;
-        height:290px;
-    }
-
-    .centro{
-        width:120px;
-        height:120px;
-    }
-
-    .nodo{
-        width:170px;
-    }
-    
 }
 
 /* ==========================
@@ -313,53 +43,40 @@ body{
 .subheader{
     position:relative;
     overflow:hidden;
-
     padding:28px 60px 30px;
-
     background:
         radial-gradient(circle at 45% 20%, rgba(34,211,238,.18), transparent 28%),
         linear-gradient(90deg, #f8fafc 0%, #eaf3f7 55%, #eef2f7 100%);
- 
 }
 
 .subheader::before{
     content:"";
     position:absolute;
     inset:0;
-
     background:
         linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 45%, transparent 70%);
-
     pointer-events:none;
 }
- 
 
 .subheader-content{
     position:relative;
     z-index:1;
-
     max-width:1200px;
     margin:0 auto;
 }
 
 .subheader-badge{
     display:inline-block;
-
     margin-bottom:6px;
-
     color:var(--azulPetroleo);
-
     font-size:.82rem;
     font-weight:700;
-
     letter-spacing:.2px;
 }
 
 .subheader h1{
     margin:0;
-
     color:var(--azulNoche);
-
     font-size:2rem;
     font-weight:800;
     line-height:1.05;
@@ -368,46 +85,87 @@ body{
 .subheader h1::after{
     content:"";
     display:block;
-
     width:62px;
     height:4px;
-
     margin-top:8px;
-
     border-radius:999px;
-
     background:linear-gradient(90deg, var(--dorado), var(--turquesa));
 }
 
-.subheader p{
-    margin-top:10px;
+/* ==========================
+   MENU EN BLOQUES
+========================== */
 
-    color:#475569;
-
-    font-size:1rem;
-    font-weight:500;
+.submenu-semana{
+    max-width:1100px;
+    margin:42px auto;
+    padding:0 24px;
 }
 
-/* Responsive */
+.menu-bloques{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:22px;
+}
+
+.bloque{
+    background:white;
+    color:var(--azulNoche);
+    text-decoration:none;
+    border:1px solid rgba(100,116,139,.18);
+    border-radius:22px;
+    padding:26px 24px;
+    box-shadow:0 12px 28px rgba(15,23,42,.08);
+    transition:.3s ease;
+}
+
+.bloque:hover{
+    transform:translateY(-6px);
+    border-color:var(--turquesa);
+    box-shadow:0 18px 38px rgba(15,23,42,.14);
+}
+
+.bloque .icono{
+    width:46px;
+    height:46px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(34,211,238,.15);
+    font-size:1.3rem;
+    margin-bottom:16px;
+}
+
+.bloque h3{
+    font-size:1.1rem;
+    margin-bottom:10px;
+    color:var(--azulNoche);
+}
+
+.bloque p{
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.92rem;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
 
 @media(max-width:700px){
     .subheader{
         padding:24px 26px 26px;
     }
 
-    .subheader::after{
-        display:none;
-    }
-
     .subheader h1{
         font-size:1.85rem;
     }
 
-    .subheader p{
-        font-size:.92rem;
+    .submenu-semana{
+        margin:30px auto;
     }
 }
-
 </style>
 </head>
 
@@ -415,42 +173,42 @@ body{
 
 <header class="subheader">
     <div class="subheader-content">
-
         <span class="subheader-badge">
             Diplomado en Estadística Aplicada
         </span>
 
-        <h1>Semana I</h1> 
-
+        <h1>Semana I</h1>
     </div>
-</header> 
+</header>
 
 <section class="submenu-semana">
+    <div class="menu-bloques">
 
-    <div class="orbita">
-
-        <div class="centro">
-            <span>Semana I</span>
-            <small>Regresión lineal</small>
-        </div>
-
-        <a href="SemanaI/dispersiones.html" class="nodo nodo-1">
+        <a href="SemanaI/dispersiones.html" class="bloque">
             <span class="icono">📈</span>
-            <strong>Relación entre variables</strong> 
+            <h3>Relación entre variables</h3>
+            <p>
+                Explora gráficos de dispersión para identificar relaciones lineales y no lineales.
+            </p>
         </a>
 
-        <a href="./semanaI.html" class="nodo nodo-2">
-            <span class="icono"> 🎛️ </span>
-            <strong>Simulador con parámetros</strong> 
+        <a href="./semanaI.html" class="bloque">
+            <span class="icono">🎛️</span>
+            <h3>Simulador con parámetros</h3>
+            <p>
+                Modifica β₀, β₁, ruido y tamaño de muestra para observar el comportamiento del modelo.
+            </p>
         </a>
 
-        <a href="SemanaI/minimos_cuadrados.html" class="nodo nodo-3">
-            <span class="icono"> 🎛️ </span>
-            <strong>Mínimos Cuadrados</strong> 
+        <a href="SemanaI/minimos_cuadrados.html" class="bloque">
+            <span class="icono">📉</span>
+            <h3>Mínimos Cuadrados</h3>
+            <p>
+                Observa cómo se ajusta la recta minimizando la suma de cuadrados de los residuos.
+            </p>
         </a>
 
     </div>
-
 </section>
 
 </body>
