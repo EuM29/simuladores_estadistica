@@ -6,19 +6,16 @@
 
 <title>Diplomado en Estadística Aplicada - Semana I</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
 :root{
-    --azulNoche:#0f172a;
-    --azulPetroleo:#164e63;
-    --turquesa:#22d3ee;
-    --dorado:#f4c542;
-    --grisTexto:#64748b;
-    --fondo:#f8fafc;
-    --blanco:#ffffff;
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
 }
 
 *{
@@ -29,53 +26,57 @@
 
 body{
     min-height:100vh;
-    font-family:'Inter',sans-serif;
-    background:
-        radial-gradient(circle at top, rgba(34,211,238,.10), transparent 35%),
-        linear-gradient(135deg,#f8fafc,#e2e8f0);
+    font-family:Segoe UI, Arial, sans-serif;
     color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
 }
 
 /* ==========================
-   SUBHEADER SEMANA I
+   SUBHEADER
 ========================== */
 
 .subheader{
     position:relative;
     overflow:hidden;
-    padding:28px 60px 30px;
+    padding:26px 60px 28px;
     background:
-        radial-gradient(circle at 45% 20%, rgba(34,211,238,.18), transparent 28%),
-        linear-gradient(90deg, #f8fafc 0%, #eaf3f7 55%, #eef2f7 100%);
+        radial-gradient(circle at 45% 20%, rgba(45,154,184,.16), transparent 28%),
+        linear-gradient(90deg, #F8FAFC 0%, #EEF2F7 55%, #F8FAFC 100%);
+    border-bottom:4px solid var(--dorado);
 }
 
 .subheader::before{
     content:"";
     position:absolute;
     inset:0;
-    background:
-        linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 45%, transparent 70%);
+    background:linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,.55) 45%,
+        transparent 70%
+    );
     pointer-events:none;
 }
 
 .subheader-content{
     position:relative;
     z-index:1;
-    max-width:1200px;
+    max-width:1150px;
     margin:0 auto;
 }
 
 .subheader-badge{
     display:inline-block;
-    margin-bottom:6px;
-    color:var(--azulPetroleo);
+    margin-bottom:7px;
+    color:var(--turquesa);
     font-size:.82rem;
     font-weight:700;
-    letter-spacing:.2px;
+    letter-spacing:.3px;
 }
 
 .subheader h1{
-    margin:0;
     color:var(--azulNoche);
     font-size:2rem;
     font-weight:800;
@@ -92,61 +93,81 @@ body{
     background:linear-gradient(90deg, var(--dorado), var(--turquesa));
 }
 
+.descripcion-semana{
+    margin-top:12px;
+    max-width:720px;
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.98rem;
+}
+
 /* ==========================
-   MENU EN BLOQUES
+   MENÚ EN BLOQUES
 ========================== */
 
 .submenu-semana{
-    max-width:1100px;
+    max-width:1150px;
     margin:42px auto;
     padding:0 24px;
 }
 
 .menu-bloques{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
     gap:22px;
 }
 
 .bloque{
-    background:white;
+    background:var(--blanco);
     color:var(--azulNoche);
     text-decoration:none;
-    border:1px solid rgba(100,116,139,.18);
-    border-radius:22px;
+    border:1px solid var(--borde);
+    border-radius:20px;
     padding:26px 24px;
-    box-shadow:0 12px 28px rgba(15,23,42,.08);
-    transition:.3s ease;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+    transition:.25s ease;
 }
 
 .bloque:hover{
-    transform:translateY(-6px);
+    transform:translateY(-5px);
     border-color:var(--turquesa);
-    box-shadow:0 18px 38px rgba(15,23,42,.14);
+    box-shadow:0 14px 34px rgba(0,0,0,.10);
 }
 
-.bloque .icono{
-    width:46px;
-    height:46px;
+.icono{
+    width:50px;
+    height:50px;
     border-radius:14px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(34,211,238,.15);
-    font-size:1.3rem;
+    background:#2D9AB811;
+    color:var(--turquesa);
+    font-size:1.45rem;
     margin-bottom:16px;
 }
 
 .bloque h3{
-    font-size:1.1rem;
+    color:var(--azulMedio);
+    font-size:1.12rem;
     margin-bottom:10px;
-    color:var(--azulNoche);
 }
 
 .bloque p{
     color:var(--grisTexto);
-    line-height:1.5;
-    font-size:.92rem;
+    line-height:1.55;
+    font-size:.93rem;
+}
+
+.etiqueta{
+    display:inline-block;
+    margin-top:16px;
+    padding:5px 11px;
+    border-radius:999px;
+    background:#C7A05A22;
+    color:var(--dorado);
+    font-size:.78rem;
+    font-weight:700;
 }
 
 /* ==========================
@@ -159,7 +180,7 @@ body{
     }
 
     .subheader h1{
-        font-size:1.85rem;
+        font-size:1.75rem;
     }
 
     .submenu-semana{
@@ -178,6 +199,11 @@ body{
         </span>
 
         <h1>Semana I</h1>
+
+        <p class="descripcion-semana">
+            Regresión lineal simple · Seleccione uno de los recursos interactivos
+            para explorar los conceptos fundamentales de la unidad.
+        </p>
     </div>
 </header>
 
@@ -188,24 +214,30 @@ body{
             <span class="icono">📈</span>
             <h3>Relación entre variables</h3>
             <p>
-                Explora gráficos de dispersión para identificar relaciones lineales y no lineales.
+                Explora gráficos de dispersión para identificar relaciones lineales
+                y no lineales entre dos variables.
             </p>
+            <span class="etiqueta">Visualización</span>
         </a>
 
         <a href="./semanaI.html" class="bloque">
             <span class="icono">🎛️</span>
             <h3>Simulador con parámetros</h3>
             <p>
-                Modifica β₀, β₁, ruido y tamaño de muestra para observar el comportamiento del modelo.
+                Modifica β₀, β₁, ruido y tamaño de muestra para observar
+                el comportamiento del modelo lineal.
             </p>
+            <span class="etiqueta">Interactivo</span>
         </a>
 
         <a href="SemanaI/minimos_cuadrados.html" class="bloque">
             <span class="icono">📉</span>
             <h3>Mínimos Cuadrados</h3>
             <p>
-                Observa cómo se ajusta la recta minimizando la suma de cuadrados de los residuos.
+                Observa cómo se ajusta la recta minimizando la suma de cuadrados
+                de los residuos.
             </p>
+            <span class="etiqueta">Animación</span>
         </a>
 
     </div>
