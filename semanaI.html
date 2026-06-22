@@ -782,8 +782,82 @@ function draw(trueB0,trueB1,x0){
     // axes
     ctx.strokeStyle = "#2C447D";
     ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(pad,canvas.height-pad); ctx.lineTo(canvas.width-pad,canvas.height-pad); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(pad,pad); ctx.lineTo(pad,canvas.height-pad); ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(pad,canvas.height-pad);
+    ctx.lineTo(canvas.width-pad,canvas.height-pad);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(pad,pad);
+    ctx.lineTo(pad,canvas.height-pad);
+    ctx.stroke();
+    
+    /* ==================================
+       ETIQUETAS Y NUMERACIÓN DE EJES
+    ================================== */
+    
+    ctx.fillStyle = "#64748B";
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "center";
+    
+    // Eje X
+    for(let i=0;i<=10;i++){
+        ctx.fillText(
+            i,
+            X(i),
+            canvas.height - pad + 20
+        );
+    }
+    
+    // Eje Y
+    ctx.textAlign = "right";
+    
+    for(let i=0;i<=8;i++){
+    
+        const valorY =
+            ymax - i*(ymax-ymin)/8;
+    
+        const yPos =
+            pad + i*(canvas.height-2*pad)/8;
+    
+        ctx.fillText(
+            valorY.toFixed(0),
+            pad - 10,
+            yPos + 4
+        );
+    }
+    
+    // Títulos de los ejes
+    
+    ctx.fillStyle = "#1D2D50";
+    ctx.font = "bold 14px Segoe UI";
+    
+    // Eje X
+    ctx.textAlign = "center";
+    ctx.fillText(
+        "Variable X",
+        canvas.width/2,
+        canvas.height - 10
+    );
+    
+    // Eje Y
+    ctx.save();
+    
+    ctx.translate(
+        18,
+        canvas.height/2
+    );
+    
+    ctx.rotate(-Math.PI/2);
+    
+    ctx.fillText(
+        "Variable Y",
+        0,
+        0
+    );
+    
+    ctx.restore();
 
     // population line
     ctx.strokeStyle = "#C7A05A";
