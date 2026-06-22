@@ -79,6 +79,37 @@ body{
     margin:40px;
     font-size:14px;
 }
+    .card.locked{
+    opacity:.55;
+    filter:grayscale(80%);
+    cursor:not-allowed;
+    position:relative;
+}
+
+.card.locked:hover{
+    transform:none;
+    box-shadow:0 8px 22px rgba(0,0,0,.06);
+}
+
+.lock-icon{
+    position:absolute;
+    top:16px;
+    right:16px;
+
+    font-size:22px;
+}
+
+.locked .badge{
+    color:#94A3B8;
+}
+
+.locked h2{
+    color:#64748B;
+}
+
+.locked p{
+    color:#94A3B8;
+}
 </style>
 </head>
 
@@ -102,32 +133,50 @@ body{
     </p>
 </a>
 
-<a class="card" href="semana2/regresion_multiple.html">
+<div class="card locked">
+
+    <span class="lock-icon">🔒</span>
+
     <span class="badge">SEMANA II</span>
+
     <h2>Regresión lineal múltiple</h2>
+
     <p>
         Comparación de predictores, interpretación de coeficientes
         y ajuste del modelo.
     </p>
-</a>
 
-<a class="card" href="semana3/anova.html">
+</div>
+
+<div class="card locked">
+
+    <span class="lock-icon">🔒</span>
+
     <span class="badge">SEMANA III</span>
-    <h2>ANOVA de un factor</h2>
-    <p>
-        Comparación de medias entre grupos, variabilidad
-        entre tratamientos y dentro de grupos.
-    </p>
-</a>
 
-<a class="card" href="semana4/factorial.html">
-    <span class="badge">SEMANA IV</span>
-    <h2>Diseño de factores</h2>
+    <h2>ANOVA de un factor</h2>
+
     <p>
-        Simulación de diseños experimentales, efectos principales
-        e interacción entre factores.
+        Comparación de medias entre grupos y análisis
+        de la variabilidad.
     </p>
-</a>
+
+</div>
+
+<div class="card locked">
+
+    <span class="lock-icon">🔒</span>
+
+    <span class="badge">SEMANA IV</span>
+
+    <h2>Diseño de factores</h2>
+
+    <p>
+        Simulación de diseños experimentales e
+        interacción entre factores.
+    </p>
+
+</div>
 
 </div>
 
