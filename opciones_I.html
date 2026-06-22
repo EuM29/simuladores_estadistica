@@ -170,6 +170,42 @@ body{
     font-weight:700;
 }
 
+    /* ==========================
+   BOTÓN VOLVER
+========================== */
+
+.contenedor-boton{
+    max-width:1150px;
+    margin:25px auto 0;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    text-decoration:none;
+
+    background:var(--azulMedio);
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.25s ease;
+
+    box-shadow:0 4px 12px rgba(44,68,125,.20);
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+    transform:translateY(-2px);
+}
+    
 /* ==========================
    RESPONSIVE
 ========================== */
@@ -202,6 +238,12 @@ body{
   
     </div>
 </header>
+
+<div class="contenedor-boton">
+    <a href="../index.html" class="btn-volver">
+    🏠 Inicio
+</a>
+</div>
 
 <section class="submenu-semana">
     <div class="menu-bloques">
