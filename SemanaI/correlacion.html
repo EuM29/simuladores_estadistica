@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,6 +8,14 @@
 <title>Simulador de Correlación de Pearson</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 <style>
 :root{
@@ -92,6 +101,10 @@ body{
     padding:10px 16px;
     border-radius:10px;
     font-weight:700;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
 }
 
 .grid{
@@ -195,6 +208,56 @@ button:hover{
     color:var(--azulMedio);
 }
 
+.matriz-card{
+    margin-top:18px;
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:14px;
+    padding:14px;
+}
+
+.matriz-card strong{
+    color:var(--azulMedio);
+}
+
+.matriz-card p{
+    margin-top:6px;
+    color:var(--grisTexto);
+    font-size:.86rem;
+    line-height:1.45;
+}
+
+.corr-matrix{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:50px 1fr 1fr;
+    gap:6px;
+}
+
+.header-cell{
+    background:var(--azulMedio);
+    color:white;
+    font-weight:800;
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+}
+
+.corr-cell{
+    text-align:center;
+    padding:16px 10px;
+    border-radius:12px;
+    font-weight:800;
+    color:var(--azulNoche);
+    border:1px solid var(--borde);
+    background:#2D9AB822;
+    transition:.3s ease;
+}
+
+.corr-cell.diag{
+    background:#C7A05A33;
+}
+
 @media(max-width:850px){
     .grid{
         grid-template-columns:1fr;
@@ -202,6 +265,10 @@ button:hover{
 
     .subheader{
         padding:24px 26px 26px;
+    }
+
+    .subheader h1{
+        font-size:1.75rem;
     }
 
     .canvas-box{
@@ -229,9 +296,7 @@ button:hover{
 
 <main class="contenedor">
 
-    <a href="../opciones_I.html" class="btn-volver">← Regresar a Semana I</a>
-    <a href="../index.html" class="btn-volver">← Menú</a>
-
+    <a href="../semana1.html" class="btn-volver">← Regresar a Semana I</a>
 
     <section class="grid">
 
@@ -244,7 +309,7 @@ button:hover{
             </div>
 
             <div class="control">
-                <label for="rangoR">Valor de r</label>
+                <label for="rangoR">Valor de \(r\)</label>
                 <input id="rangoR" type="range" min="-0.99" max="0.99" step="0.01" value="0.70">
             </div>
 
@@ -262,11 +327,32 @@ button:hover{
                 </p>
             </div>
 
+            <div class="matriz-card">
+                <strong>Matriz de correlación</strong>
+                <p>
+                    La diagonal es 1 porque cada variable se correlaciona perfectamente consigo misma.
+                </p>
+
+                <div class="corr-matrix">
+                    <div></div>
+                    <div class="header-cell">X</div>
+                    <div class="header-cell">Y</div>
+
+                    <div class="header-cell">X</div>
+                    <div class="corr-cell diag">1.00</div>
+                    <div id="corrXY" class="corr-cell">0.70</div>
+
+                    <div class="header-cell">Y</div>
+                    <div id="corrYX" class="corr-cell">0.70</div>
+                    <div class="corr-cell diag">1.00</div>
+                </div>
+            </div>
+
             <div class="formula">
                 <strong>Idea clave:</strong><br>
                 \(r\) mide la dirección y fuerza de la relación lineal entre dos variables.
                 <br><br>
-                \( -1 \leq r \leq 1 \)
+                \(-1 \leq r \leq 1\)
             </div>
         </aside>
 
@@ -309,10 +395,7 @@ function generarDatos(r, n){
         const x = z1;
         const y = r * z1 + Math.sqrt(1 - r*r) * z2;
 
-        datos.push({
-            x: x,
-            y: y
-        });
+        datos.push({ x, y });
     }
 
     return datos;
@@ -320,8 +403,8 @@ function generarDatos(r, n){
 
 function interpretar(r){
     const absR = Math.abs(r);
-    let fuerza = "";
     let direccion = "";
+    let fuerza = "";
 
     if(r > 0){
         direccion = "positiva";
@@ -350,6 +433,23 @@ function interpretar(r){
     return `Correlación lineal ${direccion} ${fuerza}.`;
 }
 
+function actualizarMatriz(r){
+    const corrXY = document.getElementById("corrXY");
+    const corrYX = document.getElementById("corrYX");
+
+    corrXY.textContent = r.toFixed(2);
+    corrYX.textContent = r.toFixed(2);
+
+    const intensidad = Math.abs(r);
+
+    const color = r >= 0
+        ? `rgba(45,154,184,${0.15 + intensidad * 0.70})`
+        : `rgba(199,160,90,${0.15 + intensidad * 0.70})`;
+
+    corrXY.style.background = color;
+    corrYX.style.background = color;
+}
+
 function generar(){
     const r = parseFloat(document.getElementById("rangoR").value);
     const n = parseInt(document.getElementById("n").value);
@@ -358,11 +458,17 @@ function generar(){
     document.getElementById("valorN").textContent = n;
     document.getElementById("textoInterpretacion").textContent = interpretar(r);
 
+    actualizarMatriz(r);
+
     const datos = generarDatos(r, n);
 
     if(grafico){
         grafico.data.datasets[0].data = datos;
         grafico.update();
+
+        if(window.MathJax){
+            MathJax.typesetPromise();
+        }
         return;
     }
 
@@ -418,6 +524,10 @@ function generar(){
             }
         }
     });
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
 }
 
 document.getElementById("rangoR").addEventListener("input", generar);
