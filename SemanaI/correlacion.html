@@ -313,6 +313,12 @@ button:hover{
                 <input id="rangoR" type="range" min="-0.99" max="0.99" step="0.01" value="0.70">
             </div>
 
+           <div class="formula"> 
+                \(r\) mide la dirección y fuerza de la relación lineal entre dos variables.
+                <br><br>
+                \(-1 \leq r \leq 1\)
+            </div>
+
             <div class="control">
                 <label for="n">Tamaño de muestra: <span id="valorN">80</span></label>
                 <input id="n" type="range" min="20" max="250" step="5" value="80">
@@ -348,12 +354,7 @@ button:hover{
                 </div>
             </div>
 
-            <div class="formula">
-                <strong>Idea clave:</strong><br>
-                \(r\) mide la dirección y fuerza de la relación lineal entre dos variables.
-                <br><br>
-                \(-1 \leq r \leq 1\)
-            </div>
+             
         </aside>
 
         <section class="card">
@@ -361,12 +362,7 @@ button:hover{
 
             <div class="canvas-box">
                 <canvas id="grafico"></canvas>
-            </div>
-
-            <div class="formula">
-                Cuando \(r\) está cerca de 1 o -1, los puntos se alinean más.
-                Cuando \(r\) está cerca de 0, no se observa una relación lineal clara.
-            </div>
+            </div> 
         </section>
 
     </section>
