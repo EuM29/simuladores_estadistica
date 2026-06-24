@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Formulario rápido - Regresión Lineal Simple</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero{
+    padding:30px 60px;
+    background:
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:700;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    color:var(--azulNoche);
+    font-size:2rem;
+}
+
+.hero p{
+    margin-top:10px;
+    color:var(--grisTexto);
+}
+
+.container{
+    max-width:1150px;
+    margin:34px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    margin-bottom:12px;
+    font-size:1.2rem;
+    border-bottom:3px solid var(--dorado);
+    padding-bottom:8px;
+}
+
+.formula{
+    background:#2D9AB811;
+    border-left:5px solid var(--turquesa);
+    border-radius:12px;
+    padding:12px;
+    margin:12px 0;
+    text-align:center;
+}
+
+.note{
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.94rem;
+}
+
+.excel{
+    margin-top:12px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:12px;
+    padding:12px;
+}
+
+.excel strong{
+    color:var(--azulMedio);
+}
+
+code{
+    display:block;
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:8px;
+    padding:8px;
+    margin-top:6px;
+    color:var(--azulNoche);
+    font-size:.9rem;
+    overflow-x:auto;
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.table th{
+    background:var(--azulMedio);
+    color:white;
+    padding:10px;
+}
+
+.table td{
+    border:1px solid var(--borde);
+    padding:10px;
+    color:var(--grisTexto);
+}
+
+.table td:first-child{
+    color:var(--azulNoche);
+    font-weight:700;
+}
+
+.full{
+    grid-column:1 / -1;
+}
+
+@media(max-width:700px){
+    .hero{
+        padding:24px 26px;
+    }
+
+    h1{
+        font-size:1.6rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Formulario rápido · Regresión Lineal Simple</h1>
+        <p>
+            Resumen de fórmulas y funciones de Excel en español e inglés para apoyar los cálculos de la Semana I.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../opciones_I.html" class="btn-volver">← Regresar a Semana I</a>
+
+<section class="grid">
+
+<div class="card">
+    <h2>1. Modelo poblacional</h2>
+
+    <div class="formula">
+        \[
+        Y_i=\beta_0+\beta_1X_i+\varepsilon_i
+        \]
+    </div>
+
+    <p class="note">
+        Representa la relación teórica entre la variable explicativa \(X\) y la variable respuesta \(Y\).
+    </p>
+</div>
+
+<div class="card">
+    <h2>2. Modelo estimado</h2>
+
+    <div class="formula">
+        \[
+        \hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1X_i
+        \]
+    </div>
+
+    <p class="note">
+        Es la recta ajustada a partir de la muestra.
+    </p>
+
+    <div class="excel">
+        <strong>Excel pendiente:</strong>
+        <code>Español: =PENDIENTE(rango_y; rango_x)</code>
+        <code>English: =SLOPE(y_range, x_range)</code>
+
+        <strong>Excel intercepto:</strong>
+        <code>Español: =INTERSECCION.EJE(rango_y; rango_x)</code>
+        <code>English: =INTERCEPT(y_range, x_range)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>3. Pendiente estimada</h2>
+
+    <div class="formula">
+        \[
+        \hat{\beta}_1=
+        \frac{\sum (X_i-\bar X)(Y_i-\bar Y)}
+        {\sum (X_i-\bar X)^2}
+        \]
+    </div>
+
+    <p class="note">
+        Indica cuánto cambia \(Y\), en promedio, cuando \(X\) aumenta una unidad.
+    </p>
+</div>
+
+<div class="card">
+    <h2>4. Intercepto estimado</h2>
+
+    <div class="formula">
+        \[
+        \hat{\beta}_0=\bar Y-\hat{\beta}_1\bar X
+        \]
+    </div>
+
+    <p class="note">
+        Es el valor estimado de \(Y\) cuando \(X=0\).
+    </p>
+</div>
+
+<div class="card">
+    <h2>5. Correlación de Pearson</h2>
+
+    <div class="formula">
+        \[
+        r=
+        \frac{\sum (X_i-\bar X)(Y_i-\bar Y)}
+        {\sqrt{\sum (X_i-\bar X)^2\sum (Y_i-\bar Y)^2}}
+        \]
+    </div>
+
+    <p class="note">
+        Mide la dirección y fuerza de la relación lineal entre dos variables.
+    </p>
+
+    <div class="excel">
+        <strong>Excel:</strong>
+        <code>Español: =COEF.DE.CORREL(rango_x; rango_y)</code>
+        <code>English: =CORREL(x_range, y_range)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>6. Coeficiente de determinación</h2>
+
+    <div class="formula">
+        \[
+        R^2=r^2
+        \]
+    </div>
+
+    <p class="note">
+        Representa la proporción de variabilidad de \(Y\) explicada por el modelo lineal.
+    </p>
+
+    <div class="excel">
+        <strong>Excel:</strong>
+        <code>Español: =COEFICIENTE.R2(rango_y; rango_x)</code>
+        <code>English: =RSQ(y_range, x_range)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>7. Residuo</h2>
+
+    <div class="formula">
+        \[
+        e_i=Y_i-\hat{Y}_i
+        \]
+    </div>
+
+    <p class="note">
+        Es la diferencia entre el valor observado y el valor estimado por la recta.
+    </p>
+</div>
+
+<div class="card">
+    <h2>8. Suma de cuadrados de los residuos</h2>
+
+    <div class="formula">
+        \[
+        SSE=\sum e_i^2=\sum(Y_i-\hat{Y}_i)^2
+        \]
+    </div>
+
+    <p class="note">
+        Mide el error total del modelo. Mínimos cuadrados busca hacer este valor lo más pequeño posible.
+    </p>
+</div>
+
+<div class="card">
+    <h2>9. Error estándar del modelo</h2>
+
+    <div class="formula">
+        \[
+        s=\sqrt{\frac{SSE}{n-2}}
+        \]
+    </div>
+
+    <p class="note">
+        Mide la dispersión promedio de los datos alrededor de la recta ajustada.
+    </p>
+
+    <div class="excel">
+        <strong>Excel:</strong>
+        <code>Español: =ERROR.TIPICO.XY(rango_y; rango_x)</code>
+        <code>English: =STEYX(y_range, x_range)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>10. Prueba de hipótesis para la pendiente</h2>
+
+    <div class="formula">
+        \[
+        H_0:\beta_1=0
+        \]
+        \[
+        H_1:\beta_1\neq0
+        \]
+    </div>
+
+    <div class="formula">
+        \[
+        t=\frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}
+        \]
+    </div>
+
+    <p class="note">
+        Evalúa si existe evidencia estadística de una relación lineal entre \(X\) y \(Y\).
+    </p>
+
+    <div class="excel">
+        <strong>p-valor:</strong>
+        <code>Español: =DISTR.T.2C(abs(t); grados_libertad)</code>
+        <code>English: =T.DIST.2T(ABS(t), degrees_freedom)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>11. Intervalo de confianza para un coeficiente</h2>
+
+    <div class="formula">
+        \[
+        \hat{\beta}_j \pm t_{\alpha/2,n-2}SE(\hat{\beta}_j)
+        \]
+    </div>
+
+    <p class="note">
+        Se utiliza para estimar un rango plausible para \(\beta_0\) o \(\beta_1\).
+    </p>
+
+    <div class="excel">
+        <strong>Valor crítico t:</strong>
+        <code>Español: =INV.T.2C(0.05; n-2)</code>
+        <code>English: =T.INV.2T(0.05, n-2)</code>
+    </div>
+</div>
+
+<div class="card">
+    <h2>12. Predicción puntual</h2>
+
+    <div class="formula">
+        \[
+        \hat{Y}_0=
+        \hat{\beta}_0+\hat{\beta}_1X_0
+        \]
+    </div>
+
+    <p class="note">
+        Es el valor estimado de \(Y\) para un valor específico \(X_0\).
+    </p>
+</div>
+
+<div class="card">
+    <h2>13. Intervalo para la media</h2>
+
+    <div class="formula">
+        \[
+        \hat{Y}_0 \pm t_{\alpha/2,n-2}
+        s\sqrt{
+        \frac{1}{n}+
+        \frac{(X_0-\bar X)^2}{\sum(X_i-\bar X)^2}
+        }
+        \]
+    </div>
+
+    <p class="note">
+        Estima la respuesta media esperada para \(X=X_0\).
+    </p>
+</div>
+
+<div class="card">
+    <h2>14. Intervalo de predicción</h2>
+
+    <div class="formula">
+        \[
+        \hat{Y}_0 \pm t_{\alpha/2,n-2}
+        s\sqrt{
+        1+\frac{1}{n}+
+        \frac{(X_0-\bar X)^2}{\sum(X_i-\bar X)^2}
+        }
+        \]
+    </div>
+
+    <p class="note">
+        Estima el rango probable para una observación individual futura.
+    </p>
+</div>
+
+<div class="card full">
+    <h2>15. Funciones útiles de Excel</h2>
+
+    <table class="table">
+        <tr>
+            <th>Cálculo</th>
+            <th>Excel en español</th>
+            <th>Excel en inglés</th>
+        </tr>
+
+        <tr>
+            <td>Promedio</td>
+            <td>=PROMEDIO(rango)</td>
+            <td>=AVERAGE(range)</td>
+        </tr>
+
+        <tr>
+            <td>Varianza muestral</td>
+            <td>=VAR.S(rango)</td>
+            <td>=VAR.S(range)</td>
+        </tr>
+
+        <tr>
+            <td>Desviación estándar muestral</td>
+            <td>=DESVEST.M(rango)</td>
+            <td>=STDEV.S(range)</td>
+        </tr>
+
+        <tr>
+            <td>Correlación</td>
+            <td>=COEF.DE.CORREL(rango_x; rango_y)</td>
+            <td>=CORREL(x_range, y_range)</td>
+        </tr>
+
+        <tr>
+            <td>Pendiente</td>
+            <td>=PENDIENTE(rango_y; rango_x)</td>
+            <td>=SLOPE(y_range, x_range)</td>
+        </tr>
+
+        <tr>
+            <td>Intercepto</td>
+            <td>=INTERSECCION.EJE(rango_y; rango_x)</td>
+            <td>=INTERCEPT(y_range, x_range)</td>
+        </tr>
+
+        <tr>
+            <td>\(R^2\)</td>
+            <td>=COEFICIENTE.R2(rango_y; rango_x)</td>
+            <td>=RSQ(y_range, x_range)</td>
+        </tr>
+
+        <tr>
+            <td>Error estándar \(s\)</td>
+            <td>=ERROR.TIPICO.XY(rango_y; rango_x)</td>
+            <td>=STEYX(y_range, x_range)</td>
+        </tr>
+
+        <tr>
+            <td>Valor crítico t</td>
+            <td>=INV.T.2C(α; gl)</td>
+            <td>=T.INV.2T(α, df)</td>
+        </tr>
+
+        <tr>
+            <td>p-valor bilateral</td>
+            <td>=DISTR.T.2C(ABS(t); gl)</td>
+            <td>=T.DIST.2T(ABS(t), df)</td>
+        </tr>
+    </table>
+</div>
+
+</section>
+
+</main>
+
+</body>
+</html>
