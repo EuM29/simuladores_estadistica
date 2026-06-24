@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Atajos de Excel</title>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.12), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+/* HEADER */
+
+.hero{
+    position:relative;
+    overflow:hidden;
+    padding:32px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.18), transparent 28%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero::after{
+    content:"Ctrl  Alt  Shift";
+    position:absolute;
+    right:60px;
+    top:20px;
+    font-size:3rem;
+    font-weight:900;
+    color:rgba(44,68,125,.08);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+    position:relative;
+    z-index:1;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+}
+
+/* CONTENIDO */
+
+.container{
+    max-width:1150px;
+    margin:34px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+    transition:.25s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 14px 34px rgba(0,0,0,.11);
+    border-color:var(--turquesa);
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:90px;
+    height:90px;
+    right:-35px;
+    top:-35px;
+    background:rgba(45,154,184,.10);
+    border-radius:50%;
+}
+
+.icono{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#2D9AB811;
+    color:var(--turquesa);
+    font-size:1.45rem;
+    margin-bottom:14px;
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.08rem;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.93rem;
+    margin-bottom:14px;
+}
+
+.keys{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+}
+
+.key{
+    min-width:38px;
+    text-align:center;
+    padding:8px 10px;
+    border-radius:10px;
+    background:linear-gradient(180deg,#ffffff,#f1f5f9);
+    border:1px solid var(--borde);
+    box-shadow:0 4px 0 #d7dde6;
+    color:var(--azulNoche);
+    font-weight:800;
+    font-size:.9rem;
+    animation:pulseKey 2.8s ease-in-out infinite;
+}
+
+.plus{
+    color:var(--dorado);
+    font-weight:900;
+}
+
+.seccion{
+    margin:34px 0 18px;
+    color:var(--azulNoche);
+    font-size:1.35rem;
+}
+
+.seccion span{
+    color:var(--dorado);
+}
+
+.tip{
+    margin-top:30px;
+    background:#C7A05A18;
+    border-left:5px solid var(--dorado);
+    border-radius:16px;
+    padding:18px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.tip strong{
+    color:var(--azulMedio);
+}
+
+@keyframes pulseKey{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-2px);
+    }
+}
+
+@media(max-width:700px){
+    .hero{
+        padding:26px;
+    }
+
+    .hero::after{
+        display:none;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Atajos rápidos para Excel</h1>
+        <p>
+            Combinaciones de teclas útiles para trabajar más rápido con datos, fórmulas, tablas y análisis.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../opciones_I.html" class="btn-volver">← Regresar a Semana I</a>
+
+<h2 class="seccion"><span>01.</span> Navegación rápida</h2>
+
+<section class="grid">
+
+<div class="card">
+    <div class="icono">↔️</div>
+    <h2>Ir al final de una tabla</h2>
+    <p>Moverse rápidamente hasta el último dato en una dirección.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">↑ ↓ ← →</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🏁</div>
+    <h2>Ir a la celda A1</h2>
+    <p>Regresa al inicio de la hoja de cálculo.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">Inicio</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">📍</div>
+    <h2>Ir a una celda específica</h2>
+    <p>Permite escribir una referencia como B25 o Hoja2!A1.</p>
+    <div class="keys">
+        <span class="key">F5</span>
+    </div>
+</div>
+
+</section>
+
+<h2 class="seccion"><span>02.</span> Selección de datos</h2>
+
+<section class="grid">
+
+<div class="card">
+    <div class="icono">🔲</div>
+    <h2>Seleccionar región actual</h2>
+    <p>Selecciona rápidamente toda la tabla o bloque de datos.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">*</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">📋</div>
+    <h2>Seleccionar columna completa</h2>
+    <p>Útil para aplicar formato o revisar una variable.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">Espacio</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">↕️</div>
+    <h2>Seleccionar fila completa</h2>
+    <p>Selecciona toda la fila activa.</p>
+    <div class="keys">
+        <span class="key">Shift</span><span class="plus">+</span><span class="key">Espacio</span>
+    </div>
+</div>
+
+</section>
+
+<h2 class="seccion"><span>03.</span> Fórmulas y edición</h2>
+
+<section class="grid">
+
+<div class="card">
+    <div class="icono">🧮</div>
+    <h2>Insertar función</h2>
+    <p>Abre el asistente para buscar funciones como promedio, correlación o pendiente.</p>
+    <div class="keys">
+        <span class="key">Shift</span><span class="plus">+</span><span class="key">F3</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">✏️</div>
+    <h2>Editar celda activa</h2>
+    <p>Permite modificar la fórmula o contenido sin usar doble clic.</p>
+    <div class="keys">
+        <span class="key">F2</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🔁</div>
+    <h2>Repetir última acción</h2>
+    <p>Aplica nuevamente el último formato o acción realizada.</p>
+    <div class="keys">
+        <span class="key">F4</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">💲</div>
+    <h2>Fijar referencias</h2>
+    <p>Cambia entre A1, $A$1, A$1 y $A1 dentro de una fórmula.</p>
+    <div class="keys">
+        <span class="key">F4</span>
+    </div>
+</div>
+
+</section>
+
+<h2 class="seccion"><span>04.</span> Formato y análisis</h2>
+
+<section class="grid">
+
+<div class="card">
+    <div class="icono">📊</div>
+    <h2>Crear gráfico rápido</h2>
+    <p>Genera un gráfico con los datos seleccionados.</p>
+    <div class="keys">
+        <span class="key">Alt</span><span class="plus">+</span><span class="key">F1</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🧾</div>
+    <h2>Crear tabla</h2>
+    <p>Convierte un rango en tabla con filtros y formato automático.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">T</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🔍</div>
+    <h2>Activar filtros</h2>
+    <p>Agrega o quita filtros en la fila de encabezados.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">Shift</span><span class="plus">+</span><span class="key">L</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">📌</div>
+    <h2>Formato de celdas</h2>
+    <p>Abre la ventana para número, alineación, bordes y relleno.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">1</span>
+    </div>
+</div>
+
+</section>
+
+<h2 class="seccion"><span>05.</span> Productividad general</h2>
+
+<section class="grid">
+
+<div class="card">
+    <div class="icono">💾</div>
+    <h2>Guardar archivo</h2>
+    <p>Guarda rápidamente los cambios realizados.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">G</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">↩️</div>
+    <h2>Deshacer</h2>
+    <p>Revierte la última acción realizada.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">Z</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🔎</div>
+    <h2>Buscar</h2>
+    <p>Busca valores, texto o fórmulas dentro de la hoja.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">B</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="icono">🖨️</div>
+    <h2>Imprimir</h2>
+    <p>Abre la vista de impresión del libro.</p>
+    <div class="keys">
+        <span class="key">Ctrl</span><span class="plus">+</span><span class="key">P</span>
+    </div>
+</div>
+
+</section>
+
+<div class="tip">
+    <strong>Sugerencia didáctica:</strong>
+    practique estos atajos mientras trabaja con bases de datos pequeñas. 
+    La velocidad aumenta cuando se combinan navegación, selección y fórmulas sin depender tanto del mouse.
+</div>
+
+</main>
+
+</body>
+</html>
