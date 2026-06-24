@@ -5,18 +5,33 @@
 <title>Simuladores de Estadística Aplicada</title>
 
 <style>
+
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+}
+
 body{
     margin:0;
     font-family:Segoe UI, Arial, sans-serif;
     background:#f7f8fa;
-    color:#1D2D50;
+    color:var(--azulNoche);
 }
 
+/* ==========================
+   ENCABEZADO
+========================== */
+
 .hero{
-    background:linear-gradient(120deg,#2C447D,#3E6FA5);
+    background:linear-gradient(120deg,var(--azulMedio),#3E6FA5);
     color:white;
     padding:55px 8%;
-    border-bottom:6px solid #C7A05A;
+    border-bottom:6px solid var(--dorado);
 }
 
 .hero h1{
@@ -27,7 +42,12 @@ body{
 .hero p{
     font-size:18px;
     opacity:.95;
+    margin-top:10px;
 }
+
+/* ==========================
+   CONTENIDO
+========================== */
 
 .container{
     max-width:1100px;
@@ -41,15 +61,19 @@ body{
     gap:22px;
 }
 
+/* ==========================
+   TARJETAS PRINCIPALES
+========================== */
+
 .card{
     background:white;
-    border:1px solid #E2E8F0;
+    border:1px solid var(--borde);
     border-radius:16px;
     padding:24px;
     box-shadow:0 8px 22px rgba(0,0,0,.06);
     transition:.25s;
     text-decoration:none;
-    color:#1D2D50;
+    color:var(--azulNoche);
 }
 
 .card:hover{
@@ -58,13 +82,13 @@ body{
 }
 
 .badge{
-    color:#C7A05A;
+    color:var(--dorado);
     font-weight:bold;
     font-size:14px;
 }
 
 .card h2{
-    color:#2C447D;
+    color:var(--azulMedio);
     margin-bottom:10px;
 }
 
@@ -73,13 +97,11 @@ body{
     line-height:1.45;
 }
 
-.footer{
-    text-align:center;
-    color:#64748B;
-    margin:40px;
-    font-size:14px;
-}
-    .card.locked{
+/* ==========================
+   SEMANAS BLOQUEADAS
+========================== */
+
+.card.locked{
     opacity:.55;
     filter:grayscale(80%);
     cursor:not-allowed;
@@ -95,7 +117,6 @@ body{
     position:absolute;
     top:16px;
     right:16px;
-
     font-size:22px;
 }
 
@@ -110,9 +131,9 @@ body{
 .locked p{
     color:#94A3B8;
 }
-    
+
 .coming-soon{
-    margin-top:12px;
+    margin-bottom:10px;
     display:inline-block;
     padding:5px 10px;
     border-radius:999px;
@@ -122,11 +143,23 @@ body{
     font-weight:600;
 }
 
+/* ==========================
+   RECURSOS AUXILIARES
+========================== */
+
+.aux-section{
+    margin-top:45px;
+}
+
 .aux-title{
-    margin-top:40px;
-    margin-bottom:15px;
-    color:#2C447D;
-    font-size:1.2rem;
+    color:var(--azulMedio);
+    font-size:1.25rem;
+    margin-bottom:16px;
+}
+
+.aux-subtitle{
+    color:var(--grisTexto);
+    margin-bottom:18px;
 }
 
 .aux-grid{
@@ -140,13 +173,13 @@ body{
 
     background:white;
 
-    border:1px solid #E2E8F0;
+    border:1px solid var(--borde);
 
     border-radius:12px;
 
     padding:12px 18px;
 
-    color:#2C447D;
+    color:var(--azulMedio);
 
     font-weight:600;
 
@@ -157,8 +190,21 @@ body{
 
 .aux-card:hover{
     transform:translateY(-2px);
-    border-color:#2D9AB8;
+    border-color:var(--turquesa);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
 }
+
+/* ==========================
+   FOOTER
+========================== */
+
+.footer{
+    text-align:center;
+    color:var(--grisTexto);
+    margin:50px 20px 35px;
+    font-size:14px;
+}
+
 </style>
 </head>
 
@@ -171,72 +217,103 @@ body{
 
 <main class="container">
 
-<div class="grid">
+    <!-- SEMANAS -->
 
-<a class="card" href="opciones_I.html">
-    <span class="badge">SEMANA I</span>
-    <h2>Regresión lineal simple</h2>
-    <p>
-        Simulación inferencial con β₀, β₁, ruido, R²,
-        p-valor e intervalo de confianza.
-    </p>
-</a>
+    <div class="grid">
 
-<div class="card locked">
+        <a class="card" href="opciones_I.html">
+            <span class="badge">SEMANA I</span>
+            <h2>Regresión lineal simple</h2>
+            <p>
+                Simulación inferencial con β₀, β₁, ruido, R²,
+                p-valor e intervalo de confianza.
+            </p>
+        </a>
 
-    <span class="lock-icon">🔒</span>
+        <div class="card locked">
 
-    <div class="coming-soon">
-        Próximamente
+            <span class="lock-icon">🔒</span>
+
+            <div class="coming-soon">
+                Próximamente
+            </div>
+
+            <span class="badge">SEMANA II</span>
+
+            <h2>Regresión lineal múltiple</h2>
+
+            <p>
+                Comparación de predictores, interpretación de coeficientes
+                y ajuste del modelo.
+            </p>
+
+        </div>
+
+        <div class="card locked">
+
+            <span class="lock-icon">🔒</span>
+
+            <div class="coming-soon">
+                Próximamente
+            </div>
+
+            <span class="badge">SEMANA III</span>
+
+            <h2>ANOVA de un factor</h2>
+
+            <p>
+                Comparación de medias entre grupos y análisis
+                de la variabilidad.
+            </p>
+
+        </div>
+
+        <div class="card locked">
+
+            <span class="lock-icon">🔒</span>
+
+            <div class="coming-soon">
+                Próximamente
+            </div>
+
+            <span class="badge">SEMANA IV</span>
+
+            <h2>Diseño de factores</h2>
+
+            <p>
+                Simulación de diseños experimentales e
+                interacción entre factores.
+            </p>
+
+        </div>
+
     </div>
 
-    <span class="badge">SEMANA II</span>
+    <!-- RECURSOS COMPLEMENTARIOS -->
 
-    <h2>Regresión lineal múltiple</h2>
+    <section class="aux-section">
 
-    <p>
-        Comparación de predictores, interpretación de coeficientes
-        y ajuste del modelo.
-    </p>
+        <h2 class="aux-title">
+            Recursos complementarios
+        </h2>
 
-</div>
+        <p class="aux-subtitle">
+            Material de apoyo para facilitar el uso de Excel y la interpretación de resultados.
+        </p>
 
-<div class="card locked">
+        <div class="aux-grid">
 
-    <span class="lock-icon">🔒</span>
+            <a class="aux-card" href="auxiliar.html">
+                ⌨️ Atajos de Excel
+            </a>
+        </div>
 
-    <span class="badge">SEMANA III</span>
-
-    <h2>ANOVA de un factor</h2>
-
-    <p>
-        Comparación de medias entre grupos y análisis
-        de la variabilidad.
-    </p>
-
-</div>
-
-<div class="card locked">
-
-    <span class="lock-icon">🔒</span>
-
-    <span class="badge">SEMANA IV</span>
-
-    <h2>Diseño de factores</h2>
-
-    <p>
-        Simulación de diseños experimentales e
-        interacción entre factores.
-    </p>
-
-</div>
-    
-</div>
+    </section>
 
 </main>
 
 <div class="footer">
-    Universidad Nacional Autónoma de Honduras · Estadística Aplicada
+    Universidad Nacional Autónoma de Honduras · Diplomado en Estadística Aplicada
 </div>
 
 </body>
