@@ -121,6 +121,44 @@ body{
     font-size:12px;
     font-weight:600;
 }
+
+    .aux-title{
+    margin-top:40px;
+    margin-bottom:15px;
+    color:#2C447D;
+    font-size:1.2rem;
+}
+
+.aux-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.aux-card{
+    text-decoration:none;
+
+    background:white;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    color:#2C447D;
+
+    font-weight:600;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+    transition:.25s;
+}
+
+.aux-card:hover{
+    transform:translateY(-2px);
+    border-color:#2D9AB8;
+}
 </style>
 </head>
 
@@ -193,15 +231,19 @@ body{
 
 </div>
 
-<a class="card" href="opciones_I.html">
-    <span class="badge">Auxiliar</span>
-    <h2>Recursos complemetarios</h2>
-    <p>
-        Comandos o atájos del teclado para Excel.
-    </p>
-</a>
+<h3 class="aux-title">Recursos complementarios</h3>
 
+<div class="aux-grid">
 
+    <a class="aux-card" href="excel_atajos.html">
+        ⌨️ Atajos de Excel
+    </a>
+
+    <a class="aux-card" href="formulario.html">
+        📖 Formulario rápido
+    </a>
+
+</div>
 </div>
 
 </main>
