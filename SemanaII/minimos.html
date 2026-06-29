@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mínimos Cuadrados - Regresión Múltiple</title>
+
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero{
+    padding:30px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.16), transparent 30%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1200px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+}
+
+.container{
+    max-width:1250px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:310px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+.control{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+button{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    background:var(--azulMedio);
+    color:white;
+    padding:11px 16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#b89248;
+}
+
+.plot3d{
+    height:530px;
+}
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin-top:18px;
+}
+
+.metric{
+    background:#2D9AB811;
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+    padding:12px;
+}
+
+.metric span{
+    display:block;
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    color:var(--azulMedio);
+    font-size:1.1rem;
+}
+
+.formula{
+    margin-top:18px;
+    background:#C7A05A18;
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+    padding:14px;
+    line-height:1.5;
+    color:var(--grisTexto);
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+.note{
+    margin-top:22px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:16px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+@media(max-width:950px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    .plot3d{
+        height:420px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Mínimos Cuadrados en Regresión Múltiple</h1>
+        <p>
+            Ajuste visual de un plano de regresión minimizando la suma de cuadrados de los residuos.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../index.html" class="btn-volver">← Regresar al inicio</a>
+
+<section class="grid">
+
+<aside class="card">
+    <h2>⚙ Plano propuesto</h2>
+
+    <div class="control">
+        <label>\(b_0\): <span id="b0v" class="valor">20</span></label>
+        <input id="b0" type="range" min="-20" max="60" value="20" step="1">
+    </div>
+
+    <div class="control">
+        <label>\(b_1\): <span id="b1v" class="valor">-2</span></label>
+        <input id="b1" type="range" min="-8" max="8" value="-2" step="0.25">
+    </div>
+
+    <div class="control">
+        <label>\(b_2\): <span id="b2v" class="valor">6</span></label>
+        <input id="b2" type="range" min="-8" max="8" value="6" step="0.25">
+    </div>
+
+    <button onclick="actualizarPlano()">
+        Actualizar plano
+    </button>
+
+    <button class="btn-dorado" onclick="animarAjuste()">
+        Ajustar por mínimos cuadrados
+    </button>
+
+    <button onclick="generarMuestra()">
+        Generar nueva muestra
+    </button>
+
+    <div class="formula">
+        <strong>Modelo estimado:</strong>
+        \[
+        \hat{Y}=b_0+b_1X_1+b_2X_2
+        \]
+    </div>
+
+    <div class="formula">
+        <strong>Criterio de mínimos cuadrados:</strong>
+        \[
+        SSE=\sum_{i=1}^{n}
+        \left(Y_i-\hat{Y}_i\right)^2
+        \]
+    </div>
+</aside>
+
+<section class="card">
+    <h2>Plano, puntos y residuos</h2>
+
+    <div id="plot3d" class="plot3d"></div>
+
+    <div class="metrics">
+        <div class="metric">
+            <span>Plano actual</span>
+            <strong id="eqActual">---</strong>
+        </div>
+
+        <div class="metric">
+            <span>Suma de cuadrados</span>
+            <strong id="sseActual">0.00</strong>
+        </div>
+
+        <div class="metric">
+            <span>\(\hat{\beta}_0\) óptimo</span>
+            <strong id="optB0">0.00</strong>
+        </div>
+
+        <div class="metric">
+            <span>\(\hat{\beta}_1\) óptimo</span>
+            <strong id="optB1">0.00</strong>
+        </div>
+
+        <div class="metric">
+            <span>\(\hat{\beta}_2\) óptimo</span>
+            <strong id="optB2">0.00</strong>
+        </div>
+    </div>
+</section>
+
+</section>
+
+<div class="note">
+    <strong>Idea didáctica:</strong>
+    en regresión lineal simple ajustamos una recta. En regresión lineal múltiple con dos predictores ajustamos un plano.
+    Los segmentos verticales representan residuos. El mejor plano es el que minimiza la suma de cuadrados de esos residuos.
+</div>
+
+</main>
+
+<script>
+let data = [];
+let optimo = null;
+let animando = false;
+
+function randn(){
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+function generarMuestra(){
+    data = [];
+
+    const beta0 = 8;
+    const beta1 = 3;
+    const beta2 = 2;
+    const sigma = 5;
+    const n = 70;
+
+    for(let i=0; i<n; i++){
+        const x1 = Math.random()*10;
+        const x2 = Math.random()*10;
+        const y = beta0 + beta1*x1 + beta2*x2 + randn()*sigma;
+
+        data.push({x1,x2,y});
+    }
+
+    optimo = ajustarModelo(data);
+
+    document.getElementById("optB0").textContent = optimo.b0.toFixed(2);
+    document.getElementById("optB1").textContent = optimo.b1.toFixed(2);
+    document.getElementById("optB2").textContent = optimo.b2.toFixed(2);
+
+    actualizarPlano();
+}
+
+function ajustarModelo(datos){
+    const n = datos.length;
+
+    let sx1=0, sx2=0, sy=0;
+    let sx1x1=0, sx2x2=0, sx1x2=0;
+    let sx1y=0, sx2y=0;
+
+    datos.forEach(d=>{
+        sx1 += d.x1;
+        sx2 += d.x2;
+        sy += d.y;
+
+        sx1x1 += d.x1*d.x1;
+        sx2x2 += d.x2*d.x2;
+        sx1x2 += d.x1*d.x2;
+
+        sx1y += d.x1*d.y;
+        sx2y += d.x2*d.y;
+    });
+
+    const A = [
+        [n, sx1, sx2],
+        [sx1, sx1x1, sx1x2],
+        [sx2, sx1x2, sx2x2]
+    ];
+
+    const B = [sy, sx1y, sx2y];
+
+    const beta = resolver3x3(A,B);
+
+    return {
+        b0: beta[0],
+        b1: beta[1],
+        b2: beta[2]
+    };
+}
+
+function resolver3x3(A,B){
+    const M = [
+        [A[0][0], A[0][1], A[0][2], B[0]],
+        [A[1][0], A[1][1], A[1][2], B[1]],
+        [A[2][0], A[2][1], A[2][2], B[2]]
+    ];
+
+    for(let i=0; i<3; i++){
+        let maxRow = i;
+
+        for(let k=i+1; k<3; k++){
+            if(Math.abs(M[k][i]) > Math.abs(M[maxRow][i])){
+                maxRow = k;
+            }
+        }
+
+        [M[i], M[maxRow]] = [M[maxRow], M[i]];
+
+        const pivot = M[i][i];
+
+        for(let j=i; j<4; j++){
+            M[i][j] /= pivot;
+        }
+
+        for(let k=0; k<3; k++){
+            if(k !== i){
+                const factor = M[k][i];
+
+                for(let j=i; j<4; j++){
+                    M[k][j] -= factor*M[i][j];
+                }
+            }
+        }
+    }
+
+    return [M[0][3], M[1][3], M[2][3]];
+}
+
+function calcularSSE(b0,b1,b2){
+    return data.reduce((acc,d)=>{
+        const yhat = b0 + b1*d.x1 + b2*d.x2;
+        return acc + Math.pow(d.y-yhat,2);
+    },0);
+}
+
+function actualizarPlano(){
+    if(animando) return;
+
+    const b0 = +document.getElementById("b0").value;
+    const b1 = +document.getElementById("b1").value;
+    const b2 = +document.getElementById("b2").value;
+
+    document.getElementById("b0v").textContent = b0.toFixed(2);
+    document.getElementById("b1v").textContent = b1.toFixed(2);
+    document.getElementById("b2v").textContent = b2.toFixed(2);
+
+    dibujar(b0,b1,b2);
+}
+
+function dibujar(b0,b1,b2){
+    const x1 = data.map(d=>d.x1);
+    const x2 = data.map(d=>d.x2);
+    const y = data.map(d=>d.y);
+
+    const puntos = {
+        x:x1,
+        y:x2,
+        z:y,
+        mode:"markers",
+        type:"scatter3d",
+        name:"Datos observados",
+        marker:{
+            size:4,
+            color:"#2D9AB8",
+            opacity:0.85
+        }
+    };
+
+    const gridX = [];
+    const gridY = [];
+    const gridZ = [];
+
+    for(let i=0; i<=10; i++){
+        gridX.push(i);
+        gridY.push(i);
+    }
+
+    for(let i=0; i<gridY.length; i++){
+        const fila = [];
+        for(let j=0; j<gridX.length; j++){
+            fila.push(b0 + b1*gridX[j] + b2*gridY[i]);
+        }
+        gridZ.push(fila);
+    }
+
+    const plano = {
+        x:gridX,
+        y:gridY,
+        z:gridZ,
+        type:"surface",
+        name:"Plano actual",
+        opacity:0.55,
+        colorscale:[
+            [0,"#C7A05A"],
+            [1,"#2D9AB8"]
+        ],
+        showscale:false
+    };
+
+    const residuosX = [];
+    const residuosY = [];
+    const residuosZ = [];
+
+    data.forEach(d=>{
+        const yhat = b0 + b1*d.x1 + b2*d.x2;
+
+        residuosX.push(d.x1, d.x1, null);
+        residuosY.push(d.x2, d.x2, null);
+        residuosZ.push(d.y, yhat, null);
+    });
+
+    const residuos = {
+        x:residuosX,
+        y:residuosY,
+        z:residuosZ,
+        mode:"lines",
+        type:"scatter3d",
+        name:"Residuos",
+        line:{
+            color:"#C7A05A",
+            width:4
+        }
+    };
+
+    const layout = {
+        margin:{l:0,r:0,b:0,t:0},
+        paper_bgcolor:"white",
+        scene:{
+            xaxis:{title:"X₁", color:"#64748B"},
+            yaxis:{title:"X₂", color:"#64748B"},
+            zaxis:{title:"Y", color:"#64748B"},
+            camera:{
+                eye:{x:1.55,y:1.55,z:1.15}
+            }
+        },
+        legend:{
+            x:0,
+            y:1
+        }
+    };
+
+    Plotly.newPlot("plot3d",[puntos,plano,residuos],layout,{responsive:true});
+
+    const sse = calcularSSE(b0,b1,b2);
+
+    document.getElementById("sseActual").textContent = sse.toFixed(2);
+    document.getElementById("eqActual").textContent =
+        `Ŷ = ${b0.toFixed(2)} + ${b1.toFixed(2)}X₁ + ${b2.toFixed(2)}X₂`;
+}
+
+function animarAjuste(){
+    if(animando || !optimo) return;
+
+    animando = true;
+
+    const b0Inicial = +document.getElementById("b0").value;
+    const b1Inicial = +document.getElementById("b1").value;
+    const b2Inicial = +document.getElementById("b2").value;
+
+    const pasos = 80;
+    let i = 0;
+
+    const intervalo = setInterval(()=>{
+        i++;
+
+        const t = i/pasos;
+        const suave = 1 - Math.pow(1-t,3);
+
+        const b0 = b0Inicial + (optimo.b0-b0Inicial)*suave;
+        const b1 = b1Inicial + (optimo.b1-b1Inicial)*suave;
+        const b2 = b2Inicial + (optimo.b2-b2Inicial)*suave;
+
+        document.getElementById("b0").value = b0;
+        document.getElementById("b1").value = b1;
+        document.getElementById("b2").value = b2;
+
+        document.getElementById("b0v").textContent = b0.toFixed(2);
+        document.getElementById("b1v").textContent = b1.toFixed(2);
+        document.getElementById("b2v").textContent = b2.toFixed(2);
+
+        dibujar(b0,b1,b2);
+
+        if(i>=pasos){
+            clearInterval(intervalo);
+            animando = false;
+        }
+
+    },75);
+}
+
+["b0","b1","b2"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", actualizarPlano);
+});
+
+generarMuestra();
+</script>
+
+</body>
+</html>
