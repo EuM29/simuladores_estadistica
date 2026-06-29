@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Semana II</title>
+
+<style>
+
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:Segoe UI,Arial,sans-serif;
+
+    background:
+    radial-gradient(circle at top,
+    rgba(45,154,184,.10),
+    transparent 35%),
+
+    linear-gradient(135deg,#f8fafc,#eef2f7);
+
+    color:var(--azulNoche);
+
+}
+
+/*==============================*/
+
+.subheader{
+
+    padding:28px 60px;
+
+    background:
+    radial-gradient(circle at 45% 20%,
+    rgba(45,154,184,.15),
+    transparent 28%),
+
+    linear-gradient(90deg,#F8FAFC,#EEF2F7);
+
+    border-bottom:4px solid var(--dorado);
+
+}
+
+.subheader-content{
+
+    max-width:1150px;
+    margin:auto;
+
+}
+
+.subheader-badge{
+
+    color:var(--turquesa);
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+}
+
+.subheader h1{
+
+    font-size:2rem;
+
+    margin-top:6px;
+
+}
+
+.subheader h1::after{
+
+    content:"";
+
+    display:block;
+
+    width:65px;
+
+    height:4px;
+
+    margin-top:8px;
+
+    border-radius:999px;
+
+    background:
+    linear-gradient(90deg,
+    var(--dorado),
+    var(--turquesa));
+
+}
+
+/*==============================*/
+
+.container{
+
+    max-width:1150px;
+
+    margin:35px auto;
+
+    padding:0 24px;
+
+}
+
+/*==============================*/
+
+.btn-back{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    text-decoration:none;
+
+    background:var(--azulMedio);
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+    transition:.25s;
+
+}
+
+.btn-back:hover{
+
+    background:var(--azulNoche);
+
+}
+
+/*==============================*/
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:22px;
+
+}
+
+.card{
+
+    background:white;
+
+    border:1px solid var(--borde);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    transition:.25s;
+
+    box-shadow:
+    0 8px 22px rgba(0,0,0,.05);
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:var(--turquesa);
+
+    box-shadow:
+    0 12px 28px rgba(0,0,0,.10);
+
+}
+
+.icon{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:14px;
+
+    background:#2D9AB815;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:28px;
+
+    margin-bottom:18px;
+
+}
+
+.card h2{
+
+    color:var(--azulMedio);
+
+    margin-bottom:10px;
+
+    font-size:1.15rem;
+
+}
+
+.card p{
+
+    color:var(--grisTexto);
+
+    line-height:1.55;
+
+}
+
+.tag{
+
+    margin-top:16px;
+
+    display:inline-block;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    background:#C7A05A22;
+
+    color:var(--dorado);
+
+    font-size:.80rem;
+
+    font-weight:700;
+
+}
+
+/*==============================*/
+
+.locked{
+
+    opacity:.55;
+
+    filter:grayscale(75%);
+
+    cursor:not-allowed;
+
+}
+
+.locked:hover{
+
+    transform:none;
+
+    border-color:var(--borde);
+
+    box-shadow:
+    0 8px 22px rgba(0,0,0,.05);
+
+}
+
+.lock{
+
+    position:absolute;
+
+    right:18px;
+
+    top:18px;
+
+    font-size:22px;
+
+}
+
+.relative{
+
+    position:relative;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="subheader">
+
+<div class="subheader-content">
+
+<span class="subheader-badge">
+
+Diplomado en Estadística Aplicada
+
+</span>
+
+<h1>Semana II</h1>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<a href="../index.html" class="btn-back">
+
+← Regresar al inicio
+
+</a>
+
+<div class="grid">
+
+<a href="dispersion.html" class="card">
+
+<div class="icon">📊</div>
+
+<h2>Matriz de dispersión</h2>
+
+<p>
+
+Visualice las relaciones entre
+las variables explicativas y la
+variable respuesta mediante
+gráficos de dispersión.
+
+</p>
+
+<span class="tag">
+
+Visualización
+
+</span>
+
+</a>
+
+<a href="minimos.html" class="card">
+
+<div class="icon">📉</div>
+
+<h2>Mínimos cuadrados</h2>
+
+<p>
+
+Observe cómo un plano se ajusta
+minimizando la suma de cuadrados
+de los residuos.
+
+</p>
+
+<span class="tag">
+
+Animación
+
+</span>
+
+</a>
+
+<div class="card locked relative">
+
+<div class="lock">
+
+🔒
+
+</div>
+
+<div class="icon">
+
+📐
+
+</div>
+
+<h2>
+
+Multicolinealidad
+
+</h2>
+
+<p>
+
+Observe cómo la correlación entre
+los predictores afecta las
+estimaciones del modelo.
+
+</p>
+
+<span class="tag">
+
+Próximamente
+
+</span>
+
+</div>
+
+<div class="card locked relative">
+
+<div class="lock">
+
+🔒
+
+</div>
+
+<div class="icon">
+
+📋
+
+</div>
+
+<h2>
+
+Interpretación del modelo
+
+</h2>
+
+<p>
+
+Analice el significado de los
+coeficientes, pruebas de hipótesis
+y medidas de ajuste.
+
+</p>
+
+<span class="tag">
+
+Próximamente
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
