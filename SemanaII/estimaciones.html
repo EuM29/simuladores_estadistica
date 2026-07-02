@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Población, muestra y modelo estimado</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero{
+    padding:30px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.16), transparent 30%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+}
+
+.container{
+    max-width:1150px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+button{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    background:var(--azulMedio);
+    color:white;
+    padding:11px 16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#b89248;
+}
+
+.control{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+.canvas-box{
+    height:500px;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+.metric{
+    margin-top:12px;
+    background:#2D9AB811;
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+    padding:12px;
+}
+
+.metric span{
+    display:block;
+    color:var(--grisTexto);
+    font-size:.84rem;
+}
+
+.metric strong{
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.formula{
+    margin-top:16px;
+    background:#C7A05A18;
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+    padding:14px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+.legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:16px;
+    color:var(--grisTexto);
+    font-size:.9rem;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.dot{
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.line{
+    width:28px;
+    height:4px;
+    border-radius:999px;
+    display:inline-block;
+}
+
+.note{
+    margin-top:22px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:16px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    .canvas-box{
+        height:380px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Población, muestra y modelo estimado</h1>
+        <p>
+            Una ilustración visual para comprender por qué usamos gorrito en las estimaciones.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../opciones_I.html" class="btn-volver">← Regresar a Semana I</a>
+
+<section class="grid">
+
+<aside class="card">
+    <h2>⚙ Simulación</h2>
+
+    <div class="control">
+        <label>Tamaño de muestra \(n\): <span id="nv" class="valor">25</span></label>
+        <input id="n" type="range" min="8" max="80" value="25" step="1">
+    </div>
+
+    <button class="btn-dorado" onclick="tomarMuestra()">
+        Tomar nueva muestra
+    </button>
+
+    <button onclick="nuevaPoblacion()">
+        Generar nueva población
+    </button>
+
+    <div class="formula">
+        <strong>Modelo poblacional:</strong>
+        \[
+        Y=\beta_0+\beta_1X+\varepsilon
+        \]
+        Es la relación verdadera en toda la población.
+    </div>
+
+    <div class="formula">
+        <strong>Modelo estimado:</strong>
+        \[
+        \hat{Y}=\hat{\beta}_0+\hat{\beta}_1X
+        \]
+        Se calcula usando solamente la muestra seleccionada.
+    </div>
+
+    <div class="metric">
+        <span>Parámetros poblacionales</span>
+        <strong>\(\beta_0=8,\quad \beta_1=2.5\)</strong>
+    </div>
+
+    <div class="metric">
+        <span>Estimación muestral actual</span>
+        <strong id="modeloEstimado">\(\hat{Y}=---\)</strong>
+    </div>
+
+</aside>
+
+<section class="card">
+    <h2>Población completa y muestra seleccionada</h2>
+
+    <div class="canvas-box">
+        <canvas id="grafico" width="900" height="520"></canvas>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="dot" style="background:#CBD5E1;"></span>
+            Población
+        </div>
+
+        <div class="legend-item">
+            <span class="dot" style="background:#2D9AB8;"></span>
+            Muestra
+        </div>
+
+        <div class="legend-item">
+            <span class="line" style="background:#C7A05A;"></span>
+            Modelo poblacional
+        </div>
+
+        <div class="legend-item">
+            <span class="line" style="background:#2C447D;"></span>
+            Modelo estimado
+        </div>
+    </div>
+</section>
+
+</section>
+
+<div class="note">
+    <strong>Idea central:</strong>
+    la población completa tiene una relación verdadera, representada por \(\beta_0\) y \(\beta_1\).
+    Como normalmente no observamos toda la población, tomamos una muestra y con ella calculamos
+    \(\hat{\beta}_0\) y \(\hat{\beta}_1\). El gorrito indica que son estimaciones. Al cambiar la muestra,
+    cambian los valores estimados; eso representa la incertidumbre muestral.
+</div>
+
+</main>
+
+<script>
+const canvas = document.getElementById("grafico");
+const ctx = canvas.getContext("2d");
+
+let poblacion = [];
+let muestra = [];
+
+const beta0 = 8;
+const beta1 = 2.5;
+const sigma = 5;
+const N = 350;
+
+function randn(){
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+function nuevaPoblacion(){
+    poblacion = [];
+
+    for(let i=0; i<N; i++){
+        const x = Math.random()*20;
+        const y = beta0 + beta1*x + randn()*sigma;
+        poblacion.push({x,y});
+    }
+
+    tomarMuestra();
+}
+
+function tomarMuestra(){
+    const n = +document.getElementById("n").value;
+    document.getElementById("nv").textContent = n;
+
+    const indices = [...Array(poblacion.length).keys()];
+    indices.sort(()=>Math.random()-0.5);
+
+    muestra = indices.slice(0,n).map(i=>poblacion[i]);
+
+    dibujar();
+}
+
+function ajustarMuestra(datos){
+    const n = datos.length;
+    const mx = datos.reduce((s,d)=>s+d.x,0)/n;
+    const my = datos.reduce((s,d)=>s+d.y,0)/n;
+
+    let sxx = 0;
+    let sxy = 0;
+
+    datos.forEach(d=>{
+        sxx += Math.pow(d.x-mx,2);
+        sxy += (d.x-mx)*(d.y-my);
+    });
+
+    const b1hat = sxy/sxx;
+    const b0hat = my - b1hat*mx;
+
+    return {b0hat,b1hat};
+}
+
+function dibujar(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const pad = 60;
+    const xmin = 0;
+    const xmax = 20;
+
+    const ys = poblacion.map(d=>d.y);
+    ys.push(beta0, beta0 + beta1*xmax);
+
+    const ymin = Math.min(...ys) - 5;
+    const ymax = Math.max(...ys) + 5;
+
+    function X(x){
+        return pad + (x-xmin)/(xmax-xmin)*(canvas.width-2*pad);
+    }
+
+    function Y(y){
+        return canvas.height-pad - (y-ymin)/(ymax-ymin)*(canvas.height-2*pad);
+    }
+
+    // grid
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<=10;i++){
+        const x = X(i*2);
+        ctx.beginPath();
+        ctx.moveTo(x,pad);
+        ctx.lineTo(x,canvas.height-pad);
+        ctx.stroke();
+    }
+
+    for(let i=0;i<=8;i++){
+        const y = pad + i*(canvas.height-2*pad)/8;
+        ctx.beginPath();
+        ctx.moveTo(pad,y);
+        ctx.lineTo(canvas.width-pad,y);
+        ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(pad,canvas.height-pad);
+    ctx.lineTo(canvas.width-pad,canvas.height-pad);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(pad,pad);
+    ctx.lineTo(pad,canvas.height-pad);
+    ctx.stroke();
+
+    // labels
+    ctx.fillStyle = "#64748B";
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "center";
+
+    for(let i=0;i<=10;i++){
+        const val = i*2;
+        ctx.fillText(val, X(val), canvas.height-pad+22);
+    }
+
+    ctx.textAlign = "right";
+    for(let i=0;i<=8;i++){
+        const val = ymax - i*(ymax-ymin)/8;
+        const yPos = pad + i*(canvas.height-2*pad)/8;
+        ctx.fillText(val.toFixed(0), pad-10, yPos+4);
+    }
+
+    ctx.fillStyle = "#1D2D50";
+    ctx.font = "bold 14px Segoe UI";
+    ctx.textAlign = "center";
+    ctx.fillText("Variable X", canvas.width/2, canvas.height-12);
+
+    ctx.save();
+    ctx.translate(20, canvas.height/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText("Variable Y", 0, 0);
+    ctx.restore();
+
+    // population points
+    poblacion.forEach(d=>{
+        ctx.beginPath();
+        ctx.fillStyle = "rgba(148,163,184,.55)";
+        ctx.arc(X(d.x),Y(d.y),3.2,0,Math.PI*2);
+        ctx.fill();
+    });
+
+    // population line
+    ctx.strokeStyle = "#C7A05A";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(X(0),Y(beta0));
+    ctx.lineTo(X(20),Y(beta0 + beta1*20));
+    ctx.stroke();
+
+    // sample points
+    muestra.forEach(d=>{
+        ctx.beginPath();
+        ctx.fillStyle = "#2D9AB8";
+        ctx.strokeStyle = "#1D2D50";
+        ctx.lineWidth = 1;
+        ctx.arc(X(d.x),Y(d.y),5.2,0,Math.PI*2);
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    // estimated line
+    const ajuste = ajustarMuestra(muestra);
+
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([8,5]);
+    ctx.beginPath();
+    ctx.moveTo(X(0),Y(ajuste.b0hat));
+    ctx.lineTo(X(20),Y(ajuste.b0hat + ajuste.b1hat*20));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    document.getElementById("modeloEstimado").innerHTML =
+        `\\(\\hat{Y}=${ajuste.b0hat.toFixed(2)}+${ajuste.b1hat.toFixed(2)}X\\)`;
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
+}
+
+document.getElementById("n").addEventListener("input", tomarMuestra);
+
+nuevaPoblacion();
+</script>
+
+</body>
+</html>
