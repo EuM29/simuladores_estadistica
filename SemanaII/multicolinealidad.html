@@ -425,6 +425,7 @@ button:hover{
                 <th>Estimación</th>
                 <th>Error estándar</th>
                 <th>t</th>
+                <th>p-value</th>
             </tr>
         </thead>
 
@@ -434,6 +435,7 @@ button:hover{
                 <td id="tb_b0">0.00</td>
                 <td id="tb_se0">0.00</td>
                 <td id="tb_t0">0.00</td>
+                <td id="tb_p0">0.000</td>
             </tr>
 
             <tr>
@@ -441,6 +443,7 @@ button:hover{
                 <td id="tb_b1">0.00</td>
                 <td id="tb_se1">0.00</td>
                 <td id="tb_t1">0.00</td>
+                <td id="tb_p1">0.000</td>
             </tr>
 
             <tr>
@@ -448,13 +451,14 @@ button:hover{
                 <td id="tb_b2">0.00</td>
                 <td id="tb_se2">0.00</td>
                 <td id="tb_t2">0.00</td>
+                <td id="tb_p2">0.000</td>
             </tr>
         </tbody>
     </table>
 
     <div id="mensaje" class="alerta">
         <strong>Interpretación:</strong>
-        Modifique la correlación entre \(X_1\) y \(X_2\) para observar cómo cambian los errores estándar.
+        Modifique la correlación entre \(X_1\) y \(X_2\) para observar cómo cambian los errores estándar y los p-values.
     </div>
 </div>
 
@@ -529,6 +533,28 @@ function generar(){
     actualizarResultados(ajuste);
 }
 
+  function erf(x){
+    const sign = x >= 0 ? 1 : -1;
+    x = Math.abs(x);
+
+    const a1=0.254829592;
+    const a2=-0.284496736;
+    const a3=1.421413741;
+    const a4=-1.453152027;
+    const a5=1.061405429;
+    const p=0.3275911;
+
+    const t = 1/(1+p*x);
+
+    const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+
+    return sign*y;
+}
+
+function normalCDF(x){
+    return 0.5 * (1 + erf(x / Math.sqrt(2)));
+}
+
 function ajustarModelo(datos){
     const n = datos.length;
 
@@ -583,14 +609,21 @@ function ajustarModelo(datos){
     const se1 = Math.sqrt(mse*inv[1][1]);
     const se2 = Math.sqrt(mse*inv[2][2]);
 
+    const gl = n - 3;
+  
+    const p0 = 2 * (1 - normalCDF(Math.abs(b0/se0)));
+    const p1 = 2 * (1 - normalCDF(Math.abs(b1/se1)));
+    const p2 = 2 * (1 - normalCDF(Math.abs(b2/se2)));
+
     return {
         b0,b1,b2,
         se0,se1,se2,
         t0:b0/se0,
         t1:b1/se1,
         t2:b2/se2,
+        p0,p1,p2,
         r2
-    };
+      };
 }
 
 function resolver3x3(A,B){
@@ -750,6 +783,15 @@ function actualizarResultados(ajuste){
 
     document.getElementById("corr12a").textContent = r.toFixed(2);
     document.getElementById("corr12b").textContent = r.toFixed(2);
+
+    document.getElementById("tb_p0").textContent =
+    ajuste.p0 < 0.001 ? "< 0.001" : ajuste.p0.toFixed(3);
+
+    document.getElementById("tb_p1").textContent =
+        ajuste.p1 < 0.001 ? "< 0.001" : ajuste.p1.toFixed(3);
+    
+    document.getElementById("tb_p2").textContent =
+        ajuste.p2 < 0.001 ? "< 0.001" : ajuste.p2.toFixed(3);
 
     const intensidad = Math.abs(r);
 
