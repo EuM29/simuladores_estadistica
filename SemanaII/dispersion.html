@@ -92,6 +92,7 @@ h1::after{
 .btn-volver{
     display:inline-block;
     margin-bottom:22px;
+    margin-right:8px;
     background:var(--azulMedio);
     color:white;
     padding:10px 16px;
@@ -212,16 +213,43 @@ button:hover{
 .scatter-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:16px;
+    gap:14px;
 }
 
 .small-plot{
-    height:250px;
+    height:240px;
     background:white;
     border:1px solid var(--borde);
     border-radius:18px;
     box-shadow:0 8px 22px rgba(0,0,0,.05);
     overflow:hidden;
+}
+
+.diagonal-card{
+    height:240px;
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.14), transparent 45%),
+        linear-gradient(135deg,#ffffff,#F8FAFC);
+    border:1px solid var(--borde);
+    border-radius:18px;
+    box-shadow:0 8px 22px rgba(0,0,0,.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:18px;
+}
+
+.diagonal-card h3{
+    font-size:2rem;
+    color:var(--azulMedio);
+    margin-bottom:8px;
+}
+
+.diagonal-card p{
+    color:var(--grisTexto);
+    font-size:.9rem;
+    line-height:1.4;
 }
 
 .note{
@@ -273,7 +301,7 @@ button:hover{
 <main class="container">
 
 <a href="../index.html" class="btn-volver">← Regresar al inicio</a>
-  <a href="submenuII.html" class="btn-volver">← Regresar semana II</a>
+<a href="submenuII.html" class="btn-volver">← Regresar semana II</a>
 
 <section class="grid">
 
@@ -346,21 +374,47 @@ button:hover{
 
 </section>
 
-<h2 class="section-title"><span>02.</span> Matriz de dispersión</h2>
+<h2 class="section-title"><span>02.</span> Matriz de dispersión completa</h2>
 
 <section class="scatter-grid">
 
+    <div class="diagonal-card">
+        <div>
+            <h3>\(X_1\)</h3>
+            <p>Variable explicativa</p>
+        </div>
+    </div>
+
+    <div id="plot_x2_x1" class="small-plot"></div>
     <div id="plot_y_x1" class="small-plot"></div>
-    <div id="plot_y_x2" class="small-plot"></div>
+
     <div id="plot_x1_x2" class="small-plot"></div>
+
+    <div class="diagonal-card">
+        <div>
+            <h3>\(X_2\)</h3>
+            <p>Variable explicativa</p>
+        </div>
+    </div>
+
+    <div id="plot_y_x2" class="small-plot"></div>
+
+    <div id="plot_x1_y" class="small-plot"></div>
+    <div id="plot_x2_y" class="small-plot"></div>
+
+    <div class="diagonal-card">
+        <div>
+            <h3>\(Y\)</h3>
+            <p>Variable respuesta</p>
+        </div>
+    </div>
 
 </section>
 
 <div class="note">
     <strong>Idea didáctica:</strong>
-    en regresión lineal múltiple se estudia cómo varios predictores explican conjuntamente a \(Y\).
-    La visualización 3D ayuda a observar el plano ajustado cuando hay dos predictores.
-    La matriz de dispersión permite revisar las relaciones bivariadas entre \(Y\), \(X_1\) y \(X_2\).
+    la matriz de dispersión permite observar todas las relaciones bivariadas entre \(Y\), \(X_1\) y \(X_2\).
+    En regresión múltiple también se revisan las relaciones entre predictores, como \(X_1\) y \(X_2\), porque una relación muy fuerte entre ellos puede ser una señal de multicolinealidad.
 </div>
 
 </main>
@@ -403,6 +457,10 @@ function generar(){
     actualizarMetricas(ajuste);
     dibujar3D(ajuste);
     dibujarMatriz();
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
 }
 
 function ajustarModelo(datos){
@@ -570,9 +628,18 @@ function dibujar3D(ajuste){
 }
 
 function dibujarMatriz(){
-    scatter2D("plot_y_x1", data.map(d=>d.x1), data.map(d=>d.y), "X₁", "Y", "Y vs X₁");
-    scatter2D("plot_y_x2", data.map(d=>d.x2), data.map(d=>d.y), "X₂", "Y", "Y vs X₂");
-    scatter2D("plot_x1_x2", data.map(d=>d.x1), data.map(d=>d.x2), "X₁", "X₂", "X₁ vs X₂");
+    const x1 = data.map(d=>d.x1);
+    const x2 = data.map(d=>d.x2);
+    const y = data.map(d=>d.y);
+
+    scatter2D("plot_x2_x1", x1, x2, "X₁", "X₂", "X₂ vs X₁");
+    scatter2D("plot_y_x1",  x1, y,  "X₁", "Y",  "Y vs X₁");
+
+    scatter2D("plot_x1_x2", x2, x1, "X₂", "X₁", "X₁ vs X₂");
+    scatter2D("plot_y_x2",  x2, y,  "X₂", "Y",  "Y vs X₂");
+
+    scatter2D("plot_x1_y",  y, x1,  "Y",  "X₁", "X₁ vs Y");
+    scatter2D("plot_x2_y",  y, x2,  "Y",  "X₂", "X₂ vs Y");
 }
 
 function scatter2D(id,x,y,xlabel,ylabel,title){
@@ -583,8 +650,8 @@ function scatter2D(id,x,y,xlabel,ylabel,title){
         type:"scatter",
         marker:{
             color:"#2D9AB8",
-            size:7,
-            opacity:0.75
+            size:6,
+            opacity:0.72
         }
     };
 
@@ -592,20 +659,26 @@ function scatter2D(id,x,y,xlabel,ylabel,title){
         title:{
             text:title,
             font:{
-                size:14,
+                size:13,
                 color:"#2C447D"
             }
         },
-        margin:{l:45,r:15,b:45,t:45},
+        margin:{l:45,r:15,b:45,t:42},
         paper_bgcolor:"white",
         plot_bgcolor:"white",
         xaxis:{
-            title:xlabel,
+            title:{
+                text:xlabel,
+                font:{size:11,color:"#64748B"}
+            },
             gridcolor:"#E2E8F0",
             zeroline:false
         },
         yaxis:{
-            title:ylabel,
+            title:{
+                text:ylabel,
+                font:{size:11,color:"#64748B"}
+            },
             gridcolor:"#E2E8F0",
             zeroline:false
         }
