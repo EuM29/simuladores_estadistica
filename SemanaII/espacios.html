@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Espacios en Regresión</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero{
+    padding:30px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.16), transparent 30%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1200px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+}
+
+.container{
+    max-width:1200px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+.control{
+    margin-bottom:22px;
+}
+
+label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+.visual{
+    min-height:430px;
+    display:grid;
+    place-items:center;
+    background:
+        radial-gradient(circle at center, rgba(45,154,184,.10), transparent 45%),
+        var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:18px;
+    position:relative;
+    overflow:hidden;
+}
+
+.stage{
+    text-align:center;
+    padding:20px;
+    animation:fade .35s ease;
+}
+
+.dimension{
+    font-size:4rem;
+    font-weight:900;
+    color:var(--azulMedio);
+    margin-bottom:12px;
+}
+
+.descripcion{
+    color:var(--grisTexto);
+    line-height:1.55;
+    max-width:620px;
+    margin:auto;
+}
+
+.formula{
+    margin-top:18px;
+    background:#C7A05A18;
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+    padding:14px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+.ejes{
+    position:relative;
+    width:330px;
+    height:260px;
+    margin:20px auto;
+}
+
+.axis-x,.axis-y,.axis-z{
+    position:absolute;
+    background:var(--azulMedio);
+    border-radius:999px;
+}
+
+.axis-x{
+    width:260px;
+    height:4px;
+    left:35px;
+    bottom:45px;
+}
+
+.axis-y{
+    width:4px;
+    height:210px;
+    left:55px;
+    bottom:45px;
+}
+
+.axis-z{
+    width:190px;
+    height:4px;
+    left:55px;
+    bottom:45px;
+    transform:rotate(-35deg);
+    transform-origin:left center;
+}
+
+.axis-label{
+    position:absolute;
+    color:var(--azulMedio);
+    font-weight:800;
+}
+
+.x-label{
+    right:20px;
+    bottom:25px;
+}
+
+.y-label{
+    left:35px;
+    top:0;
+}
+
+.z-label{
+    right:55px;
+    top:65px;
+}
+
+.point{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--turquesa);
+    box-shadow:0 0 0 4px rgba(45,154,184,.15);
+}
+
+.line-model{
+    position:absolute;
+    width:220px;
+    height:5px;
+    background:var(--dorado);
+    transform:rotate(-25deg);
+    left:70px;
+    bottom:95px;
+    border-radius:999px;
+}
+
+.plane{
+    width:260px;
+    height:150px;
+    background:linear-gradient(135deg, rgba(199,160,90,.55), rgba(45,154,184,.35));
+    border:2px solid rgba(44,68,125,.35);
+    transform:rotateX(60deg) rotateZ(-25deg);
+    border-radius:12px;
+    margin:30px auto;
+    box-shadow:0 20px 35px rgba(0,0,0,.12);
+}
+
+.blur-box{
+    width:270px;
+    height:180px;
+    border:2px dashed var(--borde);
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    color:var(--grisTexto);
+    background:rgba(255,255,255,.65);
+    filter:blur(.2px);
+    margin:20px auto;
+    position:relative;
+}
+
+.blur-box::before{
+    content:"";
+    position:absolute;
+    inset:20px;
+    border:2px solid rgba(45,154,184,.18);
+    transform:rotate(8deg);
+    border-radius:16px;
+}
+
+.metric-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:12px;
+    margin-top:18px;
+}
+
+.metric{
+    background:#2D9AB811;
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+    padding:12px;
+}
+
+.metric span{
+    display:block;
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    color:var(--azulMedio);
+    font-size:1.05rem;
+}
+
+.steps{
+    display:grid;
+    gap:10px;
+    margin-top:16px;
+}
+
+.step{
+    padding:12px;
+    border-radius:12px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    color:var(--grisTexto);
+    line-height:1.45;
+}
+
+.step.active{
+    background:#2D9AB811;
+    border-left:5px solid var(--turquesa);
+    color:var(--azulNoche);
+    font-weight:600;
+}
+
+.note{
+    margin-top:22px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:16px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+@keyframes fade{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    .dimension{
+        font-size:3rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>¿En qué espacio vive la regresión?</h1>
+        <p>
+            Una visualización progresiva para relacionar \(\mathbb{R}\), \(\mathbb{R}^2\), \(\mathbb{R}^3\) y \(\mathbb{R}^n\).
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="submenuII.html" class="btn-volver">← Regresar semana II</a>
+
+<section class="grid">
+
+<aside class="card">
+    <h2>⚙ Dimensión del espacio</h2>
+
+    <div class="control">
+        <label>Número de variables totales: <span id="dimv" class="valor">2</span></label>
+        <input id="dimension" type="range" min="1" max="8" value="2" step="1">
+    </div>
+
+    <div class="formula">
+        <strong>Idea:</strong><br>
+        Cada variable agrega una dimensión.
+        <br><br>
+        Una observación con \(d\) variables vive en:
+        \[
+        \mathbb{R}^d
+        \]
+    </div>
+
+    <div class="steps">
+        <div id="step1" class="step">
+            \(\mathbb{R}\): una variable, un eje.
+        </div>
+
+        <div id="step2" class="step">
+            \(\mathbb{R}^2\): regresión simple, puntos \((X,Y)\).
+        </div>
+
+        <div id="step3" class="step">
+            \(\mathbb{R}^3\): regresión múltiple con dos predictores, puntos \((X_1,X_2,Y)\).
+        </div>
+
+        <div id="step4" class="step">
+            \(\mathbb{R}^n\): más dimensiones, ya no se puede visualizar directamente.
+        </div>
+    </div>
+</aside>
+
+<section class="card">
+    <h2>Visualización conceptual</h2>
+
+    <div id="visual" class="visual"></div>
+
+    <div class="metric-grid">
+        <div class="metric">
+            <span>Espacio</span>
+            <strong id="espacio">\(\mathbb{R}^2\)</strong>
+        </div>
+
+        <div class="metric">
+            <span>Representación</span>
+            <strong id="representacion">Plano 2D</strong>
+        </div>
+
+        <div class="metric">
+            <span>Modelo visible</span>
+            <strong id="modelo">Recta</strong>
+        </div>
+    </div>
+</section>
+
+</section>
+
+<div class="note">
+    <strong>Idea central:</strong>
+    la regresión lineal simple se puede visualizar en \(\mathbb{R}^2\), porque cada observación tiene dos componentes: \((X,Y)\).
+    La regresión múltiple con dos predictores se puede visualizar en \(\mathbb{R}^3\), porque cada observación tiene tres componentes:
+    \((X_1,X_2,Y)\). Cuando el número de variables aumenta, el espacio sigue existiendo matemáticamente, pero ya no podemos dibujarlo.
+    Por eso usamos medidas numéricas como \(R^2\), \(\hat{R}^2\), MSE o RMSE para evaluar el ajuste.
+</div>
+
+</main>
+
+<script>
+const visual = document.getElementById("visual");
+const slider = document.getElementById("dimension");
+
+function actualizar(){
+    const d = +slider.value;
+
+    document.getElementById("dimv").textContent = d;
+
+    document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+
+    let html = "";
+    let espacio = `\\(\\mathbb{R}^{${d}}\\)`;
+    let representacion = "";
+    let modelo = "";
+
+    if(d === 1){
+        document.getElementById("step1").classList.add("active");
+
+        representacion = "Un eje";
+        modelo = "No hay regresión aún";
+
+        html = `
+        <div class="stage">
+            <div class="dimension">\\(\\mathbb{R}\\)</div>
+
+            <div class="ejes">
+                <div class="axis-x"></div>
+                <div class="axis-label x-label">X</div>
+
+                <div class="point" style="left:80px;bottom:40px;"></div>
+                <div class="point" style="left:135px;bottom:40px;"></div>
+                <div class="point" style="left:210px;bottom:40px;"></div>
+            </div>
+
+            <p class="descripcion">
+                Una sola variable se representa sobre una línea.
+                Cada observación tiene una coordenada: \\(x_i\\).
+            </p>
+        </div>`;
+    }
+
+    else if(d === 2){
+        document.getElementById("step2").classList.add("active");
+
+        representacion = "Plano 2D";
+        modelo = "Recta";
+
+        html = `
+        <div class="stage">
+            <div class="dimension">\\(\\mathbb{R}^2\\)</div>
+
+            <div class="ejes">
+                <div class="axis-x"></div>
+                <div class="axis-y"></div>
+                <div class="axis-label x-label">X</div>
+                <div class="axis-label y-label">Y</div>
+
+                <div class="line-model"></div>
+
+                <div class="point" style="left:90px;bottom:80px;"></div>
+                <div class="point" style="left:130px;bottom:105px;"></div>
+                <div class="point" style="left:175px;bottom:128px;"></div>
+                <div class="point" style="left:230px;bottom:160px;"></div>
+            </div>
+
+            <p class="descripcion">
+                En regresión lineal simple cada observación es \\((X_i,Y_i)\\).
+                Por eso podemos ver una nube de puntos y una recta en el plano.
+            </p>
+        </div>`;
+    }
+
+    else if(d === 3){
+        document.getElementById("step3").classList.add("active");
+
+        representacion = "Espacio 3D";
+        modelo = "Plano";
+
+        html = `
+        <div class="stage">
+            <div class="dimension">\\(\\mathbb{R}^3\\)</div>
+
+            <div class="ejes">
+                <div class="axis-x"></div>
+                <div class="axis-y"></div>
+                <div class="axis-z"></div>
+
+                <div class="axis-label x-label">X₁</div>
+                <div class="axis-label y-label">Y</div>
+                <div class="axis-label z-label">X₂</div>
+
+                <div class="plane"></div>
+            </div>
+
+            <p class="descripcion">
+                Con dos predictores, cada observación es \\((X_{1i},X_{2i},Y_i)\\).
+                El modelo ya no es una recta: es un plano.
+            </p>
+        </div>`;
+    }
+
+    else{
+        document.getElementById("step4").classList.add("active");
+
+        representacion = "No visualizable directamente";
+        modelo = "Hiperplano";
+
+        html = `
+        <div class="stage">
+            <div class="dimension">\\(\\mathbb{R}^{${d}}\\)</div>
+
+            <div class="blur-box">
+                <div>
+                    <strong>Visualización limitada</strong><br>
+                    No podemos dibujar directamente ${d} dimensiones.
+                </div>
+            </div>
+
+            <p class="descripcion">
+                La geometría del modelo sigue existiendo, pero ya no puede representarse
+                completamente en una pantalla. Por eso necesitamos medidas numéricas
+                para evaluar el modelo.
+            </p>
+
+            <div class="metric-grid" style="margin-top:22px;">
+                <div class="metric">
+                    <span>Medida</span>
+                    <strong>\\(R^2\\)</strong>
+                </div>
+                <div class="metric">
+                    <span>Medida</span>
+                    <strong>\\(\\hat{R}^2\\)</strong>
+                </div>
+                <div class="metric">
+                    <span>Error</span>
+                    <strong>MSE</strong>
+                </div>
+                <div class="metric">
+                    <span>Error</span>
+                    <strong>RMSE</strong>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    document.getElementById("espacio").innerHTML = espacio;
+    document.getElementById("representacion").textContent = representacion;
+    document.getElementById("modelo").textContent = modelo;
+
+    visual.innerHTML = html;
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
+}
+
+slider.addEventListener("input", actualizar);
+
+actualizar();
+</script>
+
+</body>
+</html>
