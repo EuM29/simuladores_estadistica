@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Formulario - Diplomado en Estadística Aplicada</title>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+/* ==========================
+   ENCABEZADO
+========================== */
+
+.hero{
+    padding:30px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.16), transparent 30%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+/* ==========================
+   CONTENIDO
+========================== */
+
+.container{
+    max-width:1150px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+}
+
+.card{
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.form-header{
+    margin-bottom:18px;
+    padding:16px 18px;
+    background:#2D9AB811;
+    border-left:5px solid var(--dorado);
+    border-radius:16px;
+}
+
+.form-header h2{
+    color:var(--azulMedio);
+    font-size:1.25rem;
+    margin-bottom:6px;
+}
+
+.form-header p{
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+/* ==========================
+   IFRAME RESPONSIVO
+========================== */
+
+.form-wrapper{
+    width:100%;
+    overflow:hidden;
+    border:1px solid var(--borde);
+    border-radius:18px;
+    background:var(--grisClaro);
+}
+
+.form-wrapper iframe{
+    display:block;
+    width:100%;
+    min-height:1340px;
+    border:0;
+}
+
+/* ==========================
+   NOTA
+========================== */
+
+.note{
+    margin-top:22px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:16px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+@media(max-width:700px){
+    .hero{
+        padding:26px;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+
+    .container{
+        padding:0 16px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .form-wrapper iframe{
+        min-height:1450px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Formulario de actividad</h1>
+        <p>
+            Complete el siguiente formulario como parte de las actividades del diplomado.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="index.html" class="btn-volver">← Regresar al inicio</a>
+
+<section class="card">
+
+    <div class="form-header">
+        <h2>Registro de respuestas</h2>
+        <p>
+            Revise cuidadosamente cada pregunta antes de enviar sus respuestas.
+        </p>
+    </div>
+
+    <div class="form-wrapper">
+        <iframe 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSei17CWQhippLhcc6w7WDXn4NmJ-pBnQ68d4Tp9eKessRgYEw/viewform?embedded=true"
+            height="1340"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0">
+            Cargando…
+        </iframe>
+    </div>
+
+</section>
+
+<div class="note">
+    <strong>Nota:</strong>
+    Si el formulario no se visualiza correctamente, actualice la página o ábralo desde un navegador actualizado.
+</div>
+
+</main>
+
+</body>
+</html>
