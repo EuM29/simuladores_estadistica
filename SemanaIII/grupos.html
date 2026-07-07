@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Variabilidad entre grupos - ANOVA</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+    background:
+        radial-gradient(circle at top, rgba(45,154,184,.10), transparent 35%),
+        linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.hero{
+    padding:30px 60px;
+    background:
+        radial-gradient(circle at 80% 30%, rgba(45,154,184,.16), transparent 30%),
+        linear-gradient(90deg,#F8FAFC,#EEF2F7);
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-weight:800;
+    font-size:.85rem;
+}
+
+h1{
+    margin-top:8px;
+    font-size:2rem;
+    color:var(--azulNoche);
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--dorado),var(--turquesa));
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.container{
+    max-width:1150px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    margin-right:8px;
+    background:var(--azulMedio);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+.control{
+    margin-bottom:16px;
+}
+
+label{
+    display:block;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+button{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    background:var(--azulMedio);
+    color:white;
+    padding:11px 16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#b89248;
+}
+
+.canvas-box{
+    height:500px;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin-top:18px;
+}
+
+.metric{
+    background:#2D9AB811;
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+    padding:12px;
+}
+
+.metric span{
+    display:block;
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    color:var(--azulMedio);
+    font-size:1.08rem;
+}
+
+.formula{
+    margin-top:18px;
+    background:#C7A05A18;
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+    padding:14px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+.legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:16px;
+    color:var(--grisTexto);
+    font-size:.9rem;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.dot{
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.line{
+    width:28px;
+    height:4px;
+    border-radius:999px;
+    display:inline-block;
+}
+
+.note{
+    margin-top:22px;
+    background:var(--grisClaro);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:16px;
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+
+    .canvas-box{
+        height:390px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <span class="badge">Diplomado en Estadística Aplicada</span>
+        <h1>Variabilidad entre grupos</h1>
+        <p>
+            Simulador introductorio para observar cómo se separan las medias de grupo respecto a la media general.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../index.html" class="btn-volver">← Regresar al inicio</a>
+
+<section class="grid">
+
+<aside class="card">
+    <h2>⚙ Parámetros</h2>
+
+    <div class="control">
+        <label>Media grupo A: <span id="mu1V" class="valor">50</span></label>
+        <input id="mu1" type="range" min="20" max="80" value="50" step="1">
+    </div>
+
+    <div class="control">
+        <label>Media grupo B: <span id="mu2V" class="valor">55</span></label>
+        <input id="mu2" type="range" min="20" max="80" value="55" step="1">
+    </div>
+
+    <div class="control">
+        <label>Media grupo C: <span id="mu3V" class="valor">65</span></label>
+        <input id="mu3" type="range" min="20" max="80" value="65" step="1">
+    </div>
+
+    <div class="control">
+        <label>Dispersión dentro de grupos \(\sigma\): <span id="sigmaV" class="valor">6</span></label>
+        <input id="sigma" type="range" min="1" max="20" value="6" step="1">
+    </div>
+
+    <div class="control">
+        <label>Tamaño por grupo \(n_j\): <span id="nV" class="valor">20</span></label>
+        <input id="n" type="range" min="6" max="60" value="20" step="1">
+    </div>
+
+    <button class="btn-dorado" onclick="generar()">
+        Generar nueva muestra
+    </button>
+
+    <div class="formula">
+        <strong>Media general:</strong>
+        \[
+        \bar{Y}=\frac{1}{N}\sum_{j=1}^{k}\sum_{i=1}^{n_j}Y_{ij}
+        \]
+    </div>
+
+    <div class="formula">
+        <strong>Variabilidad entre grupos:</strong>
+        \[
+        SC_{\text{entre}}
+        =
+        \sum_{j=1}^{k}
+        n_j(\bar{Y}_j-\bar{Y})^2
+        \]
+    </div>
+</aside>
+
+<section class="card">
+    <h2>Medias de grupo y media general</h2>
+
+    <div class="canvas-box">
+        <canvas id="grafico" width="900" height="520"></canvas>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="dot" style="background:#2D9AB8;"></span>
+            Observaciones
+        </div>
+
+        <div class="legend-item">
+            <span class="line" style="background:#C7A05A;"></span>
+            Media de grupo
+        </div>
+
+        <div class="legend-item">
+            <span class="line" style="background:#2C447D;"></span>
+            Media general
+        </div>
+
+        <div class="legend-item">
+            <span class="line" style="background:#64748B;"></span>
+            Distancia entre medias
+        </div>
+    </div>
+
+    <div class="metrics">
+        <div class="metric">
+            <span>Media general \(\bar{Y}\)</span>
+            <strong id="mediaGeneralOut">0.00</strong>
+        </div>
+
+        <div class="metric">
+            <span>\(SC_{\text{entre}}\)</span>
+            <strong id="scEntreOut">0.00</strong>
+        </div>
+
+        <div class="metric">
+            <span>Grupos \(k\)</span>
+            <strong>3</strong>
+        </div>
+
+        <div class="metric">
+            <span>Total \(N\)</span>
+            <strong id="totalOut">0</strong>
+        </div>
+    </div>
+</section>
+
+</section>
+
+<div class="note">
+    <strong>Conexión con ANOVA:</strong>
+    ANOVA no solo mira si las medias son diferentes, sino si la separación entre las medias de los grupos es grande
+    en comparación con la variabilidad dentro de los grupos. Este simulador se enfoca únicamente en la parte
+    <strong>entre grupos</strong>.
+</div>
+
+</main>
+
+<script>
+const canvas = document.getElementById("grafico");
+const ctx = canvas.getContext("2d");
+
+let grupos = [];
+
+function randn(){
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+function generar(){
+    const mus = [
+        +document.getElementById("mu1").value,
+        +document.getElementById("mu2").value,
+        +document.getElementById("mu3").value
+    ];
+
+    const sigma = +document.getElementById("sigma").value;
+    const n = +document.getElementById("n").value;
+
+    document.getElementById("mu1V").textContent = mus[0];
+    document.getElementById("mu2V").textContent = mus[1];
+    document.getElementById("mu3V").textContent = mus[2];
+    document.getElementById("sigmaV").textContent = sigma;
+    document.getElementById("nV").textContent = n;
+
+    grupos = mus.map((mu, j)=>{
+        const valores = [];
+
+        for(let i=0; i<n; i++){
+            valores.push(mu + randn()*sigma);
+        }
+
+        return {
+            nombre:["Grupo A","Grupo B","Grupo C"][j],
+            valores
+        };
+    });
+
+    dibujar();
+}
+
+function calcular(){
+    const todas = grupos.flatMap(g=>g.valores);
+    const N = todas.length;
+
+    const mediaGeneral = todas.reduce((a,b)=>a+b,0)/N;
+
+    let scEntre = 0;
+
+    const resumen = grupos.map(g=>{
+        const n = g.valores.length;
+        const media = g.valores.reduce((a,b)=>a+b,0)/n;
+
+        scEntre += n*Math.pow(media-mediaGeneral,2);
+
+        return {
+            nombre:g.nombre,
+            n,
+            media
+        };
+    });
+
+    return {mediaGeneral, scEntre, resumen, N};
+}
+
+function dibujar(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const stats = calcular();
+
+    const pad = 70;
+    const todas = grupos.flatMap(g=>g.valores);
+    todas.push(stats.mediaGeneral);
+    stats.resumen.forEach(r=>todas.push(r.media));
+
+    const ymin = Math.min(...todas) - 10;
+    const ymax = Math.max(...todas) + 10;
+
+    function Y(y){
+        return canvas.height-pad - (y-ymin)/(ymax-ymin)*(canvas.height-2*pad);
+    }
+
+    const xGrupos = [
+        canvas.width*0.25,
+        canvas.width*0.50,
+        canvas.width*0.75
+    ];
+
+    // grid
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<=8;i++){
+        const y = pad + i*(canvas.height-2*pad)/8;
+        ctx.beginPath();
+        ctx.moveTo(pad,y);
+        ctx.lineTo(canvas.width-pad,y);
+        ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(pad,canvas.height-pad);
+    ctx.lineTo(canvas.width-pad,canvas.height-pad);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(pad,pad);
+    ctx.lineTo(pad,canvas.height-pad);
+    ctx.stroke();
+
+    // y labels
+    ctx.fillStyle = "#64748B";
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "right";
+
+    for(let i=0;i<=8;i++){
+        const valorY = ymax - i*(ymax-ymin)/8;
+        const yPos = pad + i*(canvas.height-2*pad)/8;
+        ctx.fillText(valorY.toFixed(0), pad-10, yPos+4);
+    }
+
+    // y axis title
+    ctx.fillStyle = "#1D2D50";
+    ctx.font = "bold 14px Segoe UI";
+
+    ctx.save();
+    ctx.translate(22, canvas.height/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.textAlign = "center";
+    ctx.fillText("Valor observado", 0, 0);
+    ctx.restore();
+
+    // general mean
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+    ctx.moveTo(pad, Y(stats.mediaGeneral));
+    ctx.lineTo(canvas.width-pad, Y(stats.mediaGeneral));
+    ctx.stroke();
+
+    ctx.fillStyle = "#2C447D";
+    ctx.font = "bold 13px Segoe UI";
+    ctx.textAlign = "left";
+    ctx.fillText("Media general", pad+8, Y(stats.mediaGeneral)-8);
+
+    // group elements
+    grupos.forEach((g,j)=>{
+        const xCenter = xGrupos[j];
+        const resumen = stats.resumen[j];
+
+        // observations
+        g.valores.forEach((valor,i)=>{
+            const jitter = (Math.random()-0.5)*70;
+
+            ctx.beginPath();
+            ctx.fillStyle = "#2D9AB8";
+            ctx.strokeStyle = "#1D2D50";
+            ctx.lineWidth = 1;
+            ctx.arc(xCenter+jitter, Y(valor), 4.6, 0, Math.PI*2);
+            ctx.fill();
+            ctx.stroke();
+        });
+
+        // distance from group mean to grand mean
+        ctx.strokeStyle = "#64748B";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5,5]);
+
+        ctx.beginPath();
+        ctx.moveTo(xCenter, Y(resumen.media));
+        ctx.lineTo(xCenter, Y(stats.mediaGeneral));
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+
+        // group mean line
+        ctx.strokeStyle = "#C7A05A";
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+        ctx.moveTo(xCenter-70, Y(resumen.media));
+        ctx.lineTo(xCenter+70, Y(resumen.media));
+        ctx.stroke();
+
+        // group label
+        ctx.fillStyle = "#1D2D50";
+        ctx.font = "bold 14px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.fillText(g.nombre, xCenter, canvas.height-pad+32);
+
+        ctx.fillStyle = "#C7A05A";
+        ctx.font = "bold 12px Segoe UI";
+        ctx.fillText(`Media = ${resumen.media.toFixed(1)}`, xCenter, Y(resumen.media)-10);
+    });
+
+    document.getElementById("mediaGeneralOut").textContent = stats.mediaGeneral.toFixed(2);
+    document.getElementById("scEntreOut").textContent = stats.scEntre.toFixed(2);
+    document.getElementById("totalOut").textContent = stats.N;
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
+}
+
+["mu1","mu2","mu3","sigma","n"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", generar);
+});
+
+generar();
+</script>
+
+</body>
+</html>
