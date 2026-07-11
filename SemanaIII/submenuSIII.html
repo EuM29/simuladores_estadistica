@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Semana II</title>
+<title>Semana III</title>
 
 <style>
 
@@ -255,44 +255,11 @@ body{
 
 }
 
-/*==============================*/
+@media(max-width:700px){
 
-.locked{
-
-    opacity:.55;
-
-    filter:grayscale(75%);
-
-    cursor:not-allowed;
-
-}
-
-.locked:hover{
-
-    transform:none;
-
-    border-color:var(--borde);
-
-    box-shadow:
-    0 8px 22px rgba(0,0,0,.05);
-
-}
-
-.lock{
-
-    position:absolute;
-
-    right:18px;
-
-    top:18px;
-
-    font-size:22px;
-
-}
-
-.relative{
-
-    position:relative;
+    .subheader{
+        padding:24px;
+    }
 
 }
 
@@ -307,9 +274,7 @@ body{
 <div class="subheader-content">
 
 <span class="subheader-badge">
-
 Diplomado en Estadística Aplicada
-
 </span>
 
 <h1>Semana III</h1>
@@ -321,22 +286,41 @@ Diplomado en Estadística Aplicada
 <div class="container">
 
 <a href="../index.html" class="btn-back">
-
 ← Regresar al inicio
-
 </a>
 
 <div class="grid">
 
+<!-- Función sigmoide -->
+
 <a href="sigmoide.html" class="card">
 
-    <div class="icon">🌐</div>
+    <div class="icon">📈</div>
 
-    <h2>Función Sigmoide</h2>
+    <h2>Función sigmoide</h2>
 
     <p>
-        Visualice cómo aumenta la dimensión del espacio al incorporar
-        nuevas variables.
+        Explore cómo una función transforma cualquier número real en un
+        valor comprendido entre 0 y 1.
+    </p>
+
+    <span class="tag">
+        Exploración
+    </span>
+
+</a>
+
+<!-- Regresión logística -->
+
+<a href="logistica.html" class="card">
+
+    <div class="icon">🎯</div>
+
+    <h2>Regresión logística</h2>
+
+    <p>
+        Observe cómo el modelo estima probabilidades y clasifica
+        observaciones mediante un umbral de decisión.
     </p>
 
     <span class="tag">
@@ -345,127 +329,36 @@ Diplomado en Estadística Aplicada
 
 </a>
 
-    <a href="logistica.html" class="card">
+<!-- Grupos -->
 
-    <div class="icon">🌐</div>
+<a href="grupos.html" class="card">
 
-    <h2>Regresión Logistica</h2>
+    <div class="icon">👥</div>
+
+    <h2>Comparación de grupos</h2>
 
     <p>
-        Visualice cómo aumenta la dimensión del espacio al incorporar
-        nuevas variables.
+        Visualice diferentes grupos y comprenda por qué es necesario
+        comparar sus medias mediante ANOVA.
     </p>
 
     <span class="tag">
-        Simulación
+        Visualización
     </span>
 
 </a>
 
-    <a href="grupos.html" class="card">
-
-    <div class="icon">🌐</div>
-
-    <h2>Grupos</h2>
-
-    <p>
-        Visualice cómo aumenta la dimensión del espacio al incorporar
-        nuevas variables.
-    </p>
-
-    <span class="tag">
-        Simulación
-    </span>
-
-</a>
+<!-- Variabilidad -->
 
 <a href="variabilidad.html" class="card">
 
-<div class="icon">📊</div>
+    <div class="icon">📊</div>
 
-<h2>Variabilidad</h2>
-
-<p>
-
-Visualice las relaciones entre
-las variables explicativas y la
-variable respuesta mediante
-gráficos de dispersión.
-
-</p>
-
-<span class="tag">
-
-Visualización
-
-</span>
-
-</a>
-
-<a href="minimos.html" class="card">
-
-<div class="icon">📉</div>
-
-<h2>Mínimos cuadrados</h2>
-
-<p>
-
-Observe cómo un plano se ajusta
-minimizando la suma de cuadrados
-de los residuos.
-
-</p>
-
-<span class="tag">
-
-Animación
-
-</span>
-
-</a>
-
-<a href="multicolinealidad.html" class="card">
-
-<div class="icon">
-
-📐
-
-</div>
-
-<h2>
-
-Multicolinealidad
-
-</h2>
-
-<p>
-
-Observe cómo la correlación entre
-los predictores afecta las
-estimaciones del modelo.
-
-</p>
-
-<span class="tag">
-
-Simulación
-
-</span>
-
-</a>
-
-<a href="estimaciones.html" class="card">
-
-    <div class="icon">
-        🎯
-    </div>
-
-    <h2>Población y muestra</h2>
+    <h2>Variabilidad</h2>
 
     <p>
-        Una muestra permite estimar
-        el modelo poblacional, debido a esto, las
-        estimaciones cambian de una muestra a otra.
+        Analice la variabilidad dentro de los grupos y entre los grupos
+        como fundamento del análisis de varianza.
     </p>
 
     <span class="tag">
