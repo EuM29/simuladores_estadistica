@@ -572,12 +572,7 @@ canvas{
 
         <h1>
             Simulador de Regresión Logística
-        </h1>
-
-        <p>
-            Observe cómo un predictor se transforma primero en un puntaje
-            lineal, luego en una probabilidad y finalmente en una clase.
-        </p>
+        </h1> 
 
     </div>
 </section>
@@ -737,12 +732,12 @@ canvas{
             <strong>Regla de clasificación:</strong>
 
             \[
-            \hat{Y}
-            =
-            \begin{cases}
-            1, & \hat{p}\geq c,\\
-            0, & \hat{p}<c.
-            \end{cases}
+                \hat{Y}
+                =
+                \begin{cases}
+                1, & \hat{p} \geq c,\\
+                0, & \hat{p}<c
+                \end{cases}
             \]
 
             donde \(c\) representa el umbral.
@@ -911,9 +906,8 @@ canvas{
 
 </section>
 
-<div class="note">
-    <strong>Idea central:</strong>
-    la regresión logística no predice directamente una categoría.
+<div class="note"> 
+    La regresión logística no predice directamente una categoría.
     Primero calcula un puntaje lineal, luego lo transforma en una
     probabilidad mediante la función sigmoide y, finalmente, utiliza un
     umbral para determinar la clase predicha.
