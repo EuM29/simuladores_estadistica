@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Explorando la función sigmoide</title>
+
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(45,154,184,.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+}
+
+/* ==========================
+   ENCABEZADO
+========================== */
+
+.hero{
+    padding:30px 60px;
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(45,154,184,.16),
+            transparent 30%
+        ),
+        linear-gradient(
+            90deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1150px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-size:.85rem;
+    font-weight:800;
+}
+
+h1{
+    margin-top:8px;
+    color:var(--azulNoche);
+    font-size:2rem;
+}
+
+h1::after{
+    content:"";
+    display:block;
+
+    width:65px;
+    height:4px;
+
+    margin-top:8px;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dorado),
+            var(--turquesa)
+        );
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+/* ==========================
+   CONTENIDO
+========================== */
+
+.container{
+    max-width:1180px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+
+    margin-bottom:22px;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    text-decoration:none;
+    font-weight:700;
+
+    transition:.25s ease;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+    transform:translateY(-2px);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:var(--blanco);
+
+    border:1px solid var(--borde);
+    border-radius:20px;
+
+    padding:22px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+/* ==========================
+   CONTROLES
+========================== */
+
+.control{
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:8px;
+
+    color:var(--azulNoche);
+    font-weight:700;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:var(--turquesa);
+}
+
+.escala{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:5px;
+
+    color:var(--grisTexto);
+    font-size:.75rem;
+}
+
+button{
+    width:100%;
+
+    margin-top:8px;
+
+    padding:11px 16px;
+
+    border:0;
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    font-weight:700;
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#B89248;
+}
+
+/* ==========================
+   TARJETAS DE INFORMACIÓN
+========================== */
+
+.valor-principal{
+    margin-bottom:18px;
+
+    padding:18px;
+
+    text-align:center;
+
+    background:#2D9AB811;
+
+    border:1px solid var(--borde);
+    border-left:5px solid var(--dorado);
+    border-radius:16px;
+}
+
+.valor-principal span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:var(--grisTexto);
+    font-size:.83rem;
+}
+
+.valor-principal strong{
+    color:var(--azulMedio);
+    font-size:2rem;
+}
+
+.formula{
+    margin-top:18px;
+
+    padding:14px;
+
+    background:#C7A05A18;
+
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+.oculto{
+    display:none;
+}
+
+/* ==========================
+   GRÁFICO
+========================== */
+
+.canvas-box{
+    height:470px;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+
+    background:white;
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+/* ==========================
+   RESULTADOS
+========================== */
+
+.metrics{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(145px,1fr));
+
+    gap:12px;
+
+    margin-top:18px;
+}
+
+.metric{
+    padding:13px;
+
+    background:#2D9AB811;
+
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+}
+
+.metric span{
+    display:block;
+
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    display:block;
+
+    margin-top:4px;
+
+    color:var(--azulMedio);
+    font-size:1.08rem;
+}
+
+/* ==========================
+   BARRA DE PROBABILIDAD
+========================== */
+
+.probability-card{
+    margin-top:18px;
+
+    padding:16px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+.probability-card h3{
+    margin-bottom:12px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.probability-track{
+    position:relative;
+
+    height:24px;
+
+    overflow:hidden;
+
+    background:#E2E8F0;
+
+    border-radius:999px;
+}
+
+.probability-fill{
+    width:50%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dorado),
+            var(--turquesa)
+        );
+
+    border-radius:999px;
+
+    transition:width .25s ease;
+}
+
+.probability-labels{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:7px;
+
+    color:var(--grisTexto);
+    font-size:.8rem;
+}
+
+.probability-value{
+    margin-top:10px;
+
+    color:var(--azulMedio);
+
+    text-align:center;
+    font-size:1.15rem;
+    font-weight:800;
+}
+
+/* ==========================
+   TARJETAS CONCEPTUALES
+========================== */
+
+.concept-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+
+    gap:16px;
+
+    margin-top:24px;
+}
+
+.concept{
+    padding:18px;
+
+    background:white;
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.04);
+}
+
+.concept h3{
+    margin-bottom:8px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.concept p{
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.92rem;
+}
+
+.note{
+    margin-top:22px;
+
+    padding:16px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:900px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+
+    .canvas-box{
+        height:380px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+
+        <span class="badge">
+            Diplomado en Estadística Aplicada
+        </span>
+
+        <h1>
+            Explorando la función sigmoide
+        </h1>
+
+        <p>
+            Observe cómo la función sigmoide transforma cualquier valor real
+            en un número comprendido entre 0 y 1.
+        </p>
+
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../index.html" class="btn-volver">
+    ← Regresar al inicio
+</a>
+
+<section class="grid">
+
+    <!-- PANEL DE CONTROLES -->
+
+    <aside class="card">
+
+        <h2>⚙ Controles</h2>
+
+        <div class="valor-principal">
+            <span>Valor de entrada</span>
+            <strong id="xPrincipal">0.00</strong>
+        </div>
+
+        <div class="control">
+            <label>
+                Valor de \(x\):
+                <span id="xV" class="valor">0.00</span>
+            </label>
+
+            <input
+                id="x"
+                type="range"
+                min="-10"
+                max="10"
+                value="0"
+                step="0.1"
+            >
+
+            <div class="escala">
+                <span>-10</span>
+                <span>0</span>
+                <span>10</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Inclinación:
+                <span id="pendienteV" class="valor">1.00</span>
+            </label>
+
+            <input
+                id="pendiente"
+                type="range"
+                min="-4"
+                max="4"
+                value="1"
+                step="0.1"
+            >
+
+            <div class="escala">
+                <span>Decreciente</span>
+                <span>Suave</span>
+                <span>Creciente</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Desplazamiento:
+                <span id="desplazamientoV" class="valor">0.00</span>
+            </label>
+
+            <input
+                id="desplazamiento"
+                type="range"
+                min="-6"
+                max="6"
+                value="0"
+                step="0.1"
+            >
+
+            <div class="escala">
+                <span>Izquierda</span>
+                <span>Centro</span>
+                <span>Derecha</span>
+            </div>
+        </div>
+
+        <button
+            class="btn-dorado"
+            onclick="animarPunto()"
+        >
+            ▶ Recorrer la curva
+        </button>
+
+        <button onclick="alternarEcuacion()">
+            Mostrar u ocultar ecuación
+        </button>
+
+        <div id="formulaSigmoide" class="formula oculto">
+
+            <strong>Función sigmoide básica:</strong>
+
+            \[
+            \sigma(x)
+            =
+            \frac{1}{1+e^{-x}}
+            \]
+
+            <br>
+
+            <strong>Versión transformada:</strong>
+
+            \[
+            f(x)
+            =
+            \frac{1}
+            {1+e^{-a(x-c)}}
+            \]
+
+            donde \(a\) controla la inclinación y \(c\) el desplazamiento.
+
+        </div>
+
+    </aside>
+
+    <!-- GRÁFICO -->
+
+    <section class="card">
+
+        <h2>Forma de la función sigmoide</h2>
+
+        <div class="canvas-box">
+            <canvas
+                id="grafico"
+                width="900"
+                height="500"
+            ></canvas>
+        </div>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <span>Entrada \(x\)</span>
+                <strong id="xOut">0.00</strong>
+            </div>
+
+            <div class="metric">
+                <span>Salida \(f(x)\)</span>
+                <strong id="fxOut">0.5000</strong>
+            </div>
+
+            <div class="metric">
+                <span>Rango de salida</span>
+                <strong>\(0<f(x)<1\)</strong>
+            </div>
+
+            <div class="metric">
+                <span>Punto central</span>
+                <strong id="centroOut">0.00</strong>
+            </div>
+
+        </div>
+
+        <div class="probability-card">
+
+            <h3>
+                Salida transformada
+            </h3>
+
+            <div class="probability-track">
+
+                <div
+                    id="probabilityFill"
+                    class="probability-fill"
+                ></div>
+
+            </div>
+
+            <div class="probability-labels">
+                <span>0</span>
+                <span>0.5</span>
+                <span>1</span>
+            </div>
+
+            <div
+                id="probabilityValue"
+                class="probability-value"
+            >
+                0.5000
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<section class="concept-grid">
+
+    <div class="concept">
+        <h3>Valores negativos</h3>
+        <p>
+            Cuando la entrada es muy negativa, la salida de la función
+            se aproxima a 0, pero nunca llega exactamente a ese valor.
+        </p>
+    </div>
+
+    <div class="concept">
+        <h3>Valor central</h3>
+        <p>
+            Cuando la entrada transformada es igual a 0, la salida de
+            la función sigmoide es exactamente 0.5.
+        </p>
+    </div>
+
+    <div class="concept">
+        <h3>Valores positivos</h3>
+        <p>
+            Cuando la entrada es muy positiva, la salida se aproxima a 1,
+            pero nunca lo alcanza exactamente.
+        </p>
+    </div>
+
+</section>
+
+<div class="note">
+    <strong>Idea central:</strong>
+    la función sigmoide recibe valores de todo el conjunto de los números
+    reales y los transforma al intervalo comprendido entre 0 y 1. Por esta
+    razón resulta útil cuando se desea representar probabilidades.
+</div>
+
+</main>
+
+<script>
+const canvas = document.getElementById("grafico");
+const ctx = canvas.getContext("2d");
+
+let animando = false;
+let intervaloAnimacion = null;
+
+/* ==========================
+   FUNCIÓN SIGMOIDE
+========================== */
+
+function sigmoide(x, inclinacion, desplazamiento){
+    const z = inclinacion * (x - desplazamiento);
+
+    /*
+        Protección para evitar desbordamientos numéricos
+        cuando el exponente es muy grande.
+    */
+
+    if(z >= 0){
+        const expNegativo = Math.exp(-z);
+        return 1 / (1 + expNegativo);
+    }
+
+    const expPositivo = Math.exp(z);
+    return expPositivo / (1 + expPositivo);
+}
+
+/* ==========================
+   ACTUALIZAR SIMULADOR
+========================== */
+
+function actualizar(){
+
+    const x =
+        Number(document.getElementById("x").value);
+
+    const inclinacion =
+        Number(document.getElementById("pendiente").value);
+
+    const desplazamiento =
+        Number(document.getElementById("desplazamiento").value);
+
+    const fx =
+        sigmoide(x, inclinacion, desplazamiento);
+
+    document.getElementById("xV").textContent =
+        x.toFixed(2);
+
+    document.getElementById("pendienteV").textContent =
+        inclinacion.toFixed(2);
+
+    document.getElementById("desplazamientoV").textContent =
+        desplazamiento.toFixed(2);
+
+    document.getElementById("xPrincipal").textContent =
+        x.toFixed(2);
+
+    document.getElementById("xOut").textContent =
+        x.toFixed(2);
+
+    document.getElementById("fxOut").textContent =
+        fx.toFixed(4);
+
+    document.getElementById("centroOut").textContent =
+        desplazamiento.toFixed(2);
+
+    document.getElementById("probabilityValue").textContent =
+        fx.toFixed(4);
+
+    document.getElementById("probabilityFill").style.width =
+        `${fx * 100}%`;
+
+    dibujar(
+        x,
+        inclinacion,
+        desplazamiento,
+        fx
+    );
+}
+
+/* ==========================
+   DIBUJAR GRÁFICO
+========================== */
+
+function dibujar(
+    xActual,
+    inclinacion,
+    desplazamiento,
+    fxActual
+){
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const padIzquierdo = 70;
+    const padDerecho = 35;
+    const padSuperior = 35;
+    const padInferior = 65;
+
+    const xmin = -10;
+    const xmax = 10;
+
+    const ymin = 0;
+    const ymax = 1;
+
+    const anchoGrafico =
+        canvas.width -
+        padIzquierdo -
+        padDerecho;
+
+    const altoGrafico =
+        canvas.height -
+        padSuperior -
+        padInferior;
+
+    function X(x){
+        return (
+            padIzquierdo +
+            ((x - xmin) / (xmax - xmin)) *
+            anchoGrafico
+        );
+    }
+
+    function Y(y){
+        return (
+            canvas.height -
+            padInferior -
+            ((y - ymin) / (ymax - ymin)) *
+            altoGrafico
+        );
+    }
+
+    /* Fondo del área */
+
+    ctx.fillStyle = "#FFFFFF";
+
+    ctx.fillRect(
+        padIzquierdo,
+        padSuperior,
+        anchoGrafico,
+        altoGrafico
+    );
+
+    /* Cuadrícula vertical */
+
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    for(let x = -10; x <= 10; x += 2){
+
+        const px = X(x);
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            px,
+            padSuperior
+        );
+
+        ctx.lineTo(
+            px,
+            canvas.height - padInferior
+        );
+
+        ctx.stroke();
+    }
+
+    /* Cuadrícula horizontal */
+
+    for(let y = 0; y <= 1.0001; y += 0.1){
+
+        const py = Y(y);
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            padIzquierdo,
+            py
+        );
+
+        ctx.lineTo(
+            canvas.width - padDerecho,
+            py
+        );
+
+        ctx.stroke();
+    }
+
+    /* Línea horizontal de 0.5 */
+
+    ctx.strokeStyle =
+        "rgba(199,160,90,.75)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([6,5]);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        Y(0.5)
+    );
+
+    ctx.lineTo(
+        canvas.width - padDerecho,
+        Y(0.5)
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+    /* Ejes */
+
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        padSuperior
+    );
+
+    ctx.lineTo(
+        padIzquierdo,
+        canvas.height - padInferior
+    );
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        canvas.height - padInferior
+    );
+
+    ctx.lineTo(
+        canvas.width - padDerecho,
+        canvas.height - padInferior
+    );
+
+    ctx.stroke();
+
+    /* Etiquetas del eje X */
+
+    ctx.fillStyle = "#64748B";
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "center";
+
+    for(let x = -10; x <= 10; x += 2){
+
+        ctx.fillText(
+            x.toString(),
+            X(x),
+            canvas.height - padInferior + 22
+        );
+    }
+
+    /* Etiquetas del eje Y */
+
+    ctx.textAlign = "right";
+
+    for(let y = 0; y <= 1.0001; y += 0.1){
+
+        ctx.fillText(
+            y.toFixed(1),
+            padIzquierdo - 10,
+            Y(y) + 4
+        );
+    }
+
+    /* Título del eje X */
+
+    ctx.fillStyle = "#1D2D50";
+    ctx.font = "bold 14px Segoe UI";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+        "Valor de entrada x",
+        padIzquierdo + anchoGrafico / 2,
+        canvas.height - 15
+    );
+
+    /* Título del eje Y */
+
+    ctx.save();
+
+    ctx.translate(
+        20,
+        padSuperior + altoGrafico / 2
+    );
+
+    ctx.rotate(-Math.PI / 2);
+
+    ctx.fillText(
+        "Salida f(x)",
+        0,
+        0
+    );
+
+    ctx.restore();
+
+    /* Etiqueta 0.5 */
+
+    ctx.fillStyle = "#C7A05A";
+    ctx.font = "bold 12px Segoe UI";
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+        "Punto medio = 0.5",
+        padIzquierdo + 10,
+        Y(0.5) - 8
+    );
+
+    /* Curva sigmoide */
+
+    ctx.strokeStyle = "#2D9AB8";
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    const pasos = 500;
+
+    for(let i = 0; i <= pasos; i++){
+
+        const x =
+            xmin +
+            (i / pasos) *
+            (xmax - xmin);
+
+        const y =
+            sigmoide(
+                x,
+                inclinacion,
+                desplazamiento
+            );
+
+        const px = X(x);
+        const py = Y(y);
+
+        if(i === 0){
+            ctx.moveTo(px, py);
+        }else{
+            ctx.lineTo(px, py);
+        }
+    }
+
+    ctx.stroke();
+
+    /* Línea vertical del punto actual */
+
+    ctx.strokeStyle =
+        "rgba(44,68,125,.70)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([5,5]);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        X(xActual),
+        Y(0)
+    );
+
+    ctx.lineTo(
+        X(xActual),
+        Y(fxActual)
+    );
+
+    ctx.stroke();
+
+    /* Línea horizontal del punto actual */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        X(xmin),
+        Y(fxActual)
+    );
+
+    ctx.lineTo(
+        X(xActual),
+        Y(fxActual)
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+    /* Punto actual */
+
+    ctx.beginPath();
+
+    ctx.fillStyle = "#C7A05A";
+    ctx.strokeStyle = "#1D2D50";
+    ctx.lineWidth = 2;
+
+    ctx.arc(
+        X(xActual),
+        Y(fxActual),
+        7,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    /* Etiqueta dinámica */
+
+    const texto =
+        `(${xActual.toFixed(2)}, ${fxActual.toFixed(4)})`;
+
+    const etiquetaX =
+        Math.min(
+            X(xActual) + 12,
+            canvas.width - 170
+        );
+
+    const etiquetaY =
+        Math.max(
+            Y(fxActual) - 15,
+            padSuperior + 20
+        );
+
+    ctx.font = "bold 13px Segoe UI";
+
+    const anchoTexto =
+        ctx.measureText(texto).width;
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.94)";
+
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        etiquetaX - 7,
+        etiquetaY - 17,
+        anchoTexto + 14,
+        25,
+        7
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#1D2D50";
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+        texto,
+        etiquetaX,
+        etiquetaY
+    );
+}
+
+/* ==========================
+   MOSTRAR ECUACIÓN
+========================== */
+
+function alternarEcuacion(){
+
+    const bloque =
+        document.getElementById(
+            "formulaSigmoide"
+        );
+
+    bloque.classList.toggle("oculto");
+
+    if(
+        !bloque.classList.contains("oculto") &&
+        window.MathJax
+    ){
+        MathJax.typesetPromise();
+    }
+}
+
+/* ==========================
+   ANIMACIÓN
+========================== */
+
+function animarPunto(){
+
+    if(animando){
+
+        clearInterval(intervaloAnimacion);
+
+        animando = false;
+
+        return;
+    }
+
+    animando = true;
+
+    let x = -10;
+
+    document.getElementById("x").value = x;
+
+    actualizar();
+
+    intervaloAnimacion =
+        setInterval(()=>{
+
+            x += 0.1;
+
+            if(x > 10){
+
+                clearInterval(
+                    intervaloAnimacion
+                );
+
+                animando = false;
+
+                return;
+            }
+
+            document.getElementById("x").value =
+                x.toFixed(1);
+
+            actualizar();
+
+        },40);
+}
+
+/* ==========================
+   EVENTOS
+========================== */
+
+[
+    "x",
+    "pendiente",
+    "desplazamiento"
+].forEach(id=>{
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            actualizar
+        );
+});
+
+/* ==========================
+   INICIO
+========================== */
+
+actualizar();
+</script>
+
+</body>
+</html>
