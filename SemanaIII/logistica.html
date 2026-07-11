@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulador de Regresión Logística</title>
+
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+    --rojo:#B91C1C;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(45,154,184,.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+}
+
+/* ==========================
+   ENCABEZADO
+========================== */
+
+.hero{
+    padding:30px 60px;
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(45,154,184,.16),
+            transparent 30%
+        ),
+        linear-gradient(
+            90deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1200px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-size:.85rem;
+    font-weight:800;
+}
+
+h1{
+    margin-top:8px;
+    color:var(--azulNoche);
+    font-size:2rem;
+}
+
+h1::after{
+    content:"";
+    display:block;
+
+    width:65px;
+    height:4px;
+
+    margin-top:8px;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dorado),
+            var(--turquesa)
+        );
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+/* ==========================
+   CONTENIDO
+========================== */
+
+.container{
+    max-width:1250px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+
+    margin-bottom:22px;
+    margin-right:8px;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    text-decoration:none;
+    font-weight:700;
+
+    transition:.25s ease;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+    transform:translateY(-2px);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:330px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:var(--blanco);
+
+    border:1px solid var(--borde);
+    border-radius:20px;
+
+    padding:22px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    color:var(--azulMedio);
+    font-size:1.15rem;
+    margin-bottom:14px;
+}
+
+/* ==========================
+   CONTROLES
+========================== */
+
+.control{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:8px;
+
+    color:var(--azulNoche);
+    font-weight:700;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:var(--turquesa);
+}
+
+.escala{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:5px;
+
+    color:var(--grisTexto);
+    font-size:.74rem;
+}
+
+button{
+    width:100%;
+
+    margin-top:9px;
+
+    padding:11px 16px;
+
+    border:0;
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    font-weight:700;
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#B89248;
+}
+
+/* ==========================
+   FÓRMULAS
+========================== */
+
+.formula{
+    margin-top:18px;
+
+    padding:14px;
+
+    background:#C7A05A18;
+
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+/* ==========================
+   GRÁFICO
+========================== */
+
+.canvas-box{
+    height:510px;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+
+    background:white;
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+/* ==========================
+   MÉTRICAS
+========================== */
+
+.metrics{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(145px,1fr));
+
+    gap:12px;
+
+    margin-top:18px;
+}
+
+.metric{
+    padding:13px;
+
+    background:#2D9AB811;
+
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+}
+
+.metric span{
+    display:block;
+
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    display:block;
+
+    margin-top:4px;
+
+    color:var(--azulMedio);
+    font-size:1.08rem;
+}
+
+/* ==========================
+   PROBABILIDAD
+========================== */
+
+.probability-card{
+    margin-top:18px;
+
+    padding:17px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+}
+
+.probability-card h3{
+    margin-bottom:12px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.probability-track{
+    position:relative;
+
+    height:26px;
+
+    overflow:hidden;
+
+    background:#E2E8F0;
+
+    border-radius:999px;
+}
+
+.probability-fill{
+    width:50%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dorado),
+            var(--turquesa)
+        );
+
+    border-radius:999px;
+
+    transition:width .25s ease;
+}
+
+.threshold-marker{
+    position:absolute;
+    top:-4px;
+
+    width:3px;
+    height:34px;
+
+    background:var(--rojo);
+
+    transform:translateX(-50%);
+    transition:left .25s ease;
+}
+
+.probability-labels{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:7px;
+
+    color:var(--grisTexto);
+    font-size:.8rem;
+}
+
+.clasificacion{
+    margin-top:15px;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    background:#2D9AB811;
+    border:1px solid var(--borde);
+
+    transition:.25s ease;
+}
+
+.clasificacion span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.clasificacion strong{
+    color:var(--azulMedio);
+    font-size:1.35rem;
+}
+
+.clasificacion.clase-uno{
+    background:rgba(45,154,184,.14);
+    border-left:5px solid var(--turquesa);
+}
+
+.clasificacion.clase-cero{
+    background:rgba(199,160,90,.15);
+    border-left:5px solid var(--dorado);
+}
+
+/* ==========================
+   PROCESO
+========================== */
+
+.process-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:16px;
+
+    margin-top:24px;
+}
+
+.process-card{
+    position:relative;
+
+    padding:19px;
+
+    background:white;
+
+    border:1px solid var(--borde);
+    border-radius:18px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.04);
+}
+
+.process-number{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:34px;
+    height:34px;
+
+    margin-bottom:12px;
+
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    font-weight:800;
+}
+
+.process-card h3{
+    margin-bottom:8px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.process-card p{
+    color:var(--grisTexto);
+    font-size:.92rem;
+    line-height:1.5;
+}
+
+.process-value{
+    margin-top:12px;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    background:#2D9AB811;
+
+    color:var(--azulMedio);
+
+    text-align:center;
+    font-weight:800;
+}
+
+.note{
+    margin-top:22px;
+
+    padding:16px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:950px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .process-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+
+    .canvas-box{
+        height:410px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+
+        <span class="badge">
+            Diplomado en Estadística Aplicada
+        </span>
+
+        <h1>
+            Simulador de Regresión Logística
+        </h1>
+
+        <p>
+            Observe cómo un predictor se transforma primero en un puntaje
+            lineal, luego en una probabilidad y finalmente en una clase.
+        </p>
+
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../index.html" class="btn-volver">
+    ← Regresar al inicio
+</a>
+
+<section class="grid">
+
+    <!-- PANEL DE CONTROLES -->
+
+    <aside class="card">
+
+        <h2>⚙ Parámetros</h2>
+
+        <div class="control">
+            <label>
+                Intercepto \(\beta_0\):
+                <span id="b0V" class="valor">-2.00</span>
+            </label>
+
+            <input
+                id="b0"
+                type="range"
+                min="-8"
+                max="8"
+                value="-2"
+                step="0.1"
+            >
+
+            <div class="escala">
+                <span>-8</span>
+                <span>0</span>
+                <span>8</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Pendiente \(\beta_1\):
+                <span id="b1V" class="valor">0.80</span>
+            </label>
+
+            <input
+                id="b1"
+                type="range"
+                min="-3"
+                max="3"
+                value="0.8"
+                step="0.05"
+            >
+
+            <div class="escala">
+                <span>Negativa</span>
+                <span>0</span>
+                <span>Positiva</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Valor de predicción \(x_0\):
+                <span id="x0V" class="valor">4.00</span>
+            </label>
+
+            <input
+                id="x0"
+                type="range"
+                min="-10"
+                max="10"
+                value="4"
+                step="0.1"
+            >
+
+            <div class="escala">
+                <span>-10</span>
+                <span>0</span>
+                <span>10</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Umbral de clasificación:
+                <span id="umbralV" class="valor">0.50</span>
+            </label>
+
+            <input
+                id="umbral"
+                type="range"
+                min="0.05"
+                max="0.95"
+                value="0.50"
+                step="0.01"
+            >
+
+            <div class="escala">
+                <span>0.05</span>
+                <span>0.50</span>
+                <span>0.95</span>
+            </div>
+        </div>
+
+        <div class="control">
+            <label>
+                Tamaño de muestra \(n\):
+                <span id="nV" class="valor">80</span>
+            </label>
+
+            <input
+                id="n"
+                type="range"
+                min="20"
+                max="250"
+                value="80"
+                step="10"
+            >
+        </div>
+
+        <button
+            class="btn-dorado"
+            onclick="generarMuestra()"
+        >
+            Generar nueva muestra
+        </button>
+
+        <div class="formula">
+
+            <strong>Puntaje lineal:</strong>
+
+            \[
+            \eta
+            =
+            \beta_0+\beta_1X
+            \]
+
+        </div>
+
+        <div class="formula">
+
+            <strong>Probabilidad logística:</strong>
+
+            \[
+            P(Y=1\mid X)
+            =
+            \frac{1}
+            {1+e^{-(\beta_0+\beta_1X)}}
+            \]
+
+        </div>
+
+        <div class="formula">
+
+            <strong>Regla de clasificación:</strong>
+
+            \[
+            \hat{Y}
+            =
+            \begin{cases}
+            1, & \hat{p}\geq c,\\
+            0, & \hat{p}<c.
+            \end{cases}
+            \]
+
+            donde \(c\) representa el umbral.
+
+        </div>
+
+    </aside>
+
+    <!-- GRÁFICO -->
+
+    <section class="card">
+
+        <h2>
+            Curva logística y observaciones binarias
+        </h2>
+
+        <div class="canvas-box">
+            <canvas
+                id="grafico"
+                width="920"
+                height="520"
+            ></canvas>
+        </div>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <span>Valor \(x_0\)</span>
+                <strong id="x0Out">4.00</strong>
+            </div>
+
+            <div class="metric">
+                <span>Puntaje lineal \(\eta_0\)</span>
+                <strong id="etaOut">1.20</strong>
+            </div>
+
+            <div class="metric">
+                <span>Probabilidad \(\hat{p}_0\)</span>
+                <strong id="probOut">0.7685</strong>
+            </div>
+
+            <div class="metric">
+                <span>Umbral \(c\)</span>
+                <strong id="umbralOut">0.50</strong>
+            </div>
+
+        </div>
+
+        <div class="probability-card">
+
+            <h3>
+                Probabilidad estimada para \(x_0\)
+            </h3>
+
+            <div class="probability-track">
+
+                <div
+                    id="probabilityFill"
+                    class="probability-fill"
+                ></div>
+
+                <div
+                    id="thresholdMarker"
+                    class="threshold-marker"
+                ></div>
+
+            </div>
+
+            <div class="probability-labels">
+                <span>0</span>
+                <span>Probabilidad</span>
+                <span>1</span>
+            </div>
+
+            <div
+                id="clasificacion"
+                class="clasificacion"
+            >
+                <span>Clase predicha</span>
+                <strong id="claseOut">
+                    \(\hat{Y}=1\)
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!-- PROCESO DE LA REGRESIÓN LOGÍSTICA -->
+
+<section class="process-grid">
+
+    <article class="process-card">
+
+        <div class="process-number">
+            1
+        </div>
+
+        <h3>
+            Combinación lineal
+        </h3>
+
+        <p>
+            El modelo combina el intercepto, el coeficiente y el valor
+            de la variable explicativa.
+        </p>
+
+        <div
+            id="etaProceso"
+            class="process-value"
+        >
+            \(\eta=1.20\)
+        </div>
+
+    </article>
+
+    <article class="process-card">
+
+        <div class="process-number">
+            2
+        </div>
+
+        <h3>
+            Transformación sigmoide
+        </h3>
+
+        <p>
+            El puntaje lineal puede tomar cualquier valor real. La
+            función sigmoide lo transforma al intervalo entre 0 y 1.
+        </p>
+
+        <div
+            id="probProceso"
+            class="process-value"
+        >
+            \(\hat{p}=0.7685\)
+        </div>
+
+    </article>
+
+    <article class="process-card">
+
+        <div class="process-number">
+            3
+        </div>
+
+        <h3>
+            Clasificación
+        </h3>
+
+        <p>
+            La probabilidad estimada se compara con un umbral para
+            asignar la observación a una de las dos clases.
+        </p>
+
+        <div
+            id="claseProceso"
+            class="process-value"
+        >
+            Clase 1
+        </div>
+
+    </article>
+
+</section>
+
+<div class="note">
+    <strong>Idea central:</strong>
+    la regresión logística no predice directamente una categoría.
+    Primero calcula un puntaje lineal, luego lo transforma en una
+    probabilidad mediante la función sigmoide y, finalmente, utiliza un
+    umbral para determinar la clase predicha.
+</div>
+
+</main>
+
+<script>
+const canvas =
+    document.getElementById("grafico");
+
+const ctx =
+    canvas.getContext("2d");
+
+let datos = [];
+
+/* ==========================
+   FUNCIÓN SIGMOIDE
+========================== */
+
+function sigmoide(z){
+
+    if(z >= 0){
+        const expNegativo =
+            Math.exp(-z);
+
+        return 1 / (1 + expNegativo);
+    }
+
+    const expPositivo =
+        Math.exp(z);
+
+    return expPositivo /
+        (1 + expPositivo);
+}
+
+/* ==========================
+   GENERAR MUESTRA BINARIA
+========================== */
+
+function generarMuestra(){
+
+    const b0 =
+        Number(
+            document.getElementById("b0").value
+        );
+
+    const b1 =
+        Number(
+            document.getElementById("b1").value
+        );
+
+    const n =
+        Number(
+            document.getElementById("n").value
+        );
+
+    datos = [];
+
+    for(let i = 0; i < n; i++){
+
+        const x =
+            -10 + Math.random() * 20;
+
+        const eta =
+            b0 + b1 * x;
+
+        const p =
+            sigmoide(eta);
+
+        const y =
+            Math.random() < p ? 1 : 0;
+
+        datos.push({
+            x,
+            y,
+            p
+        });
+    }
+
+    actualizar();
+}
+
+/* ==========================
+   ACTUALIZAR SIMULADOR
+========================== */
+
+function actualizar(){
+
+    const b0 =
+        Number(
+            document.getElementById("b0").value
+        );
+
+    const b1 =
+        Number(
+            document.getElementById("b1").value
+        );
+
+    const x0 =
+        Number(
+            document.getElementById("x0").value
+        );
+
+    const umbral =
+        Number(
+            document.getElementById("umbral").value
+        );
+
+    const n =
+        Number(
+            document.getElementById("n").value
+        );
+
+    document.getElementById("b0V").textContent =
+        b0.toFixed(2);
+
+    document.getElementById("b1V").textContent =
+        b1.toFixed(2);
+
+    document.getElementById("x0V").textContent =
+        x0.toFixed(2);
+
+    document.getElementById("umbralV").textContent =
+        umbral.toFixed(2);
+
+    document.getElementById("nV").textContent =
+        n;
+
+    const eta0 =
+        b0 + b1 * x0;
+
+    const probabilidad =
+        sigmoide(eta0);
+
+    const clase =
+        probabilidad >= umbral ? 1 : 0;
+
+    document.getElementById("x0Out").textContent =
+        x0.toFixed(2);
+
+    document.getElementById("etaOut").textContent =
+        eta0.toFixed(3);
+
+    document.getElementById("probOut").textContent =
+        probabilidad.toFixed(4);
+
+    document.getElementById("umbralOut").textContent =
+        umbral.toFixed(2);
+
+    document.getElementById("probabilityFill").style.width =
+        `${probabilidad * 100}%`;
+
+    document.getElementById("thresholdMarker").style.left =
+        `${umbral * 100}%`;
+
+    const clasificacion =
+        document.getElementById("clasificacion");
+
+    clasificacion.classList.remove(
+        "clase-uno",
+        "clase-cero"
+    );
+
+    if(clase === 1){
+        clasificacion.classList.add(
+            "clase-uno"
+        );
+    }else{
+        clasificacion.classList.add(
+            "clase-cero"
+        );
+    }
+
+    document.getElementById("claseOut").innerHTML =
+        `\\(\\hat{Y}=${clase}\\)`;
+
+    document.getElementById("etaProceso").innerHTML =
+        `\\(
+        \\eta
+        =
+        ${b0.toFixed(2)}
+        +
+        ${b1.toFixed(2)}
+        (${x0.toFixed(2)})
+        =
+        ${eta0.toFixed(3)}
+        \\)`;
+
+    document.getElementById("probProceso").innerHTML =
+        `\\(
+        \\hat{p}
+        =
+        ${probabilidad.toFixed(4)}
+        \\)`;
+
+    document.getElementById("claseProceso").textContent =
+        `Clase ${clase}`;
+
+    dibujar(
+        b0,
+        b1,
+        x0,
+        umbral,
+        probabilidad
+    );
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
+}
+
+/* ==========================
+   DIBUJAR GRÁFICO
+========================== */
+
+function dibujar(
+    b0,
+    b1,
+    x0,
+    umbral,
+    probabilidad
+){
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const padIzquierdo = 72;
+    const padDerecho = 35;
+    const padSuperior = 35;
+    const padInferior = 68;
+
+    const xmin = -10;
+    const xmax = 10;
+
+    const ymin = -0.12;
+    const ymax = 1.12;
+
+    const anchoGrafico =
+        canvas.width -
+        padIzquierdo -
+        padDerecho;
+
+    const altoGrafico =
+        canvas.height -
+        padSuperior -
+        padInferior;
+
+    function X(x){
+        return (
+            padIzquierdo +
+            ((x - xmin) /
+            (xmax - xmin)) *
+            anchoGrafico
+        );
+    }
+
+    function Y(y){
+        return (
+            canvas.height -
+            padInferior -
+            ((y - ymin) /
+            (ymax - ymin)) *
+            altoGrafico
+        );
+    }
+
+    /* Cuadrícula */
+
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    for(let x = -10; x <= 10; x += 2){
+
+        const px = X(x);
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            px,
+            padSuperior
+        );
+
+        ctx.lineTo(
+            px,
+            canvas.height - padInferior
+        );
+
+        ctx.stroke();
+    }
+
+    for(let y = 0; y <= 1.0001; y += 0.1){
+
+        const py = Y(y);
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            padIzquierdo,
+            py
+        );
+
+        ctx.lineTo(
+            canvas.width - padDerecho,
+            py
+        );
+
+        ctx.stroke();
+    }
+
+    /* Umbral horizontal */
+
+    ctx.strokeStyle =
+        "rgba(185,28,28,.75)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([7,5]);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        Y(umbral)
+    );
+
+    ctx.lineTo(
+        canvas.width - padDerecho,
+        Y(umbral)
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+    /* Ejes */
+
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        padSuperior
+    );
+
+    ctx.lineTo(
+        padIzquierdo,
+        canvas.height - padInferior
+    );
+
+    ctx.stroke();
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        padIzquierdo,
+        Y(0)
+    );
+
+    ctx.lineTo(
+        canvas.width - padDerecho,
+        Y(0)
+    );
+
+    ctx.stroke();
+
+    /* Etiquetas X */
+
+    ctx.fillStyle = "#64748B";
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "center";
+
+    for(let x = -10; x <= 10; x += 2){
+
+        ctx.fillText(
+            x.toString(),
+            X(x),
+            canvas.height -
+            padInferior +
+            23
+        );
+    }
+
+    /* Etiquetas Y */
+
+    ctx.textAlign = "right";
+
+    for(let y = 0; y <= 1.0001; y += 0.1){
+
+        ctx.fillText(
+            y.toFixed(1),
+            padIzquierdo - 10,
+            Y(y) + 4
+        );
+    }
+
+    /* Títulos */
+
+    ctx.fillStyle = "#1D2D50";
+    ctx.font = "bold 14px Segoe UI";
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+        "Variable explicativa X",
+        padIzquierdo +
+        anchoGrafico / 2,
+        canvas.height - 15
+    );
+
+    ctx.save();
+
+    ctx.translate(
+        21,
+        padSuperior +
+        altoGrafico / 2
+    );
+
+    ctx.rotate(-Math.PI / 2);
+
+    ctx.fillText(
+        "Probabilidad y respuesta binaria",
+        0,
+        0
+    );
+
+    ctx.restore();
+
+    /* Etiqueta del umbral */
+
+    ctx.fillStyle = "#B91C1C";
+    ctx.font = "bold 12px Segoe UI";
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+        `Umbral = ${umbral.toFixed(2)}`,
+        padIzquierdo + 10,
+        Y(umbral) - 8
+    );
+
+    /* Datos observados */
+
+    datos.forEach((d, i)=>{
+
+        const jitter =
+            ((i % 7) - 3) * 0.006;
+
+        ctx.beginPath();
+
+        ctx.fillStyle =
+            d.y === 1
+            ? "#2D9AB8"
+            : "#C7A05A";
+
+        ctx.strokeStyle = "#1D2D50";
+        ctx.lineWidth = 1;
+
+        ctx.arc(
+            X(d.x),
+            Y(d.y + jitter),
+            4.7,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    /* Curva logística */
+
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    const pasos = 500;
+
+    for(let i = 0; i <= pasos; i++){
+
+        const x =
+            xmin +
+            (i / pasos) *
+            (xmax - xmin);
+
+        const p =
+            sigmoide(
+                b0 + b1 * x
+            );
+
+        const px = X(x);
+        const py = Y(p);
+
+        if(i === 0){
+            ctx.moveTo(px, py);
+        }else{
+            ctx.lineTo(px, py);
+        }
+    }
+
+    ctx.stroke();
+
+    /* Línea vertical x0 */
+
+    ctx.strokeStyle =
+        "rgba(44,68,125,.70)";
+
+    ctx.lineWidth = 2;
+
+    ctx.setLineDash([5,5]);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        X(x0),
+        Y(0)
+    );
+
+    ctx.lineTo(
+        X(x0),
+        Y(probabilidad)
+    );
+
+    ctx.stroke();
+
+    /* Línea horizontal de probabilidad */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        X(xmin),
+        Y(probabilidad)
+    );
+
+    ctx.lineTo(
+        X(x0),
+        Y(probabilidad)
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+    /* Punto de predicción */
+
+    ctx.beginPath();
+
+    ctx.fillStyle = "#B91C1C";
+    ctx.strokeStyle = "#1D2D50";
+    ctx.lineWidth = 2;
+
+    ctx.arc(
+        X(x0),
+        Y(probabilidad),
+        7,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    /* Etiqueta del punto */
+
+    const texto =
+        `x₀=${x0.toFixed(2)}, p=${probabilidad.toFixed(3)}`;
+
+    const etiquetaX =
+        Math.min(
+            X(x0) + 12,
+            canvas.width - 190
+        );
+
+    const etiquetaY =
+        Math.max(
+            Y(probabilidad) - 15,
+            padSuperior + 20
+        );
+
+    ctx.font = "bold 13px Segoe UI";
+
+    const anchoTexto =
+        ctx.measureText(texto).width;
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.94)";
+
+    ctx.strokeStyle = "#E2E8F0";
+    ctx.lineWidth = 1;
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        etiquetaX - 7,
+        etiquetaY - 17,
+        anchoTexto + 14,
+        25,
+        7
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#1D2D50";
+    ctx.textAlign = "left";
+
+    ctx.fillText(
+        texto,
+        etiquetaX,
+        etiquetaY
+    );
+
+    /* Leyenda */
+
+    const leyendaX =
+        canvas.width -
+        padDerecho -
+        170;
+
+    const leyendaY =
+        padSuperior + 15;
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.92)";
+
+    ctx.strokeStyle = "#E2E8F0";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        leyendaX,
+        leyendaY,
+        155,
+        88,
+        10
+    );
+
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = "12px Segoe UI";
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "#2D9AB8";
+
+    ctx.beginPath();
+    ctx.arc(
+        leyendaX + 14,
+        leyendaY + 22,
+        5,
+        0,
+        Math.PI * 2
+    );
+    ctx.fill();
+
+    ctx.fillStyle = "#64748B";
+
+    ctx.fillText(
+        "Clase observada 1",
+        leyendaX + 27,
+        leyendaY + 26
+    );
+
+    ctx.fillStyle = "#C7A05A";
+
+    ctx.beginPath();
+    ctx.arc(
+        leyendaX + 14,
+        leyendaY + 48,
+        5,
+        0,
+        Math.PI * 2
+    );
+    ctx.fill();
+
+    ctx.fillStyle = "#64748B";
+
+    ctx.fillText(
+        "Clase observada 0",
+        leyendaX + 27,
+        leyendaY + 52
+    );
+
+    ctx.strokeStyle = "#2C447D";
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        leyendaX + 8,
+        leyendaY + 73
+    );
+
+    ctx.lineTo(
+        leyendaX + 25,
+        leyendaY + 73
+    );
+
+    ctx.stroke();
+
+    ctx.fillStyle = "#64748B";
+
+    ctx.fillText(
+        "Probabilidad",
+        leyendaX + 32,
+        leyendaY + 77
+    );
+}
+
+/* ==========================
+   EVENTOS
+========================== */
+
+/*
+    Al modificar beta0 o beta1 se genera una nueva
+    muestra compatible con el nuevo modelo.
+*/
+
+["b0","b1","n"].forEach(id=>{
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            generarMuestra
+        );
+});
+
+/*
+    Al modificar x0 o el umbral, la muestra debe
+    permanecer igual. Solo cambia la predicción.
+*/
+
+["x0","umbral"].forEach(id=>{
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            actualizar
+        );
+});
+
+/* ==========================
+   INICIO
+========================== */
+
+generarMuestra();
+</script>
+
+</body>
+</html>
