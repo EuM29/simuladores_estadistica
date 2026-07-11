@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulador de cajas y bigotes</title>
+
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+<script>
+window.MathJax = {
+    tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --azulNoche:#1D2D50;
+    --azulMedio:#2C447D;
+    --turquesa:#2D9AB8;
+    --dorado:#C7A05A;
+    --grisTexto:#64748B;
+    --grisClaro:#F8FAFC;
+    --borde:#E2E8F0;
+    --blanco:#FFFFFF;
+    --rojo:#B91C1C;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Segoe UI, Arial, sans-serif;
+    color:var(--azulNoche);
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(45,154,184,.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+}
+
+/* ==========================
+   ENCABEZADO
+========================== */
+
+.hero{
+    padding:30px 60px;
+
+    background:
+        radial-gradient(
+            circle at 80% 30%,
+            rgba(45,154,184,.16),
+            transparent 30%
+        ),
+        linear-gradient(
+            90deg,
+            #F8FAFC,
+            #EEF2F7
+        );
+
+    border-bottom:5px solid var(--dorado);
+}
+
+.hero-content{
+    max-width:1200px;
+    margin:auto;
+}
+
+.badge{
+    color:var(--turquesa);
+    font-size:.85rem;
+    font-weight:800;
+}
+
+h1{
+    margin-top:8px;
+    color:var(--azulNoche);
+    font-size:2rem;
+}
+
+h1::after{
+    content:"";
+    display:block;
+    width:65px;
+    height:4px;
+    margin-top:8px;
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--dorado),
+            var(--turquesa)
+        );
+}
+
+.hero p{
+    margin-top:12px;
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+/* ==========================
+   CONTENIDO
+========================== */
+
+.container{
+    max-width:1280px;
+    margin:32px auto;
+    padding:0 24px;
+}
+
+.btn-volver{
+    display:inline-block;
+    margin-bottom:22px;
+    margin-right:8px;
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    text-decoration:none;
+    font-weight:700;
+
+    transition:.25s ease;
+}
+
+.btn-volver:hover{
+    background:var(--azulNoche);
+    transform:translateY(-2px);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:330px 1fr;
+    gap:22px;
+    align-items:start;
+}
+
+.card{
+    background:var(--blanco);
+
+    border:1px solid var(--borde);
+    border-radius:20px;
+
+    padding:22px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.06);
+}
+
+.card h2{
+    margin-bottom:14px;
+
+    color:var(--azulMedio);
+    font-size:1.15rem;
+}
+
+/* ==========================
+   CONTROLES
+========================== */
+
+.group-control{
+    margin-bottom:20px;
+    padding:14px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:15px;
+}
+
+.group-control h3{
+    margin-bottom:12px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.control{
+    margin-bottom:13px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+
+    color:var(--azulNoche);
+    font-weight:700;
+    font-size:.9rem;
+}
+
+.valor{
+    color:var(--turquesa);
+    font-weight:800;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:var(--turquesa);
+}
+
+button{
+    width:100%;
+
+    margin-top:9px;
+    padding:11px 16px;
+
+    border:0;
+    border-radius:10px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    font-weight:700;
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+button:hover{
+    background:var(--azulNoche);
+}
+
+.btn-dorado{
+    background:var(--dorado);
+    color:var(--azulNoche);
+}
+
+.btn-dorado:hover{
+    background:#B89248;
+}
+
+/* ==========================
+   FÓRMULAS
+========================== */
+
+.formula{
+    margin-top:18px;
+    padding:14px;
+
+    background:#C7A05A18;
+
+    border-left:5px solid var(--dorado);
+    border-radius:14px;
+
+    color:var(--grisTexto);
+    line-height:1.5;
+}
+
+.formula strong{
+    color:var(--azulMedio);
+}
+
+/* ==========================
+   GRÁFICO
+========================== */
+
+.plot{
+    height:540px;
+}
+
+/* ==========================
+   MÉTRICAS
+========================== */
+
+.metrics{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(150px,1fr));
+
+    gap:12px;
+
+    margin-top:18px;
+}
+
+.metric{
+    padding:13px;
+
+    background:#2D9AB811;
+
+    border-left:4px solid var(--dorado);
+    border-radius:12px;
+}
+
+.metric span{
+    display:block;
+
+    color:var(--grisTexto);
+    font-size:.82rem;
+}
+
+.metric strong{
+    display:block;
+
+    margin-top:4px;
+
+    color:var(--azulMedio);
+    font-size:1.08rem;
+}
+
+/* ==========================
+   TABLA
+========================== */
+
+.table-card{
+    margin-top:24px;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    margin-top:10px;
+
+    border-collapse:collapse;
+}
+
+th{
+    padding:11px 9px;
+
+    background:var(--azulMedio);
+    color:white;
+
+    text-align:center;
+    font-size:.88rem;
+}
+
+td{
+    padding:10px 9px;
+
+    border:1px solid var(--borde);
+
+    text-align:center;
+    color:var(--grisTexto);
+}
+
+td:first-child{
+    color:var(--azulNoche);
+    font-weight:700;
+}
+
+.outlier-value{
+    color:var(--rojo);
+    font-weight:800;
+}
+
+/* ==========================
+   TARJETAS CONCEPTUALES
+========================== */
+
+.concept-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(230px,1fr));
+
+    gap:16px;
+
+    margin-top:24px;
+}
+
+.concept{
+    padding:18px;
+
+    background:white;
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.04);
+}
+
+.concept h3{
+    margin-bottom:8px;
+
+    color:var(--azulMedio);
+    font-size:1rem;
+}
+
+.concept p{
+    color:var(--grisTexto);
+    line-height:1.5;
+    font-size:.92rem;
+}
+
+.note{
+    margin-top:22px;
+    padding:16px;
+
+    background:var(--grisClaro);
+
+    border:1px solid var(--borde);
+    border-radius:16px;
+
+    color:var(--grisTexto);
+    line-height:1.55;
+}
+
+.note strong{
+    color:var(--azulMedio);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:950px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero{
+        padding:26px;
+    }
+
+    h1{
+        font-size:1.65rem;
+    }
+
+    .plot{
+        height:430px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+
+        <span class="badge">
+            Diplomado en Estadística Aplicada
+        </span>
+
+        <h1>
+            Diagramas de cajas y bigotes
+        </h1>
+  
+
+    </div>
+</section>
+
+<main class="container">
+
+<a href="../index.html" class="btn-volver">
+    ← Regresar al inicio
+</a>
+
+<a href="submenuIII.html" class="btn-volver">
+    ← Regresar a Semana III
+</a>
+
+<section class="grid">
+
+    <!-- CONTROLES -->
+
+    <aside class="card">
+
+        <h2>⚙ Parámetros de los grupos</h2>
+
+        <div class="group-control">
+
+            <h3>Grupo A</h3>
+
+            <div class="control">
+                <label>
+                    Media:
+                    <span id="mu1V" class="valor">50</span>
+                </label>
+
+                <input
+                    id="mu1"
+                    type="range"
+                    min="20"
+                    max="80"
+                    value="50"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Dispersión:
+                    <span id="sigma1V" class="valor">6</span>
+                </label>
+
+                <input
+                    id="sigma1"
+                    type="range"
+                    min="1"
+                    max="20"
+                    value="6"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Tamaño \(n_1\):
+                    <span id="n1V" class="valor">20</span>
+                </label>
+
+                <input
+                    id="n1"
+                    type="range"
+                    min="8"
+                    max="60"
+                    value="20"
+                    step="1"
+                >
+            </div>
+
+        </div>
+
+        <div class="group-control">
+
+            <h3>Grupo B</h3>
+
+            <div class="control">
+                <label>
+                    Media:
+                    <span id="mu2V" class="valor">55</span>
+                </label>
+
+                <input
+                    id="mu2"
+                    type="range"
+                    min="20"
+                    max="80"
+                    value="55"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Dispersión:
+                    <span id="sigma2V" class="valor">9</span>
+                </label>
+
+                <input
+                    id="sigma2"
+                    type="range"
+                    min="1"
+                    max="20"
+                    value="9"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Tamaño \(n_2\):
+                    <span id="n2V" class="valor">25</span>
+                </label>
+
+                <input
+                    id="n2"
+                    type="range"
+                    min="8"
+                    max="60"
+                    value="25"
+                    step="1"
+                >
+            </div>
+
+        </div>
+
+        <div class="group-control">
+
+            <h3>Grupo C</h3>
+
+            <div class="control">
+                <label>
+                    Media:
+                    <span id="mu3V" class="valor">65</span>
+                </label>
+
+                <input
+                    id="mu3"
+                    type="range"
+                    min="20"
+                    max="80"
+                    value="65"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Dispersión:
+                    <span id="sigma3V" class="valor">5</span>
+                </label>
+
+                <input
+                    id="sigma3"
+                    type="range"
+                    min="1"
+                    max="20"
+                    value="5"
+                    step="1"
+                >
+            </div>
+
+            <div class="control">
+                <label>
+                    Tamaño \(n_3\):
+                    <span id="n3V" class="valor">15</span>
+                </label>
+
+                <input
+                    id="n3"
+                    type="range"
+                    min="8"
+                    max="60"
+                    value="15"
+                    step="1"
+                >
+            </div>
+
+        </div>
+
+        <div class="control">
+            <label>
+                Intensidad de datos atípicos:
+                <span id="atipicoV" class="valor">3.0</span>
+            </label>
+
+            <input
+                id="atipico"
+                type="range"
+                min="0"
+                max="6"
+                value="3"
+                step="0.5"
+            >
+        </div>
+
+        <button
+            class="btn-dorado"
+            onclick="generarDatos()"
+        >
+            Generar nueva muestra
+        </button>
+
+        <button onclick="agregarAtipicos()">
+            Agregar datos atípicos
+        </button>
+
+        <div class="formula">
+
+            <strong>Tamaño total:</strong>
+
+            \[
+            N=\sum_{i=1}^{k}n_i
+            \]
+
+            Para tres grupos:
+
+            \[
+            N=n_1+n_2+n_3
+            \]
+
+        </div>
+
+        <div class="formula">
+
+            <strong>Regla para datos atípicos:</strong>
+
+            \[
+            y<Q_1-1.5\,RIC
+            \]
+
+            o
+
+            \[
+            y>Q_3+1.5\,RIC
+            \]
+
+        </div>
+
+    </aside>
+
+    <!-- GRÁFICO -->
+
+    <section class="card">
+
+        <h2>
+            Comparación de los grupos
+        </h2>
+
+        <div
+            id="boxplot"
+            class="plot"
+        ></div>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <span>Número de grupos \(k\)</span>
+                <strong>3</strong>
+            </div>
+
+            <div class="metric">
+                <span>Tamaño total \(N\)</span>
+                <strong id="NOut">60</strong>
+            </div>
+
+            <div class="metric">
+                <span>Total de datos atípicos</span>
+                <strong id="outliersOut">0</strong>
+            </div>
+
+            <div class="metric">
+                <span>Grupo más disperso</span>
+                <strong id="grupoDispersoOut">---</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!-- TABLA DE RESUMEN -->
+
+<section class="card table-card">
+
+    <h2>
+        Resumen de los diagramas de caja
+    </h2>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Grupo</th>
+                    <th>\(n_i\)</th>
+                    <th>Mínimo</th>
+                    <th>\(Q_1\)</th>
+                    <th>Mediana</th>
+                    <th>\(Q_3\)</th>
+                    <th>RIC</th>
+                    <th>Atípicos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Grupo A</td>
+                    <td id="tablaN1">0</td>
+                    <td id="min1">0.00</td>
+                    <td id="q11">0.00</td>
+                    <td id="med1">0.00</td>
+                    <td id="q31">0.00</td>
+                    <td id="iqr1">0.00</td>
+                    <td id="out1" class="outlier-value">0</td>
+                </tr>
+
+                <tr>
+                    <td>Grupo B</td>
+                    <td id="tablaN2">0</td>
+                    <td id="min2">0.00</td>
+                    <td id="q12">0.00</td>
+                    <td id="med2">0.00</td>
+                    <td id="q32">0.00</td>
+                    <td id="iqr2">0.00</td>
+                    <td id="out2" class="outlier-value">0</td>
+                </tr>
+
+                <tr>
+                    <td>Grupo C</td>
+                    <td id="tablaN3">0</td>
+                    <td id="min3">0.00</td>
+                    <td id="q13">0.00</td>
+                    <td id="med3">0.00</td>
+                    <td id="q33">0.00</td>
+                    <td id="iqr3">0.00</td>
+                    <td id="out3" class="outlier-value">0</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- CONCEPTOS -->
+
+<section class="concept-grid">
+
+    <article class="concept">
+
+        <h3>\(n_i\): tamaño de cada grupo</h3>
+
+        <p>
+            \(n_i\) indica cuántas observaciones pertenecen al grupo \(i\).
+            Por ejemplo, \(n_1\) es el tamaño del Grupo A y \(n_2\) es
+            el tamaño del Grupo B.
+        </p>
+
+    </article>
+
+    <article class="concept">
+
+        <h3>\(N\): tamaño total</h3>
+
+        <p>
+            \(N\) representa el número total de observaciones del estudio.
+            Se obtiene sumando los tamaños de todos los grupos:
+            \(N=n_1+n_2+\cdots+n_k\).
+        </p>
+
+    </article>
+
+    <article class="concept">
+
+        <h3>La caja</h3>
+
+        <p>
+            La caja contiene el 50 % central de los datos. Se extiende
+            desde el primer cuartil \(Q_1\) hasta el tercer cuartil \(Q_3\).
+        </p>
+
+    </article>
+
+    <article class="concept">
+
+        <h3>La mediana</h3>
+
+        <p>
+            La línea dentro de la caja representa la mediana.
+        </p>
+
+    </article>
+
+    <article class="concept">
+
+        <h3>Los bigotes</h3>
+
+        <p>
+            Los bigotes se extienden hasta los valores más extremos que
+            todavía se encuentran dentro de los límites establecidos
+            mediante \(1.5\,RIC\).
+        </p>
+
+    </article>
+
+    <article class="concept">
+
+        <h3>Datos atípicos</h3>
+
+        <p>
+            Los puntos fuera de los bigotes son posibles datos atípicos.
+            Deben investigarse, pero no eliminarse automáticamente.
+        </p>
+
+    </article>
+
+</section> 
+
+</main>
+
+<script>
+let grupos = [
+    { nombre:"Grupo A", valores:[] },
+    { nombre:"Grupo B", valores:[] },
+    { nombre:"Grupo C", valores:[] }
+];
+
+/* ==========================
+   NORMAL ESTÁNDAR
+========================== */
+
+function randn(){
+    let u = 0;
+    let v = 0;
+
+    while(u === 0){
+        u = Math.random();
+    }
+
+    while(v === 0){
+        v = Math.random();
+    }
+
+    return Math.sqrt(
+        -2 * Math.log(u)
+    ) * Math.cos(
+        2 * Math.PI * v
+    );
+}
+
+/* ==========================
+   GENERAR DATOS
+========================== */
+
+function generarDatos(){
+
+    const medias = [
+        Number(document.getElementById("mu1").value),
+        Number(document.getElementById("mu2").value),
+        Number(document.getElementById("mu3").value)
+    ];
+
+    const sigmas = [
+        Number(document.getElementById("sigma1").value),
+        Number(document.getElementById("sigma2").value),
+        Number(document.getElementById("sigma3").value)
+    ];
+
+    const tamanos = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value)
+    ];
+
+    actualizarEtiquetas(
+        medias,
+        sigmas,
+        tamanos
+    );
+
+    grupos.forEach((grupo, indice)=>{
+
+        grupo.valores = [];
+
+        for(
+            let i = 0;
+            i < tamanos[indice];
+            i++
+        ){
+            const valor =
+                medias[indice] +
+                randn() * sigmas[indice];
+
+            grupo.valores.push(valor);
+        }
+    });
+
+    actualizarTodo();
+}
+
+/* ==========================
+   AGREGAR ATÍPICOS
+========================== */
+
+function agregarAtipicos(){
+
+    const intensidad =
+        Number(
+            document.getElementById("atipico").value
+        );
+
+    if(intensidad === 0){
+        return;
+    }
+
+    grupos.forEach((grupo, indice)=>{
+
+        const sigma =
+            Number(
+                document.getElementById(
+                    `sigma${indice + 1}`
+                ).value
+            );
+
+        const media =
+            Number(
+                document.getElementById(
+                    `mu${indice + 1}`
+                ).value
+            );
+
+        const direccion =
+            Math.random() < 0.5 ? -1 : 1;
+
+        const valorAtipico =
+            media +
+            direccion *
+            sigma *
+            (3 + intensidad);
+
+        grupo.valores.push(valorAtipico);
+    });
+
+    actualizarTodo();
+}
+
+/* ==========================
+   CUANTILES
+========================== */
+
+function cuantile(datosOrdenados, p){
+
+    if(datosOrdenados.length === 0){
+        return NaN;
+    }
+
+    const posicion =
+        (datosOrdenados.length - 1) * p;
+
+    const inferior =
+        Math.floor(posicion);
+
+    const superior =
+        Math.ceil(posicion);
+
+    if(inferior === superior){
+        return datosOrdenados[inferior];
+    }
+
+    const peso =
+        posicion - inferior;
+
+    return (
+        datosOrdenados[inferior] *
+        (1 - peso)
+        +
+        datosOrdenados[superior] *
+        peso
+    );
+}
+
+/* ==========================
+   RESUMEN DEL GRUPO
+========================== */
+
+function resumir(valores){
+
+    const ordenados =
+        [...valores].sort(
+            (a,b)=>a-b
+        );
+
+    const q1 =
+        cuantile(ordenados,0.25);
+
+    const mediana =
+        cuantile(ordenados,0.50);
+
+    const q3 =
+        cuantile(ordenados,0.75);
+
+    const iqr =
+        q3 - q1;
+
+    const limiteInferior =
+        q1 - 1.5 * iqr;
+
+    const limiteSuperior =
+        q3 + 1.5 * iqr;
+
+    const noAtipicos =
+        ordenados.filter(
+            x =>
+                x >= limiteInferior &&
+                x <= limiteSuperior
+        );
+
+    const atipicos =
+        ordenados.filter(
+            x =>
+                x < limiteInferior ||
+                x > limiteSuperior
+        );
+
+    return {
+        n:valores.length,
+        minimo:Math.min(...ordenados),
+        q1,
+        mediana,
+        q3,
+        iqr,
+        limiteInferior,
+        limiteSuperior,
+        bigoteInferior:Math.min(...noAtipicos),
+        bigoteSuperior:Math.max(...noAtipicos),
+        atipicos
+    };
+}
+
+/* ==========================
+   DIBUJAR CAJAS
+========================== */
+
+function dibujar(){
+
+    const colores = [
+        "#2D9AB8",
+        "#2C447D",
+        "#C7A05A"
+    ];
+
+    const trazas =
+        grupos.map((grupo,indice)=>({
+
+            y:grupo.valores,
+
+            type:"box",
+
+            name:grupo.nombre,
+
+            boxpoints:"outliers",
+
+            jitter:0.35,
+
+            pointpos:0,
+
+            marker:{
+                color:colores[indice],
+                size:8,
+                line:{
+                    color:"#1D2D50",
+                    width:1
+                }
+            },
+
+            line:{
+                color:colores[indice],
+                width:3
+            },
+
+            fillcolor:
+                indice === 0
+                ? "rgba(45,154,184,.20)"
+                : indice === 1
+                ? "rgba(44,68,125,.18)"
+                : "rgba(199,160,90,.23)",
+
+            boxmean:true,
+
+            hovertemplate:
+                `${grupo.nombre}<br>` +
+                `Valor: %{y:.2f}` +
+                `<extra></extra>`
+        }));
+
+    const layout = {
+
+        margin:{
+            l:65,
+            r:25,
+            b:65,
+            t:25
+        },
+
+        paper_bgcolor:"#FFFFFF",
+        plot_bgcolor:"#FFFFFF",
+
+        showlegend:false,
+
+        xaxis:{
+            title:{
+                text:"Grupos",
+                font:{
+                    color:"#1D2D50",
+                    size:14
+                }
+            },
+
+            tickfont:{
+                color:"#64748B"
+            }
+        },
+
+        yaxis:{
+            title:{
+                text:"Variable respuesta",
+                font:{
+                    color:"#1D2D50",
+                    size:14
+                }
+            },
+
+            gridcolor:"#E2E8F0",
+
+            zeroline:false,
+
+            tickfont:{
+                color:"#64748B"
+            }
+        },
+
+        font:{
+            family:"Segoe UI, Arial, sans-serif",
+            color:"#64748B"
+        },
+
+        hoverlabel:{
+            bgcolor:"#FFFFFF",
+            bordercolor:"#E2E8F0",
+            font:{
+                color:"#1D2D50"
+            }
+        }
+    };
+
+    Plotly.newPlot(
+        "boxplot",
+        trazas,
+        layout,
+        {
+            responsive:true,
+            displayModeBar:false
+        }
+    );
+}
+
+/* ==========================
+   ACTUALIZAR TABLA
+========================== */
+
+function actualizarTabla(resumenes){
+
+    resumenes.forEach((r,indice)=>{
+
+        const i = indice + 1;
+
+        document.getElementById(
+            `tablaN${i}`
+        ).textContent =
+            r.n;
+
+        document.getElementById(
+            `min${i}`
+        ).textContent =
+            r.minimo.toFixed(2);
+
+        document.getElementById(
+            `q1${i}`
+        ).textContent =
+            r.q1.toFixed(2);
+
+        document.getElementById(
+            `med${i}`
+        ).textContent =
+            r.mediana.toFixed(2);
+
+        document.getElementById(
+            `q3${i}`
+        ).textContent =
+            r.q3.toFixed(2);
+
+        document.getElementById(
+            `iqr${i}`
+        ).textContent =
+            r.iqr.toFixed(2);
+
+        document.getElementById(
+            `out${i}`
+        ).textContent =
+            r.atipicos.length;
+    });
+}
+
+/* ==========================
+   ACTUALIZAR MÉTRICAS
+========================== */
+
+function actualizarMetricas(resumenes){
+
+    const N =
+        resumenes.reduce(
+            (s,r)=>s+r.n,
+            0
+        );
+
+    const totalAtipicos =
+        resumenes.reduce(
+            (s,r)=>s+r.atipicos.length,
+            0
+        );
+
+    let indiceMayor = 0;
+
+    for(
+        let i = 1;
+        i < resumenes.length;
+        i++
+    ){
+        if(
+            resumenes[i].iqr >
+            resumenes[indiceMayor].iqr
+        ){
+            indiceMayor = i;
+        }
+    }
+
+    document.getElementById(
+        "NOut"
+    ).textContent =
+        N;
+
+    document.getElementById(
+        "outliersOut"
+    ).textContent =
+        totalAtipicos;
+
+    document.getElementById(
+        "grupoDispersoOut"
+    ).textContent =
+        grupos[indiceMayor].nombre;
+}
+
+/* ==========================
+   ACTUALIZAR ETIQUETAS
+========================== */
+
+function actualizarEtiquetas(
+    medias,
+    sigmas,
+    tamanos
+){
+    medias.forEach((valor,indice)=>{
+
+        document.getElementById(
+            `mu${indice + 1}V`
+        ).textContent =
+            valor;
+    });
+
+    sigmas.forEach((valor,indice)=>{
+
+        document.getElementById(
+            `sigma${indice + 1}V`
+        ).textContent =
+            valor;
+    });
+
+    tamanos.forEach((valor,indice)=>{
+
+        document.getElementById(
+            `n${indice + 1}V`
+        ).textContent =
+            valor;
+    });
+
+    document.getElementById(
+        "atipicoV"
+    ).textContent =
+        Number(
+            document.getElementById(
+                "atipico"
+            ).value
+        ).toFixed(1);
+}
+
+/* ==========================
+   ACTUALIZACIÓN GENERAL
+========================== */
+
+function actualizarTodo(){
+
+    const resumenes =
+        grupos.map(
+            grupo =>
+                resumir(grupo.valores)
+        );
+
+    dibujar();
+
+    actualizarTabla(
+        resumenes
+    );
+
+    actualizarMetricas(
+        resumenes
+    );
+
+    if(window.MathJax){
+        MathJax.typesetPromise();
+    }
+}
+
+/* ==========================
+   EVENTOS
+========================== */
+
+[
+    "mu1","sigma1","n1",
+    "mu2","sigma2","n2",
+    "mu3","sigma3","n3"
+].forEach(id=>{
+
+    document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            generarDatos
+        );
+});
+
+document
+    .getElementById("atipico")
+    .addEventListener(
+        "input",
+        ()=>{
+
+            document.getElementById(
+                "atipicoV"
+            ).textContent =
+                Number(
+                    document.getElementById(
+                        "atipico"
+                    ).value
+                ).toFixed(1);
+        }
+    );
+
+/* ==========================
+   INICIO
+========================== */
+
+generarDatos();
+</script>
+
+</body>
+</html>
